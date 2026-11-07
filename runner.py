@@ -25,6 +25,8 @@ from playwright.async_api import async_playwright
 from deadline import DeadlineExceeded, RoundDeadline
 from reporting import correction, read_events, rejection, result_details, write_report
 from model_policy import error_details
+from metrics import aggregate, pricing_for, usage_hook
+import httpx
 
 
 # These selectors were observed on the live UI. Read rendered state only.
@@ -277,8 +279,13 @@ async def scripted_baseline(page, observer, answers):
 
 async def play(session, observer, args):
     from player import play_actions
-    return await play_actions(observer, TimedModel(make_model(args), observer.record), args.max_steps,
-                              args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
+    model = make_model(args)
+    # Capture billing before adapter validation can discard a malformed response.
+    async with httpx.AsyncClient(timeout=None, event_hooks={'response': [usage_hook(observer.record)]}) as client:
+        if isinstance(model, ChatOpenAI):
+            model.http_client = client
+        return await play_actions(observer, TimedModel(model, observer.record), args.max_steps,
+                                  args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
 
 
 async def run(args):
@@ -331,6 +338,10 @@ async def run(args):
     if observer and observer.last_state:
         report["final_score"] = observer.last_state.score
         report["scoreboard"] = observer.last_state.results
+    record.event('run_finished', status=status)
+    pricing_path = getattr(args, 'pricing_file', None)
+    pricing = pricing_for(json.loads(pricing_path.read_text()), args.model) if pricing_path else {}
+    report['metrics'] = aggregate(read_events(record.output), pricing)
     final = record.output / "final.txt"
     write_report(report, record.output, final.read_text() if final.exists() else "", read_events(record.output))
     print(json.dumps({"status": status, "error_type": error, "output": str(record.output)}))
@@ -353,6 +364,7 @@ def main():
     parser.add_argument("--margin", type=float, default=3)
     parser.add_argument("--max-steps", type=int, default=50)
     parser.add_argument("--run-timeout", type=float, default=600)
+    parser.add_argument("--pricing-file", type=Path, help="Frozen OpenRouter catalog or campaign manifest for cost estimates")
     parser.add_argument("--max-output-tokens", type=int, default=None,
                         help="Optional API output cap; default omits it (provider limits still apply)")
     parser.add_argument("--navigation-timeout", type=float, default=60,

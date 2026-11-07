@@ -12,9 +12,10 @@ import statistics
 import sys
 
 from reporting import cell, markdown
+from leaderboard import export_campaign
 
 
-SOURCES = ("runner.py", "player.py", "deadline.py", "reporting.py", "model_policy.py", "campaign.py", "uv.lock")
+SOURCES = ("runner.py", "player.py", "deadline.py", "reporting.py", "model_policy.py", "metrics.py", "leaderboard.py", "campaign.py", "uv.lock")
 
 
 def utcnow():
@@ -49,6 +50,7 @@ def select_models(ranking, catalog, count, paid_only=False):
             raise ValueError(f"Non-text model in text ranking: {model}")
         selected.append({**row, "rank": len(selected) + 1,
                          "canonical_slug": meta.get("canonical_slug"),
+                         "pricing": meta.get("pricing", {}),
                          "supported_parameters": meta.get("supported_parameters", [])})
         if len(selected) == count:
             return selected, excluded
@@ -64,7 +66,7 @@ def summarize(row, report, events):
     durations = report.get("model_call_durations_s", [])
     rounds = report.get("rounds", [])
     return {**row, "status": report.get("status", "missing_report"),
-            "error_type": report.get("error_type"), "scorecard_verified": verified,
+            "error_type": report.get("error_type"), "metrics": report.get("metrics"), "scorecard_verified": verified,
             "score": int(report["final_score"]) if verified else None,
             "partial_points": sum(r.get("points", 0) or 0 for r in rounds),
             "daily_percentile": report.get("daily_percentile") if verified else None,
@@ -89,6 +91,13 @@ def update_reports(output, manifest, state):
     atomic_json(output / "summary.json", {"updated_at": utcnow(), "planned": len(manifest["models"]),
                 "finished": len(finished), "verified_complete": len(verified), "statuses": counts,
                 "stop_reason": state.get("stop_reason"), "runs": ordered})
+    public_reports = {}
+    for row in finished:
+        path = output / row['directory'] / 'report.json'
+        if path.exists():
+            public_reports[row['model']] = json.loads(path.read_text())
+    public_summary = dict(updated_at=utcnow(), runs=finished)
+    atomic_json(output / 'leaderboard.json', export_campaign(public_summary, manifest, public_reports))
     lines = ["# OpenRouter top 100: Krillion campaign", "",
              f"Finished: **{len(finished)}/{len(manifest['models'])}**. Verified full games: **{len(verified)}**.", "",
              "Selection: active text model variants in OpenRouter’s **Top Weekly** directory order, "
@@ -198,7 +207,7 @@ async def run_campaign(args):
                 command = [sys.executable, str(root / "runner.py"), "play", "--env-file", str(args.env_file.resolve()),
                            "--provider", "openai", "--model", model_id, "--navigation-recovery", "bounded",
                            "--output", str(output / directory)]
-                command += ['--model-retries', str(manifest['settings']['model_retries']),
+                command += ['--pricing-file', str(manifest_path), '--model-retries', str(manifest['settings']['model_retries']),
                             '--navigation-timeout', str(manifest['settings']['navigation_timeout'])]
                 if manifest['settings']['max_output_tokens'] is not None:
                     command += ['--max-output-tokens', str(manifest['settings']['max_output_tokens'])]

@@ -5,6 +5,67 @@ A small browser-action harness for an LLM to play the complete Daily Dive from
 the model's actions. Browser Use's model adapters support provider APIs and compatible
 endpoints. It runs as a standalone Python project with no database or job queue.
 
+## Leaderboard UI
+
+The static leaderboard in `index.html` follows a restrained research-table layout,
+with verified score as the default ranking and the largest visual emphasis. It includes
+all 100 historical model variants, a score-versus-metric chart, search/provider/status
+filters, light/dark themes, and a per-run dialog with every answer and rarity.
+
+```sh
+python3 -m http.server 8765 --bind 127.0.0.1
+# Open http://127.0.0.1:8765/
+```
+
+No frontend build, framework, database, or API key is needed. The four public UI files
+are `index.html`, `leaderboard.css`, `leaderboard.js`, and `leaderboard-data.json`.
+They can be served together at any static host, including a GitHub Pages project path.
+
+**Metrics:** LLM run cost (USD), output-token cost (USD), output token count, total
+elapsed time, and the game's final daily percentage. Tied scores share a rank;
+incomplete games have partial points but no final rank or daily percentage. Charts
+include completed games with usable metrics only. Cost ranks are not score ranks.
+
+Historical costs are **estimates**, using recorded per-call usage and the catalog
+saved during discovery on November 7. Cached inputs and context-price tiers are
+applied per call. Missing usage is explicitly partial or unavailable, never zero.
+The original 100-model result files are unchanged; the UI dataset is a new export.
+Its historical configuration is displayed separately from the improved harness.
+
+Future OpenAI-compatible runs capture numeric API usage before the adapter validates
+JSON, so malformed/truncated responses can retain their reported costs. `usage.cost`
+is the account charge. The output component, when present, is the provider's reported
+output cost and may not sum to the account charge. Other adapters retain available
+parsed token usage. Cancelled requests without usage remain unaccounted for.
+No reasoning tokens are added twice. Browser hosting and credit-purchase fees are
+excluded. See [OpenRouter usage accounting](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
+
+Optionally pass `runner.py --pricing-file catalog.json` to estimate fields that the
+API did not return. Campaigns freeze each selected model's catalog prices and pass
+the frozen manifest to the runner automatically. Run reports now contain `metrics`;
+campaigns also write a public `leaderboard.json`. **Load campaign** in the UI replaces
+the displayed dataset rather than mixing harness versions or daily puzzles.
+
+To publish a new campaign snapshot:
+
+```sh
+uv run python leaderboard.py artifacts/MY_CAMPAIGN --output leaderboard-data.json
+```
+
+To rebuild the historical snapshot where private raw events and the discovery catalog
+are available locally (these files are deliberately not published):
+
+```sh
+uv run python leaderboard.py artifacts/openrouter-top100-20261107 \
+  --summary TOP100-SUMMARY.json --answers TOP100-ANSWERS.json \
+  --catalog artifacts/openrouter-top100-discovery/catalog.json \
+  --output leaderboard-data.json
+```
+
+The exporter allowlists run/answer fields and omits raw observations, network traces,
+private paths, credentials, and provider response bodies. The downloadable UI JSON
+contains only the exported dataset. Uploaded campaign files stay in the browser.
+
 ## Quick start
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).

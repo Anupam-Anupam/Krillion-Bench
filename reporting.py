@@ -132,6 +132,15 @@ def markdown(report):
              f"Final daily percentage: **{'unavailable (no verified final percentile)' if pct is None else f'better than {pct:g}% of today’s players'}**.", '',
              f"Navigation recovery: {cell(report['navigation_recovery'])}; successful assistance: {sum(e.get('result') == 'ok' for e in report['recoveries'])}.", '',
              'Rarity is the game’s category, not an invented per-answer percentage. Rejected or unconfirmed attempts have no rarity. The daily percentage is the live game’s population comparison at capture time, not score ÷ 700.', '']
+    metrics = report.get('metrics')
+    if metrics:
+        lines += ['## Run metrics', '', '| Metric | Value |', '|---|---|',
+                  f"| LLM cost (USD) | {cell(metrics['run_cost_usd'])} ({cell(metrics['cost_basis'])}) |",
+                  f"| Output cost (USD) | {cell(metrics['output_cost_usd'])} ({cell(metrics['output_cost_basis'])}) |",
+                  f"| Output tokens | {cell(metrics['output_tokens'])} |",
+                  f"| Run duration (seconds) | {cell(metrics['run_duration_s'])} |",
+                  f"| Usage coverage | {metrics['usage_calls']}/{metrics['model_calls']} calls |", '',
+                  'Costs exclude browser hosting. Partial usage is not a complete run bill; provider output costs may not sum to account charges.', '']
     if report.get('error_type'):
         lines += [f"Failure: {cell(report['error_type'])}.", '']
     for row in report['rounds']:

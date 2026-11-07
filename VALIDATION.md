@@ -195,3 +195,28 @@ audited; live-regression gameplay source hashes matched the pre-run snapshot. Th
 GitHub niche-answer prompt wording was merged afterward and the full suite rerun;
 the live scores predate that wording-only merge. The old 100-model
 results were not rerun or rewritten.
+
+## Score-first leaderboard and usage accounting
+
+The static leaderboard contains the original 100 model variants: 45 verified full
+games and 55 incomplete runs. An export audit matched all scores and daily
+percentages to TOP100-SUMMARY.json and all 642 submissions to TOP100-ANSWERS.json.
+The original reports and campaign configuration remain unchanged.
+
+Historical costs are estimates from recorded per-call tokens and the saved
+OpenRouter catalog: 49 full estimates, 43 partial estimates, and 8 unavailable
+values across all runs. All 45 completed games have full recorded token coverage.
+Future OpenAI-compatible runs capture numeric response usage before action parsing;
+account charges and provider output components have separate provenance. Missing
+or cancelled response usage is never treated as zero cost. Browser hosting is excluded.
+
+The complete suite passed **66 tests in 10.15 seconds**, including real Chromium
+regressions and new usage, malformed-response billing, cache/context-tier pricing,
+missing-data, double-counting, and public-export checks. No live model games were
+rerun for this UI change.
+
+Manual browser checks passed at desktop and 390px mobile widths: score ranking,
+tied ranks, provider/status/search filters, empty results, cost sorting, all chart
+axes, keyboard chart activation and Escape dismissal, answer/rarity details, light
+and dark themes, JSON download, valid import replacing the snapshot, and invalid
+import retaining the prior dataset. The page reported no browser console errors.
