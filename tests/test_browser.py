@@ -212,3 +212,84 @@ async def test_uncertain_submit_timeout_observes_acceptance_and_continues(page, 
     first = report['rounds'][0]
     assert first['interruptions'] == ['action_timeout']
     assert len(first['submissions']) == 1 and first['submissions'][0]['outcome'] == 'accepted'
+
+
+async def test_terminal_api_failure_collects_actual_score_without_answer_fallback(page, tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+    from browser_use.llm.exceptions import ModelProviderError
+    import runner
+    from reporting import write_report, read_events
+    obs = Observer(page, Recorder(tmp_path/'run'))
+    await page.evaluate('''() => {
+      const originalNext = next;
+      next = () => { originalNext(); const n=round;
+        setTimeout(() => { if(round===n && document.querySelector('input')) expire(); }, 150); };
+    }''')
+    async def broken_agent(session, observer, args):
+        state = await observer.read()
+        await execute(Action(kind='click', target='▼ BEGIN DESCENT ▼'), state, observer)
+        state = await observer.read()
+        await execute(Action(kind='fill', target='Your answer', text='answer 1'), state, observer)
+        await execute(Action(kind='click', target='DIVE'), state, observer)
+        await observer.read()
+        raise ModelProviderError('Model unavailable', 404)
+    monkeypatch.setattr(runner, 'play', broken_agent)
+    status, error = await runner.run_game(None, obs, SimpleNamespace(command='play', run_timeout=10))
+    report = write_report(dict(status=status, error_type=error, rounds=list(obs.rounds.values()),
+                              final_score=obs.last_state.score, scoreboard=obs.last_state.results),
+                          obs.record.output, obs.last_state.text, read_events(obs.record.output))
+    assert status == 'scored_with_errors' and report['scorecard_verified']
+    assert report['final_score'] == '10' and report['daily_percentile'] == 42
+    assert sum(len(r['submissions']) for r in report['rounds']) == 1
+    assert sum(r['round_outcome'] == 'missed' for r in report['rounds']) == 6
+    assert report['agent_failures'][0]['category'] == 'invalid_request'
+    assert report['scorecard_collection'][-1]['phase'] == 'verified'
+    events = read_events(obs.record.output)
+    start = next(i for i,e in enumerate(events) if e['event'] == 'scorecard_collection')
+    assert all(e.get('action',{}).get('target') != 'Your answer' and
+               e.get('action',{}).get('target') != 'DIVE' for e in events[start:])
+
+
+async def test_all_seven_game_timeouts_are_ranked_as_a_verified_zero(page, tmp_path):
+    from player import play_actions
+    from reporting import write_report, read_events
+    from leaderboard import export_campaign
+    from campaign import summarize
+    obs = Observer(page, Recorder(tmp_path/'run'))
+    await page.evaluate('''() => {
+      const originalNext = next;
+      next = () => { originalNext(); document.querySelector('.ds-time-digits').textContent='1';
+        setTimeout(expire, 100); };
+    }''')
+    assert await play_actions(obs, FixturePlayer()) == 'agent_finished'
+    report = write_report(dict(status='agent_finished', rounds=list(obs.rounds.values()),
+                              final_score=obs.last_state.score, scoreboard=obs.last_state.results),
+                          obs.record.output, obs.last_state.text, read_events(obs.record.output))
+    row = summarize({'model':'test/model','rank':1}, report, read_events(obs.record.output))
+    public = export_campaign({'runs':[row], 'updated_at':'fixture'},
+                             {'models':[{'id':'test/model'}], 'settings':{}, 'utc_date':'fixture'},
+                             {'test/model':report})['runs'][0]
+    assert public['complete'] and public['score'] == 0 and public['daily_percentile'] == 42
+    assert public['missed_rounds'] == 7
+    assert all(not r['submissions'] for r in public['rounds'])
+
+
+async def test_score_collection_cannot_turn_broken_browser_into_a_score(tmp_path):
+    from unittest.mock import AsyncMock, Mock
+    from player import collect_final_score
+    obs = Mock(record=Recorder(tmp_path/'run'), read=AsyncMock(side_effect=TimeoutError('disconnected')))
+    with pytest.raises(TimeoutError):
+        await collect_final_score(obs, 'browser_failure', timeout=1)
+    assert obs.read.await_count == 3
+    assert '"phase": "verified"' not in (obs.record.output/'events.jsonl').read_text()
+
+
+async def test_optional_screenshot_failure_is_recorded_without_aborting_game(tmp_path):
+    from unittest.mock import AsyncMock, Mock
+    from runner import capture_screenshot
+    from reporting import read_events
+    record = Recorder(tmp_path/'run')
+    page = Mock(screenshot=AsyncMock(side_effect=TimeoutError('font animation timeout')))
+    await capture_screenshot(page, record, 'initial.png')
+    assert read_events(record.output)[0]['event'] == 'artifact_error'
