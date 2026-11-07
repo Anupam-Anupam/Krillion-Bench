@@ -18,6 +18,8 @@ Completed models are ordered by verified score descending, then model ID ascendi
 
 The score rank column continues to share ranks for tied scores. Badge placement uses the deterministic tie break so the five groups contain exactly 1, 9, 15, 25, and 50 models in the current campaign. Run errors and positions beyond 100 have no placement badge. Badges are benchmark placements, not a model's individual answer rarity.
 
+Score progress bars and daily percentages use the game’s default rarity palette for each placement: Krillion gold `#ffd166`, Deep Cut purple `#9d7bff`, Rare red `#ff5252`, Schooler cyan `#4de3ff`, and Plankton slate `#8fa3c4`. Bar fills use a translucent gradient with a solid tier-colored edge so score numerals remain readable. Colors follow the global badge through sorting and filtering.
+
 ## Accessibility and behavior
 
 - `prefers-reduced-motion` freezes the ocean and disables ambient animation and smooth scrolling. The header's effects button offers a persistent manual reduced-effects mode.
@@ -55,3 +57,7 @@ Ocean artwork and rarity sprites originate from [Krillion](https://krillion.io/)
 ### Compact leaderboard follow-up
 
 Browser verification confirmed the default five rows expand to 100 and collapse to five; the chart still includes all 47 complete cost records. Search finds a model outside the preview, and the expansion button disappears for five or fewer matching results. The # header sorts shared ranks ascending and descending in both preview and full-list modes, including keyboard activation. No browser errors were observed.
+
+### Tier metric colors follow-up
+
+Browser computed-style checks confirmed matching score-bar edges and daily percentages across all five tiers (1 / 9 / 15 / 25 / 50 rows). Rank sorting and search preserve the global placement color, and the compact five-row view remains intact. The stylesheet URL is versioned to invalidate cached styling.
