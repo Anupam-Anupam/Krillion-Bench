@@ -166,7 +166,7 @@ async def run_campaign(args):
             manifest = {"created_at": utcnow(), "utc_date": utcnow()[:10], "models": models,
                         "excluded": excluded, "source_sha256": source_hashes(root),
                         "ranking_source": ranking["source"], "ranking_captured_at": ranking["captured_at"],
-                        "concurrency": args.concurrency, "outer_timeout_s": 780,
+                        "concurrency": args.concurrency, "outer_timeout_s": 900,
                         "paid_only": getattr(args, 'paid_only', False),
                         "settings": {"provider": "openai", "browser": "cloud", "vision": False,
                                      "navigation_recovery": "bounded", "reasoning": "low",
@@ -174,6 +174,8 @@ async def run_campaign(args):
                                      "model_retries": getattr(args, 'model_retries', 2),
                                      "navigation_timeout": getattr(args, 'navigation_timeout', 60),
                                      "round_timeout_policy": "continue",
+                                     "terminal_failure_policy": "collect_actual_scorecard_without_answers",
+                                     "scorecard_collection_timeout_s": 240,
                                      "max_steps": 50, "run_timeout_s": 600, "margin_s": 3}}
             atomic_json(manifest_path, manifest)
         state_path = output / "state.json"

@@ -220,3 +220,38 @@ tied ranks, provider/status/search filters, empty results, cost sorting, all cha
 axes, keyboard chart activation and Escape dismissal, answer/rarity details, light
 and dark themes, JSON download, valid import replacing the snapshot, and invalid
 import retaining the prior dataset. The page reported no browser console errors.
+
+## Final-score continuation campaign
+
+The corrected November 7 campaign reran the same 100 model variants under one
+frozen source version. **100/100 reached verified seven-round scorecards; zero
+incomplete games or unverified final scores.** There were 136 zero-point questions
+across 57 models, including three completely missed, zero-point games. These runs
+retain their final scores and ranks. All final totals equal their seven round scores.
+
+The audit matched all 884 submission events to report entries: 543 accepted,
+238 rejected, 92 requiring correction confirmation, and 11 unconfirmed. Nonaccepted
+attempts have no attributed rarity. Daily percentages were captured for 99 games.
+DeepSeek V4 Flash's completed 300-point game displayed no daily percentage in its
+saved final page or DOM trace, so that field remains unavailable. No percentile was
+inferred from another game or from its score.
+
+The full pre-campaign suite passed **70 tests in 14.62 seconds**. New regressions
+exercise seven timed-out rounds yielding a verified zero, terminal provider failure
+after one answer followed by navigation-only collection, a disconnected browser
+that cannot be given a fabricated score, and nonfatal optional screenshot capture.
+The live campaign needed no terminal score-collection fallback: ordinary deadline,
+provider retry, and navigation recovery paths reached all 100 scorecards.
+
+An earlier 12-model pilot was stopped after four optional initial screenshots
+aborted startup; its eight completed games are retained separately and excluded
+from the published dataset. Screenshots were made nonfatal before restarting this
+entire campaign. The corrected campaign had no recorded screenshot failures. Frozen
+source hashes matched before and after; no gameplay code changed during the run.
+
+Manual UI checks verified real timeout runs retain their score, rank and daily
+placement, including Tencent HY4's 0/700 and seven missed questions. Diagnostic
+lists, complete/error filters, answer logs and partial billing labels were checked.
+The final 100-model UI showed 100 scored rows and zero run errors; the error filter returned no models. The missing daily percentage displayed as unavailable while retaining its score and rank. No browser console errors were reported. The public JSON export allowlists fields and excludes private traces and credentials.
+See [CONTINUATION-REPORT.md](CONTINUATION-REPORT.md) and
+[CONTINUATION-MANIFEST.json](CONTINUATION-MANIFEST.json) for the final campaign.

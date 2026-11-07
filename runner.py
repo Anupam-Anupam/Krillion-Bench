@@ -190,6 +190,14 @@ def make_model(args):
     return ChatGoogle(model=args.model, max_retries=1, max_output_tokens=args.max_output_tokens)
 
 
+async def capture_screenshot(page, record, name):
+    """A diagnostic image must never prevent gameplay or final score collection."""
+    try:
+        await page.screenshot(path=str(record.output / name), timeout=5000)
+    except Exception as exc:
+        record.event('artifact_error', artifact=name, error_type=type(exc).__name__)
+
+
 @asynccontextmanager
 async def browser_session(args, record):
     cloud = remote = None
@@ -224,12 +232,12 @@ async def browser_session(args, record):
                 await page.goto(args.url, wait_until="domcontentloaded", timeout=30000)
                 await page.get_by_role("button", name="▼ BEGIN DESCENT ▼", exact=True).wait_for(timeout=20000)
                 record.event("browser_ready", browser=args.browser)
-                await page.screenshot(path=str(record.output / "initial.png"))
+                await capture_screenshot(page, record, 'initial.png')
                 try:
                     yield connection, page
                 finally:
+                    await capture_screenshot(page, record, 'final.png')
                     with suppress(Exception):
-                        await page.screenshot(path=str(record.output / "final.png"))
                         (record.output / "final.txt").write_text(await page.locator("body").inner_text())
                     with suppress(Exception):
                         await context.tracing.stop(path=str(record.output / "trace.zip"))
@@ -288,6 +296,41 @@ async def play(session, observer, args):
                                   args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
 
 
+async def run_game(session, observer, args):
+    from player import collect_final_score, verified_completion
+    answers = json.loads(args.answers_file.read_text()) if args.command == 'baseline' else None
+    worker = asyncio.create_task(scripted_baseline(observer.page, observer, answers)
+                                 if args.command == 'baseline' else play(session, observer, args))
+    watchdog = asyncio.create_task(observer.watch())
+    status, error = 'failed', None
+    try:
+        try:
+            done, _ = await asyncio.wait({worker, watchdog}, timeout=args.run_timeout,
+                                         return_when=asyncio.FIRST_COMPLETED)
+            if not done:
+                raise TimeoutError('Full agent runtime reached')
+            if watchdog in done:
+                await watchdog
+            status = await worker
+        except Exception as exc:
+            error = type(exc).__name__
+            observer.record.event('agent_failure', **error_details(exc))
+            if args.command != 'play':
+                raise
+        finally:
+            # Cancel inference/actions before score collection; no late answer can leak.
+            for task in (worker, watchdog):
+                task.cancel()
+            await asyncio.gather(worker, watchdog, return_exceptions=True)
+        if args.command == 'play' and not verified_completion(observer):
+            reason = error or status
+            observer.record.event('agent_stopped', reason=reason)
+            status = await collect_final_score(observer, reason)
+        return status, error
+    finally:
+        observer.blocked = True
+
+
 async def run(args):
     record = Recorder(args.output)
     observer = None
@@ -303,21 +346,7 @@ async def run(args):
                 status = "smoke_passed"
             else:
                 observer = Observer(page, record, args.margin)
-                answers = json.loads(args.answers_file.read_text()) if args.command == "baseline" else None
-                worker = asyncio.create_task(scripted_baseline(page, observer, answers) if args.command == "baseline" else play(session, observer, args))
-                watchdog = asyncio.create_task(observer.watch())
-                try:
-                    done, _ = await asyncio.wait({worker, watchdog}, timeout=args.run_timeout, return_when=asyncio.FIRST_COMPLETED)
-                    if not done:
-                        raise TimeoutError("Full run deadline reached")
-                    if watchdog in done:
-                        await watchdog
-                    status = await worker
-                finally:
-                    observer.blocked = True
-                    for task in (worker, watchdog):
-                        task.cancel()
-                    await asyncio.gather(worker, watchdog, return_exceptions=True)
+                status, error = await run_game(session, observer, args)
                 state = await observer.read()
                 record.event("final_state", score=state.score, buttons=state.buttons, text=state.text)
     except Exception as exc:
@@ -345,7 +374,7 @@ async def run(args):
     final = record.output / "final.txt"
     write_report(report, record.output, final.read_text() if final.exists() else "", read_events(record.output))
     print(json.dumps({"status": status, "error_type": error, "output": str(record.output)}))
-    return 0 if status in {"smoke_passed", "baseline_finished", "agent_finished"} else 1
+    return 0 if status in {"smoke_passed", "baseline_finished", "agent_finished", "scored_with_errors"} else 1
 
 
 def main():

@@ -1,0 +1,3448 @@
+{
+  "created_at": "2026-11-07T22:14:23.860020+00:00",
+  "utc_date": "2026-11-07",
+  "models": [
+    {
+      "directory_rank": 1,
+      "id": "deepseek/deepseek-v4.1-flash-1017",
+      "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+      "weekly_tokens_display": "62.2T tokens",
+      "rank": 1,
+      "canonical_slug": "deepseek/deepseek-v4.1-flash-20261017",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006",
+        "input_cache_read": "0.000000003",
+        "overrides": [
+          {
+            "utc_days": [
+              "saturday",
+              "sunday"
+            ],
+            "prompt": "0.00000015",
+            "completion": "0.0000006",
+            "input_cache_read": "0.000000003"
+          },
+          {
+            "utc_days": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday"
+            ],
+            "utc_start": 0,
+            "utc_end": 100,
+            "prompt": "0.00000015",
+            "completion": "0.0000006",
+            "input_cache_read": "0.000000003"
+          },
+          {
+            "utc_days": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday"
+            ],
+            "utc_start": 100,
+            "utc_end": 400,
+            "prompt": "0.0000003",
+            "completion": "0.0000012",
+            "input_cache_read": "0.000000006"
+          },
+          {
+            "utc_days": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday"
+            ],
+            "utc_start": 400,
+            "utc_end": 600,
+            "prompt": "0.00000015",
+            "completion": "0.0000006",
+            "input_cache_read": "0.000000003"
+          },
+          {
+            "utc_days": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday"
+            ],
+            "utc_start": 600,
+            "utc_end": 1000,
+            "prompt": "0.0000003",
+            "completion": "0.0000012",
+            "input_cache_read": "0.000000006"
+          },
+          {
+            "utc_days": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday"
+            ],
+            "utc_start": 1000,
+            "utc_end": 0,
+            "prompt": "0.00000015",
+            "completion": "0.0000006",
+            "input_cache_read": "0.000000003"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 2,
+      "id": "deepseek/deepseek-v4.1-flash",
+      "name": "DeepSeek: DeepSeek V4.1 Flash",
+      "weekly_tokens_display": "19T tokens",
+      "rank": 2,
+      "canonical_slug": "deepseek/deepseek-v4.1-flash-20260910",
+      "pricing": {
+        "prompt": "0.000000051",
+        "completion": "0.000000567",
+        "input_cache_read": "0.000000018"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 3,
+      "id": "z-ai/glm-5.3-flash",
+      "name": "Z.ai: GLM 5.3 Flash",
+      "weekly_tokens_display": "15.1T tokens",
+      "rank": 3,
+      "canonical_slug": "z-ai/glm-5.3-flash-20260826",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000005",
+        "input_cache_read": "0.00000003"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 4,
+      "id": "tencent/hy4",
+      "name": "Tencent: Hy4",
+      "weekly_tokens_display": "9.97T tokens",
+      "rank": 4,
+      "canonical_slug": "tencent/hy4-20261104",
+      "pricing": {
+        "prompt": "0.000000417",
+        "completion": "0.0000012505",
+        "input_cache_read": "0.000000021"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools"
+      ]
+    },
+    {
+      "directory_rank": 5,
+      "id": "openai/gpt-6-luna",
+      "name": "OpenAI: GPT-6 Luna",
+      "weekly_tokens_display": "7.94T tokens",
+      "rank": 5,
+      "canonical_slug": "openai/gpt-6-luna-20260922",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000005",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000001",
+        "input_cache_write": "0.000000125",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.0000002",
+            "completion": "0.00000075",
+            "input_cache_read": "0.00000002",
+            "input_cache_write": "0.00000025"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 6,
+      "id": "stepfun/step-5-preview",
+      "name": "StepFun: Step 5 Preview",
+      "weekly_tokens_display": "7.79T tokens",
+      "rank": 6,
+      "canonical_slug": "stepfun/step-5-preview-20261008",
+      "pricing": {
+        "prompt": "0.000001",
+        "completion": "0.0000027",
+        "input_cache_read": "0.0000001"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 7,
+      "id": "anthropic/claude-opus-5.5",
+      "name": "Anthropic: Claude Opus 5.5",
+      "weekly_tokens_display": "7.23T tokens",
+      "rank": 7,
+      "canonical_slug": "anthropic/claude-opus-5.5-20260921",
+      "pricing": {
+        "prompt": "0.000004",
+        "completion": "0.00002",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.000005",
+        "input_cache_write_1h": "0.000008"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 8,
+      "id": "minimax/minimax-m3.1-flash",
+      "name": "MiniMax: MiniMax M3.1 Flash",
+      "weekly_tokens_display": "6.18T tokens",
+      "rank": 8,
+      "canonical_slug": "minimax/minimax-m3.1-flash-20261019",
+      "pricing": {
+        "prompt": "0.000000075",
+        "completion": "0.0000003",
+        "input_cache_read": "0.0000000075",
+        "overrides": [
+          {
+            "utc_start": 1500,
+            "utc_end": 100,
+            "prompt": "0.000000075",
+            "completion": "0.0000003",
+            "input_cache_read": "0.0000000075"
+          },
+          {
+            "utc_start": 100,
+            "utc_end": 1500,
+            "prompt": "0.00000015",
+            "completion": "0.0000006",
+            "input_cache_read": "0.000000015"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 9,
+      "id": "tencent/hy4-preview",
+      "name": "Tencent: Hy4 preview",
+      "weekly_tokens_display": "5.14T tokens",
+      "rank": 9,
+      "canonical_slug": "tencent/hy4-preview-20260827",
+      "pricing": {
+        "prompt": "0.0000007506",
+        "completion": "0.0000022509",
+        "input_cache_read": "0.0000000378",
+        "overrides": [
+          {
+            "utc_start": 0,
+            "utc_end": 1600,
+            "prompt": "0.000000834",
+            "completion": "0.000002501",
+            "input_cache_read": "0.000000042"
+          },
+          {
+            "utc_start": 1600,
+            "utc_end": 0,
+            "prompt": "0.0000007506",
+            "completion": "0.0000022509",
+            "input_cache_read": "0.0000000378"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 10,
+      "id": "openai/gpt-6.1-sol",
+      "name": "OpenAI: GPT-6.1 Sol",
+      "weekly_tokens_display": "4.23T tokens",
+      "rank": 10,
+      "canonical_slug": "openai/gpt-6.1-sol-20260929",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000001",
+        "input_cache_write": "0.0000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000004",
+            "completion": "0.000015",
+            "input_cache_read": "0.0000002",
+            "input_cache_write": "0.000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 11,
+      "id": "openai/gpt-5.6-luna",
+      "name": "OpenAI: GPT-5.6 Luna",
+      "weekly_tokens_display": "4.22T tokens",
+      "rank": 11,
+      "canonical_slug": "openai/gpt-5.6-luna-20260709",
+      "pricing": {
+        "prompt": "0.0000002",
+        "completion": "0.0000012",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000002",
+        "input_cache_write": "0.00000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.0000004",
+            "completion": "0.0000018",
+            "input_cache_read": "0.00000004",
+            "input_cache_write": "0.0000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 12,
+      "id": "moonshotai/kimi-k3.1-pro",
+      "name": "MoonshotAI: Kimi K3.1 Pro",
+      "weekly_tokens_display": "4.21T tokens",
+      "rank": 12,
+      "canonical_slug": "moonshotai/kimi-k3.1-pro-20261023",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "input_cache_read": "0.0000002"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 13,
+      "id": "z-ai/glm-5.3",
+      "name": "Z.ai: GLM 5.3",
+      "weekly_tokens_display": "3.98T tokens",
+      "rank": 13,
+      "canonical_slug": "z-ai/glm-5.3-20260816",
+      "pricing": {
+        "prompt": "0.0000000699",
+        "completion": "0.0000014",
+        "input_cache_read": "0.0000000689"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 14,
+      "id": "deepseek/deepseek-v4-flash-0731",
+      "name": "DeepSeek: DeepSeek V4 Flash 0731",
+      "weekly_tokens_display": "3.87T tokens",
+      "rank": 14,
+      "canonical_slug": "deepseek/deepseek-v4-flash-20260731",
+      "pricing": {
+        "prompt": "0.0000000434",
+        "completion": "0.0000003",
+        "input_cache_read": "0.000000035"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 15,
+      "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "weekly_tokens_display": "3.31T tokens",
+      "rank": 15,
+      "canonical_slug": "nvidia/nemotron-3-ultra-550b-a55b-20260604",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "seed",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 16,
+      "id": "stealth/crouton-alpha",
+      "name": "Crouton Alpha",
+      "weekly_tokens_display": "3.23T tokens",
+      "rank": 16,
+      "canonical_slug": "stealth/crouton-alpha",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 17,
+      "id": "nvidia/nemotron-3.5-super-vl:free",
+      "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
+      "weekly_tokens_display": "3.22T tokens",
+      "rank": 17,
+      "canonical_slug": "nvidia/nemotron-3.5-super-vl-20261015",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 18,
+      "id": "tencent/hy3",
+      "name": "Tencent: Hy3",
+      "weekly_tokens_display": "2.99T tokens",
+      "rank": 18,
+      "canonical_slug": "tencent/hy3-20260706",
+      "pricing": {
+        "prompt": "0.0000000825",
+        "completion": "0.00000033",
+        "input_cache_read": "0.000000020625",
+        "overrides": [
+          {
+            "utc_start": 0,
+            "utc_end": 1600,
+            "prompt": "0.000000132",
+            "completion": "0.000000528",
+            "input_cache_read": "0.000000033"
+          },
+          {
+            "utc_start": 1600,
+            "utc_end": 0,
+            "prompt": "0.0000000825",
+            "completion": "0.00000033",
+            "input_cache_read": "0.000000020625"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 19,
+      "id": "meta/muse-spark-1.3-contributor",
+      "name": "Meta: Muse Spark 1.3 Contributor",
+      "weekly_tokens_display": "2.94T tokens",
+      "rank": 19,
+      "canonical_slug": "meta/muse-spark-1.3-contributor-20260902",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000002",
+        "web_search": "0.0025",
+        "input_cache_read": "0.000000002"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 20,
+      "id": "anthropic/claude-haiku-5.5",
+      "name": "Anthropic: Claude Haiku 5.5",
+      "weekly_tokens_display": "2.92T tokens",
+      "rank": 20,
+      "canonical_slug": "anthropic/claude-haiku-5.5-20261007",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000005",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000001",
+        "input_cache_write": "0.000000125",
+        "input_cache_write_1h": "0.0000002",
+        "overrides": [
+          {
+            "min_prompt_tokens": 100000,
+            "prompt": "0.0000005",
+            "completion": "0.0000025",
+            "input_cache_read": "0.00000005",
+            "input_cache_write": "0.000000625",
+            "input_cache_write_1h": "0.000001"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 21,
+      "id": "xiaomi/mimo-v2.6-flash",
+      "name": "Xiaomi: MiMo-V2.6-Flash",
+      "weekly_tokens_display": "2.67T tokens",
+      "rank": 21,
+      "canonical_slug": "xiaomi/mimo-v2.6-flash-20260921",
+      "pricing": {
+        "prompt": "0.00000014",
+        "completion": "0.00000028",
+        "input_cache_read": "0.0000000028"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 22,
+      "id": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek: DeepSeek V4 Flash 0423",
+      "weekly_tokens_display": "2.56T tokens",
+      "rank": 22,
+      "canonical_slug": "deepseek/deepseek-v4-flash-20260423",
+      "pricing": {
+        "prompt": "0.000000091",
+        "completion": "0.000000182",
+        "input_cache_read": "0.0000000182"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 23,
+      "id": "anthropic/claude-sonnet-5.5",
+      "name": "Anthropic: Claude Sonnet 5.5",
+      "weekly_tokens_display": "2.54T tokens",
+      "rank": 23,
+      "canonical_slug": "anthropic/claude-sonnet-5.5-20260928",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000001",
+        "input_cache_write": "0.0000025",
+        "input_cache_write_1h": "0.000004"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 24,
+      "id": "moonshotai/kimi-k3",
+      "name": "MoonshotAI: Kimi K3",
+      "weekly_tokens_display": "2.15T tokens",
+      "rank": 24,
+      "canonical_slug": "moonshotai/kimi-k3-20260715",
+      "pricing": {
+        "prompt": "0.000000192",
+        "completion": "0.000016",
+        "input_cache_read": "0.000000182"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 26,
+      "id": "google/gemini-3.8-flash",
+      "name": "Google: Gemini 3.8 Flash",
+      "weekly_tokens_display": "1.71T tokens",
+      "rank": 25,
+      "canonical_slug": "google/gemini-3.8-flash-20260902",
+      "pricing": {
+        "prompt": "0.000000825",
+        "completion": "0.000004125",
+        "image": "0.000000825",
+        "audio": "0.000000825",
+        "input_audio_cache": "0.0000000825",
+        "web_search": "0.014",
+        "internal_reasoning": "0.000004125",
+        "input_cache_read": "0.0000000825",
+        "input_cache_write": "0.0000000416666666666667"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 27,
+      "id": "upstage/solar-mini4",
+      "name": "Upstage: Solar Mini 4",
+      "weekly_tokens_display": "1.6T tokens",
+      "rank": 26,
+      "canonical_slug": "upstage/solar-mini4-20260922",
+      "pricing": {
+        "prompt": "0.00000005",
+        "completion": "0.0000002",
+        "input_cache_read": "0.000000005"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 28,
+      "id": "google/gemini-4-argon",
+      "name": "Google: Gemini 4 Argon",
+      "weekly_tokens_display": "1.33T tokens",
+      "rank": 27,
+      "canonical_slug": "google/gemini-4-argon-20261013",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "image": "0.000002",
+        "audio": "0.000002",
+        "input_audio_cache": "0.0000001",
+        "web_search": "0.014",
+        "internal_reasoning": "0.00001",
+        "input_cache_read": "0.0000001",
+        "input_cache_write": "0.0000001875"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 29,
+      "id": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "weekly_tokens_display": "1.28T tokens",
+      "rank": 28,
+      "canonical_slug": "nvidia/nemotron-3.5-lightning-20260807",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "seed",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 30,
+      "id": "xiaomi/mimo-v2.6-pro",
+      "name": "Xiaomi: MiMo-V2.6-Pro",
+      "weekly_tokens_display": "1.26T tokens",
+      "rank": 29,
+      "canonical_slug": "xiaomi/mimo-v2.6-pro-20260921",
+      "pricing": {
+        "prompt": "0.000000435",
+        "completion": "0.00000087",
+        "input_cache_read": "0.0000000036"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 31,
+      "id": "openai/gpt-6.1-terra",
+      "name": "OpenAI: GPT-6.1 Terra",
+      "weekly_tokens_display": "1.08T tokens",
+      "rank": 30,
+      "canonical_slug": "openai/gpt-6.1-terra-20261026",
+      "pricing": {
+        "prompt": "0.000001",
+        "completion": "0.000005",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000005",
+        "input_cache_write": "0.00000125",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000002",
+            "completion": "0.0000075",
+            "input_cache_read": "0.0000001",
+            "input_cache_write": "0.0000025"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 32,
+      "id": "z-ai/glm-5.2",
+      "name": "Z.ai: GLM 5.2",
+      "weekly_tokens_display": "961B tokens",
+      "rank": 31,
+      "canonical_slug": "z-ai/glm-5.2-20260616",
+      "pricing": {
+        "prompt": "0.000000006",
+        "completion": "0.0000068",
+        "input_cache_read": "0.000000005"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 33,
+      "id": "nvidia/nemotron-3.5-super-vl",
+      "name": "NVIDIA: Nemotron 3.5 Super VL",
+      "weekly_tokens_display": "893B tokens",
+      "rank": 32,
+      "canonical_slug": "nvidia/nemotron-3.5-super-vl-20261015",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000005",
+        "input_cache_read": "0.00000002"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 34,
+      "id": "deepseek/deepseek-v4-pro-0813",
+      "name": "DeepSeek: DeepSeek V4 Pro 0813",
+      "weekly_tokens_display": "862B tokens",
+      "rank": 33,
+      "canonical_slug": "deepseek/deepseek-v4-pro-20260813",
+      "pricing": {
+        "prompt": "0.000000111",
+        "completion": "0.00000444",
+        "input_cache_read": "0.000000106"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 35,
+      "id": "qwen/qwen3.8-flash",
+      "name": "Qwen: Qwen3.8 Flash",
+      "weekly_tokens_display": "837B tokens",
+      "rank": 34,
+      "canonical_slug": "qwen/qwen3.8-flash-20260826",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.00000047",
+        "input_cache_read": "0.000000016"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 36,
+      "id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "weekly_tokens_display": "831B tokens",
+      "rank": 35,
+      "canonical_slug": "dots-studio/dots-3-note-preview-20260813",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 37,
+      "id": "qwen/qwen3.8-27b",
+      "name": "Qwen: Qwen3.8 27B",
+      "weekly_tokens_display": "817B tokens",
+      "rank": 36,
+      "canonical_slug": "qwen/qwen3.8-27b-20260814",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.000001875",
+        "input_cache_read": "0.0000000375"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 38,
+      "id": "minimax/minimax-m3",
+      "name": "MiniMax: MiniMax M3",
+      "weekly_tokens_display": "749B tokens",
+      "rank": 37,
+      "canonical_slug": "minimax/minimax-m3-20260531",
+      "pricing": {
+        "prompt": "0.0000003",
+        "completion": "0.0000012",
+        "input_cache_read": "0.00000006"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 39,
+      "id": "google/gemini-3-flash-preview",
+      "name": "Google: Gemini 3 Flash Preview",
+      "weekly_tokens_display": "685B tokens",
+      "rank": 38,
+      "canonical_slug": "google/gemini-3-flash-preview-20251217",
+      "pricing": {
+        "prompt": "0.0000005",
+        "completion": "0.000003",
+        "image": "0.0000005",
+        "audio": "0.000001",
+        "input_audio_cache": "0.0000001",
+        "web_search": "0.014",
+        "internal_reasoning": "0.000003",
+        "input_cache_read": "0.00000005",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 40,
+      "id": "openai/gpt-6-luna-pro",
+      "name": "OpenAI: GPT-6 Luna Pro",
+      "weekly_tokens_display": "674B tokens",
+      "rank": 39,
+      "canonical_slug": "openai/gpt-6-luna-pro-20260922",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000005",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000001",
+        "input_cache_write": "0.000000125",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.0000002",
+            "completion": "0.00000075",
+            "input_cache_read": "0.00000002",
+            "input_cache_write": "0.00000025"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 42,
+      "id": "deepseek/deepseek-v4-pro",
+      "name": "DeepSeek: DeepSeek V4 Pro 0423",
+      "weekly_tokens_display": "618B tokens",
+      "rank": 40,
+      "canonical_slug": "deepseek/deepseek-v4-pro-20260423",
+      "pricing": {
+        "prompt": "0.000000525306",
+        "completion": "0.000001050612",
+        "input_cache_read": "0.0000000437755"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 43,
+      "id": "google/gemini-3.1-flash-lite",
+      "name": "Google: Gemini 3.1 Flash Lite",
+      "weekly_tokens_display": "561B tokens",
+      "rank": 41,
+      "canonical_slug": "google/gemini-3.1-flash-lite-20260507",
+      "pricing": {
+        "prompt": "0.00000025",
+        "completion": "0.0000015",
+        "image": "0.00000025",
+        "audio": "0.0000005",
+        "input_audio_cache": "0.00000005",
+        "web_search": "0.014",
+        "internal_reasoning": "0.0000015",
+        "input_cache_read": "0.000000025",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 44,
+      "id": "anthropic/claude-sonnet-5",
+      "name": "Anthropic: Claude Sonnet 5",
+      "weekly_tokens_display": "556B tokens",
+      "rank": 42,
+      "canonical_slug": "anthropic/claude-sonnet-5-20260630",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.0000025",
+        "input_cache_write_1h": "0.000004"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 45,
+      "id": "google/gemma-4-31b-it",
+      "name": "Google: Gemma 4 31B",
+      "weekly_tokens_display": "525B tokens",
+      "rank": 43,
+      "canonical_slug": "google/gemma-4-31b-it-20260402",
+      "pricing": {
+        "prompt": "0.0000002",
+        "completion": "0.0000004"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 46,
+      "id": "qwen/qwen3.7-flash",
+      "name": "Qwen: Qwen3.7 Flash",
+      "weekly_tokens_display": "508B tokens",
+      "rank": 44,
+      "canonical_slug": "qwen/qwen3.7-flash-20260727",
+      "pricing": {
+        "prompt": "0.00000003",
+        "completion": "0.00000013",
+        "input_cache_read": "0.000000006",
+        "input_cache_write": "0.000000038",
+        "overrides": [
+          {
+            "min_prompt_tokens": 32000,
+            "prompt": "0.0000001",
+            "completion": "0.0000004",
+            "input_cache_read": "0.00000002",
+            "input_cache_write": "0.000000125"
+          },
+          {
+            "min_prompt_tokens": 256000,
+            "prompt": "0.0000002",
+            "completion": "0.0000008",
+            "input_cache_read": "0.00000004",
+            "input_cache_write": "0.00000025"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 47,
+      "id": "upstage/solar-pro4",
+      "name": "Upstage: Solar Pro 4",
+      "weekly_tokens_display": "496B tokens",
+      "rank": 45,
+      "canonical_slug": "upstage/solar-pro4-20260810",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006",
+        "input_cache_read": "0.00000003"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 49,
+      "id": "google/gemma-4-26b-a4b-it",
+      "name": "Google: Gemma 4 26B A4B",
+      "weekly_tokens_display": "430B tokens",
+      "rank": 46,
+      "canonical_slug": "google/gemma-4-26b-a4b-it-20260403",
+      "pricing": {
+        "prompt": "0.0000000675",
+        "completion": "0.000000225",
+        "input_cache_read": "0.0000000375"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 50,
+      "id": "google/gemini-3.7-flash",
+      "name": "Google: Gemini 3.7 Flash",
+      "weekly_tokens_display": "389B tokens",
+      "rank": 47,
+      "canonical_slug": "google/gemini-3.7-flash-20260813",
+      "pricing": {
+        "prompt": "0.00000075",
+        "completion": "0.00000375",
+        "image": "0.00000075",
+        "audio": "0.00000075",
+        "input_audio_cache": "0.000000075",
+        "web_search": "0.014",
+        "internal_reasoning": "0.00000375",
+        "input_cache_read": "0.000000075",
+        "input_cache_write": "0.0000000416666666666667"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 51,
+      "id": "openai/gpt-6-astra",
+      "name": "OpenAI: GPT-6 Astra",
+      "weekly_tokens_display": "388B tokens",
+      "rank": 48,
+      "canonical_slug": "openai/gpt-6-astra-20260903",
+      "pricing": {
+        "prompt": "0.00001",
+        "completion": "0.00005",
+        "web_search": "0.01",
+        "input_cache_read": "0.000001",
+        "input_cache_write": "0.0000125",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.00002",
+            "completion": "0.000075",
+            "input_cache_read": "0.000002",
+            "input_cache_write": "0.000025"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 52,
+      "id": "openai/gpt-oss-120b",
+      "name": "OpenAI: gpt-oss-120b",
+      "weekly_tokens_display": "383B tokens",
+      "rank": 49,
+      "canonical_slug": "openai/gpt-oss-120b",
+      "pricing": {
+        "prompt": "0.000000024",
+        "completion": "0.000000087",
+        "input_cache_read": "0.000000021"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 53,
+      "id": "stepfun/step-3.7-flash",
+      "name": "StepFun: Step 3.7 Flash",
+      "weekly_tokens_display": "365B tokens",
+      "rank": 50,
+      "canonical_slug": "stepfun/step-3.7-flash-20260528",
+      "pricing": {
+        "prompt": "0.0000002",
+        "completion": "0.00000115",
+        "input_cache_read": "0.00000004"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 54,
+      "id": "openai/gpt-5.6-sol",
+      "name": "OpenAI: GPT-5.6 Sol",
+      "weekly_tokens_display": "348B tokens",
+      "rank": 51,
+      "canonical_slug": "openai/gpt-5.6-sol-20260709",
+      "pricing": {
+        "prompt": "0.000004",
+        "completion": "0.00002",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000004",
+        "input_cache_write": "0.000005",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000008",
+            "completion": "0.00003",
+            "input_cache_read": "0.0000008",
+            "input_cache_write": "0.00001"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 55,
+      "id": "mistralai/mistral-nemo",
+      "name": "Mistral: Mistral Nemo",
+      "weekly_tokens_display": "344B tokens",
+      "rank": 52,
+      "canonical_slug": "mistralai/mistral-nemo",
+      "pricing": {
+        "prompt": "0.000000029",
+        "completion": "0.00000003"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 56,
+      "id": "google/gemini-2.5-flash-lite",
+      "name": "Google: Gemini 2.5 Flash Lite",
+      "weekly_tokens_display": "338B tokens",
+      "rank": 53,
+      "canonical_slug": "google/gemini-2.5-flash-lite",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000004",
+        "image": "0.0000001",
+        "audio": "0.0000003",
+        "input_audio_cache": "0.00000003",
+        "web_search": "0.014",
+        "internal_reasoning": "0.0000004",
+        "input_cache_read": "0.00000001",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 57,
+      "id": "deepseek/deepseek-v3.2",
+      "name": "DeepSeek: DeepSeek V3.2",
+      "weekly_tokens_display": "315B tokens",
+      "rank": 54,
+      "canonical_slug": "deepseek/deepseek-v3.2-20251201",
+      "pricing": {
+        "prompt": "0.00000026",
+        "completion": "0.00000038",
+        "input_cache_read": "0.00000013"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 58,
+      "id": "anthropic/claude-fable-5.1",
+      "name": "Anthropic: Claude Fable 5.1",
+      "weekly_tokens_display": "300B tokens",
+      "rank": 55,
+      "canonical_slug": "anthropic/claude-fable-5.1-20260831",
+      "pricing": {
+        "prompt": "0.00001",
+        "completion": "0.00005",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000025",
+        "input_cache_write": "0.0000125",
+        "input_cache_write_1h": "0.00002"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 59,
+      "id": "qwen/qwen3.6-35b-a3b",
+      "name": "Qwen: Qwen3.6 35B A3B",
+      "weekly_tokens_display": "292B tokens",
+      "rank": 56,
+      "canonical_slug": "qwen/qwen3.6-35b-a3b-20260415",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.0000009",
+        "input_cache_read": "0.000000025"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 60,
+      "id": "google/gemini-2.5-flash",
+      "name": "Google: Gemini 2.5 Flash",
+      "weekly_tokens_display": "283B tokens",
+      "rank": 57,
+      "canonical_slug": "google/gemini-2.5-flash",
+      "pricing": {
+        "prompt": "0.0000003",
+        "completion": "0.0000025",
+        "image": "0.0000003",
+        "audio": "0.000001",
+        "input_audio_cache": "0.0000001",
+        "web_search": "0.014",
+        "internal_reasoning": "0.0000025",
+        "input_cache_read": "0.00000003",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 61,
+      "id": "google/gemini-3.5-flash-lite",
+      "name": "Google: Gemini 3.5 Flash Lite",
+      "weekly_tokens_display": "280B tokens",
+      "rank": 58,
+      "canonical_slug": "google/gemini-3.5-flash-lite-20260721",
+      "pricing": {
+        "prompt": "0.0000003",
+        "completion": "0.0000025",
+        "image": "0.0000003",
+        "audio": "0.0000003",
+        "input_audio_cache": "0.00000003",
+        "web_search": "0.014",
+        "internal_reasoning": "0.0000025",
+        "input_cache_read": "0.00000003",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 62,
+      "id": "openai/gpt-6-sol",
+      "name": "OpenAI: GPT-6 Sol",
+      "weekly_tokens_display": "278B tokens",
+      "rank": 59,
+      "canonical_slug": "openai/gpt-6-sol-20260922",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.0000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000004",
+            "completion": "0.000015",
+            "input_cache_read": "0.0000004",
+            "input_cache_write": "0.000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 63,
+      "id": "x-ai/grok-4.7",
+      "name": "SpaceXAI: Grok 4.7",
+      "weekly_tokens_display": "272B tokens",
+      "rank": 60,
+      "canonical_slug": "x-ai/grok-4.7-20260916",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000006",
+        "web_search": "0.005",
+        "input_cache_read": "0.0000005",
+        "overrides": [
+          {
+            "min_prompt_tokens": 200000,
+            "prompt": "0.000004",
+            "completion": "0.000012",
+            "input_cache_read": "0.000001"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 64,
+      "id": "anthropic/claude-opus-5",
+      "name": "Anthropic: Claude Opus 5",
+      "weekly_tokens_display": "265B tokens",
+      "rank": 61,
+      "canonical_slug": "anthropic/claude-opus-5-20260723",
+      "pricing": {
+        "prompt": "0.000005",
+        "completion": "0.000025",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000005",
+        "input_cache_write": "0.00000625",
+        "input_cache_write_1h": "0.00001"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 65,
+      "id": "openai/gpt-4o-mini",
+      "name": "OpenAI: GPT-4o-mini",
+      "weekly_tokens_display": "244B tokens",
+      "rank": 62,
+      "canonical_slug": "openai/gpt-4o-mini",
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006",
+        "input_cache_read": "0.000000075"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "prediction",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p",
+        "web_search_options"
+      ]
+    },
+    {
+      "directory_rank": 66,
+      "id": "anthropic/claude-sonnet-4.6",
+      "name": "Anthropic: Claude Sonnet 4.6",
+      "weekly_tokens_display": "244B tokens",
+      "rank": 63,
+      "canonical_slug": "anthropic/claude-4.6-sonnet-20260217",
+      "pricing": {
+        "prompt": "0.000003",
+        "completion": "0.000015",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000003",
+        "input_cache_write": "0.00000375",
+        "input_cache_write_1h": "0.000006"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 68,
+      "id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "weekly_tokens_display": "237B tokens",
+      "rank": 64,
+      "canonical_slug": "cohere/north-mini-code-20260617",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 70,
+      "id": "anthropic/claude-opus-4.8",
+      "name": "Anthropic: Claude Opus 4.8",
+      "weekly_tokens_display": "214B tokens",
+      "rank": 65,
+      "canonical_slug": "anthropic/claude-4.8-opus-20260528",
+      "pricing": {
+        "prompt": "0.000005",
+        "completion": "0.000025",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000005",
+        "input_cache_write": "0.00000625",
+        "input_cache_write_1h": "0.00001"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 71,
+      "id": "openai/gpt-5.6-terra",
+      "name": "OpenAI: GPT-5.6 Terra",
+      "weekly_tokens_display": "200B tokens",
+      "rank": 66,
+      "canonical_slug": "openai/gpt-5.6-terra-20260709",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000012",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.0000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000004",
+            "completion": "0.000018",
+            "input_cache_read": "0.0000004",
+            "input_cache_write": "0.000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 72,
+      "id": "qwen/qwen3.8-max-0902",
+      "name": "Qwen: Qwen3.8 Max (0902)",
+      "weekly_tokens_display": "197B tokens",
+      "rank": 67,
+      "canonical_slug": "qwen/qwen3.8-max-20260902",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000006",
+        "input_cache_read": "0.00000025"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 73,
+      "id": "openai/gpt-oss-20b",
+      "name": "OpenAI: gpt-oss-20b",
+      "weekly_tokens_display": "178B tokens",
+      "rank": 68,
+      "canonical_slug": "openai/gpt-oss-20b",
+      "pricing": {
+        "prompt": "0.00000003",
+        "completion": "0.00000013",
+        "input_cache_read": "0.00000003"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 74,
+      "id": "anthropic/claude-sonnet-4.5",
+      "name": "Anthropic: Claude Sonnet 4.5",
+      "weekly_tokens_display": "164B tokens",
+      "rank": 69,
+      "canonical_slug": "anthropic/claude-4.5-sonnet-20250929",
+      "pricing": {
+        "prompt": "0.000003",
+        "completion": "0.000015",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000003",
+        "input_cache_write": "0.00000375",
+        "input_cache_write_1h": "0.000006",
+        "overrides": [
+          {
+            "min_prompt_tokens": 200000,
+            "prompt": "0.000006",
+            "completion": "0.0000225",
+            "input_cache_read": "0.0000006",
+            "input_cache_write": "0.0000075",
+            "input_cache_write_1h": "0.000012"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 75,
+      "id": "anthropic/claude-haiku-4.5",
+      "name": "Anthropic: Claude Haiku 4.5",
+      "weekly_tokens_display": "159B tokens",
+      "rank": 70,
+      "canonical_slug": "anthropic/claude-4.5-haiku-20251001",
+      "pricing": {
+        "prompt": "0.000001",
+        "completion": "0.000005",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000001",
+        "input_cache_write": "0.00000125",
+        "input_cache_write_1h": "0.000002"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 77,
+      "id": "mistralai/mistral-large-4-0",
+      "name": "Mistral: Mistral Large 4",
+      "weekly_tokens_display": "144B tokens",
+      "rank": 71,
+      "canonical_slug": "mistralai/mistral-large-4-0-20261006",
+      "pricing": {
+        "prompt": "0.0000007",
+        "completion": "0.0000021",
+        "input_cache_read": "0.00000007"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 78,
+      "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "weekly_tokens_display": "143B tokens",
+      "rank": 72,
+      "canonical_slug": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "seed",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 79,
+      "id": "moonshotai/kimi-k2.6",
+      "name": "MoonshotAI: Kimi K2.6",
+      "weekly_tokens_display": "143B tokens",
+      "rank": 73,
+      "canonical_slug": "moonshotai/kimi-k2.6-20260420",
+      "pricing": {
+        "prompt": "0.00000065",
+        "completion": "0.00000341",
+        "input_cache_read": "0.00000015"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 80,
+      "id": "particle-ai/particle-1",
+      "name": "Particle AI: Particle-1",
+      "weekly_tokens_display": "132B tokens",
+      "rank": 74,
+      "canonical_slug": "particle-ai/particle-1-20261027",
+      "pricing": {
+        "prompt": "0.00000005",
+        "completion": "0.0000005",
+        "input_cache_read": "0.000000003"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 81,
+      "id": "qwen/qwen3.5-9b",
+      "name": "Qwen: Qwen3.5-9B",
+      "weekly_tokens_display": "131B tokens",
+      "rank": 75,
+      "canonical_slug": "qwen/qwen3.5-9b-20260310",
+      "pricing": {
+        "prompt": "0.00000017",
+        "completion": "0.00000025"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 83,
+      "id": "meta/muse-spark-open",
+      "name": "Meta: Muse Spark Open",
+      "weekly_tokens_display": "128B tokens",
+      "rank": 76,
+      "canonical_slug": "meta/muse-spark-open-20261015",
+      "pricing": {
+        "prompt": "0.00000125",
+        "completion": "0.00000425",
+        "input_cache_read": "0.00000015"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 84,
+      "id": "inclusionai/ling-3.0-flash",
+      "name": "inclusionAI: Ling 3.0 Flash",
+      "weekly_tokens_display": "126B tokens",
+      "rank": 77,
+      "canonical_slug": "inclusionai/ling-3.0-flash-20260723",
+      "pricing": {
+        "prompt": "0.000000021",
+        "completion": "0.000000063",
+        "input_cache_read": "0.0000000042"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 85,
+      "id": "meta/muse-spark-1.3",
+      "name": "Meta: Muse Spark 1.3",
+      "weekly_tokens_display": "126B tokens",
+      "rank": 78,
+      "canonical_slug": "meta/muse-spark-1.3-20260902",
+      "pricing": {
+        "prompt": "0.00000125",
+        "completion": "0.00000425",
+        "web_search": "0.0025",
+        "input_cache_read": "0.00000015"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 86,
+      "id": "z-ai/glm-5.3-flashx",
+      "name": "Z.ai: GLM 5.3 FlashX",
+      "weekly_tokens_display": "124B tokens",
+      "rank": 79,
+      "canonical_slug": "z-ai/glm-5.3-flashx-20260918",
+      "pricing": {
+        "prompt": "0.00000037",
+        "completion": "0.00000125",
+        "input_cache_read": "0.000000075"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 87,
+      "id": "xingchen-agi/xing4.0-29b-a4b:free",
+      "name": "XingChen: Xing4.0 29B A4B (free)",
+      "weekly_tokens_display": "113B tokens",
+      "rank": 80,
+      "canonical_slug": "xingchen-agi/xing4.0-29b-a4b-20261015",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 88,
+      "id": "meta/muse-wonder",
+      "name": "Meta: Muse Wonder",
+      "weekly_tokens_display": "111B tokens",
+      "rank": 81,
+      "canonical_slug": "meta/muse-wonder-20261012",
+      "pricing": {
+        "prompt": "0.000004",
+        "completion": "0.00002",
+        "web_search": "0.0025",
+        "input_cache_read": "0.0000002"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 89,
+      "id": "google/gemini-3.6-flash",
+      "name": "Google: Gemini 3.6 Flash",
+      "weekly_tokens_display": "111B tokens",
+      "rank": 82,
+      "canonical_slug": "google/gemini-3.6-flash-20260721",
+      "pricing": {
+        "prompt": "0.00000075",
+        "completion": "0.00000375",
+        "image": "0.00000075",
+        "audio": "0.00000075",
+        "input_audio_cache": "0.000000075",
+        "web_search": "0.014",
+        "internal_reasoning": "0.00000375",
+        "input_cache_read": "0.000000075",
+        "input_cache_write": "0.0000000416666666666667"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 90,
+      "id": "google/gemini-3.1-flash-lite-preview",
+      "name": "Google: Gemini 3.1 Flash Lite Preview",
+      "weekly_tokens_display": "108B tokens",
+      "rank": 83,
+      "canonical_slug": "google/gemini-3.1-flash-lite-preview-20260303",
+      "pricing": {
+        "prompt": "0.00000025",
+        "completion": "0.0000015",
+        "image": "0.00000025",
+        "audio": "0.0000005",
+        "input_audio_cache": "0.00000005",
+        "web_search": "0.014",
+        "internal_reasoning": "0.0000015",
+        "input_cache_read": "0.000000025",
+        "input_cache_write": "0.0000000833333333333333"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 91,
+      "id": "anthropic/claude-opus-4.6",
+      "name": "Anthropic: Claude Opus 4.6",
+      "weekly_tokens_display": "98.3B tokens",
+      "rank": 84,
+      "canonical_slug": "anthropic/claude-4.6-opus-20260205",
+      "pricing": {
+        "prompt": "0.000005",
+        "completion": "0.000025",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000005",
+        "input_cache_write": "0.00000625",
+        "input_cache_write_1h": "0.00001"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 92,
+      "id": "reflection/beam-1.0-501b-a23b",
+      "name": "Reflection: Beam 1.0 501B A23B",
+      "weekly_tokens_display": "96.7B tokens",
+      "rank": 85,
+      "canonical_slug": "reflection/beam-1.0-501b-a23b-20261016",
+      "pricing": {
+        "prompt": "0.0000003",
+        "completion": "0.000001",
+        "input_cache_read": "0.00000004"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 93,
+      "id": "google/gemini-3.1-pro-preview",
+      "name": "Google: Gemini 3.1 Pro Preview",
+      "weekly_tokens_display": "96.6B tokens",
+      "rank": 86,
+      "canonical_slug": "google/gemini-3.1-pro-preview-20260219",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000012",
+        "image": "0.000002",
+        "audio": "0.000002",
+        "input_audio_cache": "0.0000002",
+        "web_search": "0.014",
+        "internal_reasoning": "0.000012",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.000000375",
+        "overrides": [
+          {
+            "min_prompt_tokens": 200000,
+            "prompt": "0.000004",
+            "completion": "0.000018",
+            "audio": "0.000004",
+            "input_audio_cache": "0.0000004",
+            "input_cache_read": "0.0000004"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 94,
+      "id": "openai/gpt-5-mini",
+      "name": "OpenAI: GPT-5 Mini",
+      "weekly_tokens_display": "95B tokens",
+      "rank": 87,
+      "canonical_slug": "openai/gpt-5-mini-2025-08-07",
+      "pricing": {
+        "prompt": "0.00000025",
+        "completion": "0.000002",
+        "web_search": "0.01",
+        "input_cache_read": "0.000000025"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 96,
+      "id": "openai/gpt-4.1-mini",
+      "name": "OpenAI: GPT-4.1 Mini",
+      "weekly_tokens_display": "89.6B tokens",
+      "rank": 88,
+      "canonical_slug": "openai/gpt-4.1-mini-2025-04-14",
+      "pricing": {
+        "prompt": "0.0000004",
+        "completion": "0.0000016",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000001"
+      },
+      "supported_parameters": [
+        "max_completion_tokens",
+        "max_tokens",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 97,
+      "id": "openai/gpt-5.4-nano",
+      "name": "OpenAI: GPT-5.4 Nano",
+      "weekly_tokens_display": "84.9B tokens",
+      "rank": 89,
+      "canonical_slug": "openai/gpt-5.4-nano-20260317",
+      "pricing": {
+        "prompt": "0.0000002",
+        "completion": "0.00000125",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000002"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 98,
+      "id": "openai/gpt-5.6-luna-pro",
+      "name": "OpenAI: GPT-5.6 Luna Pro",
+      "weekly_tokens_display": "84.1B tokens",
+      "rank": 90,
+      "canonical_slug": "openai/gpt-5.6-luna-pro-20260709",
+      "pricing": {
+        "prompt": "0.0000002",
+        "completion": "0.0000012",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000002",
+        "input_cache_write": "0.00000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.0000004",
+            "completion": "0.0000018",
+            "input_cache_read": "0.00000004",
+            "input_cache_write": "0.0000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 99,
+      "id": "openai/gpt-5.4-mini",
+      "name": "OpenAI: GPT-5.4 Mini",
+      "weekly_tokens_display": "83.3B tokens",
+      "rank": 91,
+      "canonical_slug": "openai/gpt-5.4-mini-20260317",
+      "pricing": {
+        "prompt": "0.00000075",
+        "completion": "0.0000045",
+        "web_search": "0.01",
+        "input_cache_read": "0.000000075"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 100,
+      "id": "recursive/flint-v1.0:free",
+      "name": "Recursive: Flint (free)",
+      "weekly_tokens_display": "82.6B tokens",
+      "rank": 92,
+      "canonical_slug": "recursive/flint-v1.0-20261021",
+      "pricing": {
+        "prompt": "0",
+        "completion": "0"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 101,
+      "id": "x-ai/grok-4.5",
+      "name": "SpaceXAI: Grok 4.5",
+      "weekly_tokens_display": "82.5B tokens",
+      "rank": 93,
+      "canonical_slug": "x-ai/grok-4.5-20260708",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000006",
+        "web_search": "0.005",
+        "input_cache_read": "0.0000003",
+        "overrides": [
+          {
+            "min_prompt_tokens": 200000,
+            "prompt": "0.000004",
+            "completion": "0.000012",
+            "input_cache_read": "0.0000006"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 103,
+      "id": "inception/mercury-3",
+      "name": "Inception: Mercury 3",
+      "weekly_tokens_display": "80.9B tokens",
+      "rank": 94,
+      "canonical_slug": "inception/mercury-3-20261019",
+      "pricing": {
+        "prompt": "0.0000001",
+        "completion": "0.00000035",
+        "input_cache_read": "0.00000001"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools"
+      ]
+    },
+    {
+      "directory_rank": 104,
+      "id": "qwen/qwen3.7-plus",
+      "name": "Qwen: Qwen3.7 Plus",
+      "weekly_tokens_display": "78.9B tokens",
+      "rank": 95,
+      "canonical_slug": "qwen/qwen3.7-plus-20260602",
+      "pricing": {
+        "prompt": "0.00000032",
+        "completion": "0.00000128",
+        "input_cache_read": "0.000000064",
+        "input_cache_write": "0.0000004",
+        "overrides": [
+          {
+            "min_prompt_tokens": 256000,
+            "prompt": "0.00000096",
+            "completion": "0.00000384",
+            "input_cache_read": "0.000000192",
+            "input_cache_write": "0.0000012"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 107,
+      "id": "openai/gpt-5.4",
+      "name": "OpenAI: GPT-5.4",
+      "weekly_tokens_display": "65B tokens",
+      "rank": 96,
+      "canonical_slug": "openai/gpt-5.4-20260305",
+      "pricing": {
+        "prompt": "0.0000025",
+        "completion": "0.000015",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000025",
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.000005",
+            "completion": "0.0000225",
+            "input_cache_read": "0.0000005"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "directory_rank": 108,
+      "id": "deepseek/deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
+      "weekly_tokens_display": "63.3B tokens",
+      "rank": 97,
+      "canonical_slug": "deepseek/deepseek-v4-flash-vision-exp-20260821",
+      "pricing": {
+        "prompt": "0.00000044",
+        "completion": "0.00000132",
+        "input_cache_read": "0.000000014"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 109,
+      "id": "qwen/qwen3-235b-a22b-2507",
+      "name": "Qwen: Qwen3 235B A22B Instruct 2507",
+      "weekly_tokens_display": "59.2B tokens",
+      "rank": 98,
+      "canonical_slug": "qwen/qwen3-235b-a22b-07-25",
+      "pricing": {
+        "prompt": "0.00000014",
+        "completion": "0.0000008",
+        "input_cache_read": "0.00000005"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 110,
+      "id": "inclusionai/ling-3.1-flash",
+      "name": "inclusionAI: Ling 3.1 Flash",
+      "weekly_tokens_display": "59.1B tokens",
+      "rank": 99,
+      "canonical_slug": "inclusionai/ling-3.1-flash-20261002",
+      "pricing": {
+        "prompt": "0.000000045",
+        "completion": "0.000000135",
+        "input_cache_read": "0.000000009"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "directory_rank": 111,
+      "id": "x-ai/grok-4.6",
+      "name": "SpaceXAI: Grok 4.6",
+      "weekly_tokens_display": "57.2B tokens",
+      "rank": 100,
+      "canonical_slug": "x-ai/grok-4.6-20260810",
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.000006",
+        "web_search": "0.005",
+        "input_cache_read": "0.0000005",
+        "overrides": [
+          {
+            "min_prompt_tokens": 200000,
+            "prompt": "0.000004",
+            "completion": "0.000012",
+            "input_cache_read": "0.000001"
+          }
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    }
+  ],
+  "excluded": [],
+  "source_sha256": {
+    "runner.py": "63112cbad390caad3c5dfc94fb9ade6e7a903336224b402819b7a92b6a1cd489",
+    "player.py": "4a12972255e2da73732921db6a7cbf5646c812ae80e44b7edb3bd3de886e3741",
+    "deadline.py": "11b1ccde407205c18883d2cc35b6e2d7b648134be4b3db08afe05f1290e1c369",
+    "reporting.py": "7630a14f4adee2ff1b22332cc31733f11bb8a460bbbc4cfd74941ee1c379667d",
+    "model_policy.py": "42f34c4a22d67215ea26ccf9d59f6f5c3157e63398b3833ad810d10c3862cf05",
+    "metrics.py": "74f4753215bf3bf8d4057ebdeefa3a25071a9630e375bafd50df6de7c3c8e663",
+    "leaderboard.py": "9c896ab583d9ff14332446287d8d69d7b81458aa0bd49e64eb669538ac49a605",
+    "campaign.py": "b23deaa2b605fa7496faab8f748b943f67b933b4c038682f99b0efac1958c712",
+    "uv.lock": "83aea2ba8223fab2f874ae9e739f89b08352e020889ec55823c9c4640e395547"
+  },
+  "ranking_source": "https://openrouter.ai/models?fmt=cards&output_modalities=text&order=top-weekly",
+  "ranking_captured_at": "2026-11-07T20:28:00.407Z",
+  "concurrency": 8,
+  "outer_timeout_s": 900,
+  "paid_only": false,
+  "settings": {
+    "provider": "openai",
+    "browser": "cloud",
+    "vision": false,
+    "navigation_recovery": "bounded",
+    "reasoning": "low",
+    "max_output_tokens": null,
+    "model_retries": 2,
+    "navigation_timeout": 60,
+    "round_timeout_policy": "continue",
+    "terminal_failure_policy": "collect_actual_scorecard_without_answers",
+    "scorecard_collection_timeout_s": 240,
+    "max_steps": 50,
+    "run_timeout_s": 600,
+    "margin_s": 3
+  }
+}

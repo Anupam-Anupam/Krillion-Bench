@@ -56,6 +56,8 @@ def enrich_report(report, final_text='', events=()):
     report['model_issues'] = [e for e in events if e['event'] == 'model_issue']
     report['inference_interruptions'] = [e for e in events if e['event'] == 'inference_interruption']
     report['compatibility_changes'] = [e for e in events if e['event'] == 'model_compatibility']
+    report['agent_failures'] = [e for e in events if e['event'] in ('agent_failure', 'failure')]
+    report['scorecard_collection'] = [e for e in events if e['event'] in ('scorecard_collection', 'scorecard_navigation')]
     opened = {e['round']: e['elapsed_s'] for e in events if e['event'] == 'round_open'}
     for row in report['rounds']:
         details = result_details(row.get('result_text', ''), row.get('points'))
@@ -174,6 +176,15 @@ def markdown(report):
         lines += ['## Output compatibility changes', '']
         for e in report['compatibility_changes']:
             lines += [f"- {cell(e.get('round'))}: {cell(e['mode'])}; same model and validated action schema retained ({cell(e['reason'])})."]
+        lines += ['']
+    if report.get('scorecard_collection'):
+        lines += ['## Final score collection', '',
+                  'After the agent stopped, the harness used navigation controls only and let remaining questions expire. '
+                  'The score and daily percentage come from the actual game scorecard; no answers were supplied by the harness.', '']
+    if report.get('agent_failures'):
+        lines += ['## Terminal diagnostics', '']
+        for e in report['agent_failures']:
+            lines += [f"- {cell(e.get('category'))}: {cell(e.get('message'))}"]
         lines += ['']
     return '\n'.join(lines)
 

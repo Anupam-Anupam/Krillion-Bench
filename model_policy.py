@@ -65,7 +65,9 @@ def error_details(exc):
     code = provider_status or status or adapter_status
     category = 'provider_error'
     names = {type(e).__name__ for e in chain}
-    if isinstance(exc, ModelOutputTruncatedError):
+    if isinstance(exc, ModelResponseTimeout):
+        category = 'inference_deadline'
+    elif isinstance(exc, ModelOutputTruncatedError):
         category = 'output_truncated'
     elif 'ValidationError' in names:
         category = 'invalid_model_output'

@@ -28,6 +28,11 @@ def export_campaign(summary, manifest, reports, events_by_model=None, catalog=No
                            score=row.get('score') if verified else None, partial_points=row.get('partial_points'),
                            daily_percentile=row.get('daily_percentile') if verified else None,
                            rounds_scored=row.get('rounds_scored', 0), recoveries=row.get('navigation_recoveries', 0),
+                           missed_rounds=sum(r.get('round_outcome') == 'missed' for r in report.get('rounds', [])),
+                           scorecard_assisted=any(e.get('phase') == 'verified' for e in report.get('scorecard_collection', [])),
+                           issues=[{k: e.get(k) for k in ('round', 'category', 'reason', 'http_status', 'provider_name', 'error_type')}
+                                   for field in ('model_issues', 'inference_interruptions', 'agent_failures')
+                                   for e in report.get(field, [])],
                            metrics=metrics, rounds=rounds))
     return dict(schema_version=1, date=manifest['utc_date'], updated_at=summary['updated_at'],
                 label='OpenRouter · Top 100' if len(output) == 100 else 'OpenRouter campaign',

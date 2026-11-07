@@ -9,7 +9,7 @@ endpoints. It runs as a standalone Python project with no database or job queue.
 
 The static leaderboard in `index.html` follows a restrained research-table layout,
 with verified score as the default ranking and the largest visual emphasis. It includes
-all 100 historical model variants, a score-versus-metric chart, search/provider/status
+all 100 model variants from the final-score continuation campaign, a score-versus-metric chart, search/provider/status
 filters, light/dark themes, and a per-run dialog with every answer and rarity.
 
 ```sh
@@ -23,20 +23,20 @@ They can be served together at any static host, including a GitHub Pages project
 
 **Metrics:** LLM run cost (USD), output-token cost (USD), output token count, total
 elapsed time, and the game's final daily percentage. Tied scores share a rank;
-incomplete games have partial points but no final rank or daily percentage. Charts
+question timeouts count as zero-point misses and still receive the game’s final score and rank. A run with no verified scorecard is reported separately as a run error. Charts
 include completed games with usable metrics only. Cost ranks are not score ranks.
 
-Historical costs are **estimates**, using recorded per-call usage and the catalog
-saved during discovery on November 7. Cached inputs and context-price tiers are
-applied per call. Missing usage is explicitly partial or unavailable, never zero.
-The original 100-model result files are unchanged; the UI dataset is a new export.
-Its historical configuration is displayed separately from the improved harness.
+The current snapshot is the November 7 final-score continuation campaign, documented
+in [CONTINUATION-REPORT.md](CONTINUATION-REPORT.md). Each model has a verified final
+score; missed questions count as zero. A daily percentage is unavailable when the
+game did not display it. The original TOP100 reports remain unchanged as history.
 
-Future OpenAI-compatible runs capture numeric API usage before the adapter validates
+Current OpenAI-compatible runs capture numeric API usage before the adapter validates
 JSON, so malformed/truncated responses can retain their reported costs. `usage.cost`
 is the account charge. The output component, when present, is the provider's reported
-output cost and may not sum to the account charge. Other adapters retain available
-parsed token usage. Cancelled requests without usage remain unaccounted for.
+output cost and may not sum to the account charge. Missing fields use labeled catalog
+estimates where possible. Cancelled requests without usage remain partial or unavailable,
+never zero. Historical TOP100 costs were estimates based on saved token usage.
 No reasoning tokens are added twice. Browser hosting and credit-purchase fees are
 excluded. See [OpenRouter usage accounting](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
 
@@ -66,6 +66,30 @@ The exporter allowlists run/answer fields and omits raw observations, network tr
 private paths, credentials, and provider response bodies. The downloadable UI JSON
 contains only the exported dataset. Uploaded campaign files stay in the browser.
 
+## Completion and failure policy
+
+A 25-second game timeout is a missed question, not a failed game. The agent continues
+through all seven rounds and the leaderboard uses the game’s actual final score,
+including zero. Rejections, model inference deadlines, action timeouts, malformed
+responses, output truncation, and retried provider failures remain visible in run logs.
+
+If a terminal API error, agent step limit, or full agent runtime stops the agent,
+the harness cancels outstanding inference/actions and spends up to 240 seconds
+collecting the scorecard. It only uses visible navigation controls and lets unanswered
+questions expire under the real timer. It does not fill answers, submit DIVE, reload
+the game, swap models, or manufacture a daily percentage. These scores are marked
+`scored_with_errors`, with the original diagnostic and explicit score-collection
+assistance. They measure the model-and-provider run as executed.
+
+An optional screenshot failure is logged as an artifact error and does not stop play.
+An unreadable/disconnected browser or a scorecard that cannot be verified remains an
+explicit run error without a ranked score. The harness cannot honestly turn missing
+game evidence into a successful result. Historical aborted games must be rerun, not
+relabelled using their partial points.
+
+The current leaderboard distinguishes missed questions and score-collection recovery
+in each model row and displays sanitized failure categories in its dive log.
+
 ## Quick start
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
@@ -86,7 +110,7 @@ every answer in the targeted follow-up checks.
 
 The 100-model OpenRouter campaign uses `campaign.py`. It freezes an observed ranking,
 API catalog, source hashes, and settings before launching one fresh browser per model.
-See [TOP100-REPORT.md](TOP100-REPORT.md) for the campaign results, failure breakdown,
+See [TOP100-REPORT.md](TOP100-REPORT.md) for the original historical campaign results, failure breakdown,
 and every submitted answer. Machine-readable results are in
 [TOP100-SUMMARY.json](TOP100-SUMMARY.json) and [TOP100-ANSWERS.json](TOP100-ANSWERS.json).
 
@@ -140,7 +164,7 @@ omits an output-token cap; model/provider output and context limits still apply.
 the campaign manifest. The published TOP100 results used the earlier 1,500-token/18-second
 configuration and stop-on-failure policy; they are preserved as historical results.
 Current missed questions continue to a real final scorecard; provider interruptions,
-missed rounds, and incomplete games are reported separately.
+missed rounds, and run errors without verified scorecards are reported separately.
 One daily puzzle per model is an exploratory comparison, not a statistically stable quality ranking.
 
 ## Output limits, API failures, and rate limits
@@ -341,3 +365,18 @@ overall model ranking or a statistical uptime guarantee. Pin model versions/sett
 use matched questions across models, and report failed and timed-out runs in the denominator.
 Krillion's curated accepted answers and game-awarded scores are authoritative for this
 benchmark; a plausible rejected answer is recorded as a rejection, not independently graded.
+
+## Data storage
+
+The site is static: GitHub Pages serves `leaderboard-data.json` from this repository.
+There is no application database. Published campaign manifests, sanitized reports,
+and answer logs are versioned in Git alongside the code. The leaderboard download
+exports the currently loaded public dataset; loading a file is local to the page.
+
+Private runtime artifacts are written below the directory passed to `--output`
+(default: `artifacts/`). These include event logs, screenshots, final page text,
+model observations, usage records, and cloud session identifiers. `artifacts/` and
+`.env` are ignored by Git. A checkout or output directory under `/tmp` is temporary
+storage; preserve it in a durable private location before cleanup. Browser Use also
+hosts cloud recordings; their retention is separate from this repository and has
+not been verified. Do not rely on cloud recording retention as the only archive.

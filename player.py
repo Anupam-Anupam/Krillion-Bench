@@ -164,7 +164,7 @@ class NavigationRecovery:
             self.key, self.stalls = None, 0
             return False
         # Use the stable game identity/control, not animation text, for stall counting.
-        key = (state.key, target)
+        key = (observer.current or state.key, target)
         self.stalls = self.stalls + 1 if key == self.key else 0
         self.key = key
         if self.mode != "bounded" or self.stalls < 2 or key in self.used or len(self.used) >= 8:
@@ -173,7 +173,7 @@ class NavigationRecovery:
 
     async def activate(self, state, observer, reason):
         target = navigation_target(state)
-        self.used.add((state.key, target))
+        self.used.add((observer.current or state.key, target))
         result = "cancelled"
         try:
             result = await execute(Action(kind="click", target=target), state, observer)
@@ -198,6 +198,50 @@ async def settle_interrupted_round(observer, state, reason):
         if time.monotonic() >= until:
             raise TimeoutError('Game did not close the expired round')
         await asyncio.sleep(0.2)
+
+
+async def collect_final_score(observer, reason, timeout=240):
+    """Finish the existing game after a terminal agent/API failure, without answers.
+
+    Missed rounds use the real game timer and scorecard. Never invent points,
+    reload the game, substitute a model, or resubmit an uncertain answer.
+    """
+    observer.record.event('scorecard_collection', phase='started', reason=reason)
+    attempts = {}
+    failures = 0
+    async with asyncio.timeout(timeout):
+        while True:
+            try:
+                state = await observer.read()
+                failures = 0
+            except (TimeoutError, BrowserTimeout):
+                failures += 1
+                if failures >= 3:
+                    raise
+                await asyncio.sleep(0.2)
+                continue
+            if verified_completion(observer):
+                observer.record.event('scorecard_collection', phase='verified', reason=reason,
+                                      score=state.score)
+                return 'scored_with_errors'
+            if state.answering:
+                await settle_interrupted_round(observer, state, 'agent_stopped: ' + reason)
+                continue
+            target = navigation_target(state)
+            if target:
+                key = (observer.current or state.key, target)
+                attempts[key] = attempts.get(key, 0) + 1
+                if attempts[key] > 3 or sum(attempts.values()) > 24:
+                    raise TimeoutError('Scorecard navigation stalled')
+                try:
+                    result = await execute(Action(kind='click', target=target), state, observer)
+                except (TimeoutError, BrowserTimeout):
+                    result = 'acknowledgement_timeout'
+                observer.record.event('scorecard_navigation', target=target, result=result,
+                                      reason=reason, round=state.round_label)
+                # Observe an opened question before sleeping, including very short timers.
+                await observer.read()
+            await asyncio.sleep(0.2)
 
 
 async def play_actions(observer, model, max_steps=50, vision=False, navigation_recovery="bounded",
@@ -250,7 +294,7 @@ async def play_actions(observer, model, max_steps=50, vision=False, navigation_r
                 await settle_interrupted_round(observer, state, reason)
                 continue
             target = navigation_target(state)
-            key = (state.key, target)
+            key = (observer.current or state.key, target)
             if navigation_recovery != 'bounded' or not target or key in recovery.used or len(recovery.used) >= 8:
                 raise
             await recovery.activate(state, observer, reason)
