@@ -1,0 +1,51 @@
+# Krillion ocean leaderboard
+
+The static leaderboard uses Krillion's pixel ocean artwork, VT323 type, cyan/pink accents, and rarity sprites. Normal page scrolling translates a fixed 4,800px ocean scene from surface to trench. The depth HUD shows **page exploration progress**, not a model's score or game depth. No framework, tracking, game scripts, or external runtime asset requests are needed.
+
+## Placement badges
+
+Completed models are ordered by verified score descending, then model ID ascending for ties. Badge placement is computed once per imported snapshot, independent of table sorting, provider filtering, or search:
+
+| Overall position | Icon |
+| --- | --- |
+| 1 | Krillion |
+| 2–10 | Deep Cut |
+| 11–25 | Rare |
+| 26–50 | Schooler |
+| 51–100 | Plankton |
+
+The score rank column continues to share ranks for tied scores. Badge placement uses the deterministic tie break so the five groups contain exactly 1, 9, 15, 25, and 50 models in the current campaign. Run errors and positions beyond 100 have no placement badge. Badges are benchmark placements, not a model's individual answer rarity.
+
+## Accessibility and behavior
+
+- `prefers-reduced-motion` freezes the ocean and disables ambient animation and smooth scrolling. The header's effects button offers a persistent manual reduced-effects mode.
+- Decorative scenery is hidden from accessibility APIs. Badges have descriptive alternative text and tooltips.
+- On small screens, the table scrolls horizontally; model and score appear first. The depth readout moves into a narrow bottom bar.
+- Sorting, search, provider/status filters, metric charts, per-round answer reports, campaign import, and JSON export are retained.
+- No benchmark results or harness behavior changed in this redesign.
+
+## Visual asset credits
+
+Ocean artwork and rarity sprites originate from [Krillion](https://krillion.io/), retrieved November 7, 2026 and used for this independent benchmark's requested game-matching presentation. These third-party assets remain the property of their respective owners; this project's code license does not relicense them.
+
+| Local file | Original source |
+| --- | --- |
+| `krillion-bg-sky.webp` | https://krillion.io/gen/optimized/v1/bg-sky.webp |
+| `krillion-bg-top.webp` | https://krillion.io/gen/optimized/v1/bg-top.webp |
+| `krillion-bg-mid.webp` | https://krillion.io/gen/optimized/v1/bg-mid.webp |
+| `krillion-bg-trench.webp` | https://krillion.io/gen/optimized/v1/bg-trench.webp |
+| `krillion-krillion.png` | https://krillion.io/tiers/krillion.png |
+| `krillion-deepcut.png` | https://krillion.io/tiers/deepcut.png |
+| `krillion-rare.png` | https://krillion.io/tiers/rare.png |
+| `krillion-schooler.png` | https://krillion.io/tiers/schooler.png |
+| `krillion-plankton.png` | https://krillion.io/tiers/plankton.png |
+
+`krillion-vt323.woff2` is the VT323 font served by Krillion, copyright Peter Hull, licensed under SIL OFL 1.1. See `KRILLION-FONT-LICENSE.txt` and the [Google Fonts source](https://github.com/google/fonts/tree/main/ofl/vt323).
+
+## Validation — November 7, 2026
+
+- Browser verified all 100 badge images load and tier counts are 1 / 9 / 15 / 25 / 50, including boundary positions.
+- Cost sorting and provider/search filtering preserve each model's global badge. Daily placement chart plots 99 available values; cost chart plots 47 complete cost records.
+- Desktop and 390px phone layouts checked visually. Phone page width remains 390px with the full model/score columns visible; other metrics scroll within the table.
+- Seven-round answer report, close control, campaign import, and JSON download verified. Effects setting survives reload; ocean depth reaches 7,000m at the bottom. No browser errors or warnings observed.
+- `node --check leaderboard.js` and `git diff --check` pass. The benchmark dataset remains byte-for-byte unchanged (SHA-256 `bc02aba0ef8a736a6ac65e3b84ee36234665a76e538dc5e43fba47d9cbd57fc7`).

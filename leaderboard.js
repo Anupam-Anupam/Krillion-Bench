@@ -1,7 +1,7 @@
 'use strict';
 const $ = (selector) => document.querySelector(selector);
 const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-const palette = {openai:'#507c97',anthropic:'#b5825a',google:'#7b8d69',moonshotai:'#947aa0','x-ai':'#6d7785','z-ai':'#4a9188',deepseek:'#7485b3',meta:'#aa8292',qwen:'#9d926c'};
+const palette = {openai:'#4de3ff',anthropic:'#ffb787',google:'#b6e897',moonshotai:'#ff79a5','x-ai':'#d3def5','z-ai':'#55e6bd',deepseek:'#8bafff',meta:'#dbabff',qwen:'#ffd166'};
 const color = provider => palette[provider] || '#96a19a';
 const providerName = p => ({openai:'OpenAI',anthropic:'Anthropic',google:'Google',moonshotai:'Moonshot','x-ai':'xAI','z-ai':'Z.ai',deepseek:'DeepSeek',meta:'Meta',qwen:'Qwen'}[p] || p);
 const axes = {run_cost_usd:'LLM cost / run · USD', output_cost_usd:'Output cost / run · USD',output_tokens:'Output tokens / run',run_duration_s:'Elapsed time / run · seconds',daily_percentile:'Better than today’s players · %'};
@@ -30,14 +30,28 @@ function orderedRows(rows) {
   });
 }
 function scoreRank(row) { return row.complete ? 1 + state.data.runs.filter(r=>r.complete && r.score > row.score).length : '—'; }
+// Badge placement is global and independent of filters or the selected metric.
+function badgeForPosition(position) {
+  if (!Number.isInteger(position) || position < 1 || position > 100) return null;
+  if (position === 1) return {key:'krillion', label:'Krillion'};
+  if (position <= 10) return {key:'deepcut', label:'Deep Cut'};
+  if (position <= 25) return {key:'rare', label:'Rare'};
+  if (position <= 50) return {key:'schooler', label:'Schooler'};
+  return {key:'plankton', label:'Plankton'};
+}
+function badgeMarkup(row) {
+  const position=state.placements.get(row.model), badge=badgeForPosition(position);
+  return badge ? `<img class="rank-badge ${badge.key}" src="krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
+}
 function render() {
   const rows=orderedRows(visibleRows());
   $('#results').innerHTML=rows.map(r=>{
     const m=r.metrics;
+    const badge=badgeForPosition(state.placements.get(r.model));
     const display=r.model.split('/').slice(1).join('/');
     const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
     const tokens=m.output_tokens == null ? '—' : `${m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
-    return `<tr class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" aria-label="View ${escapeHTML(r.model)} run details"><i class="provider-dot" style="background:${color(r.provider)}"></i><span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?`<div class="score-bar"><div class="score-fill" style="width:${r.score/700*100}%"></div><span class="score-value">${r.score}<small>/ 700</small></span></div>`:`<span class="incomplete-label">Run error <small>${escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${m.usage_calls} of ${m.model_calls} calls have usage">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':r.daily_percentile+'%'}</td></tr>`;
+    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" aria-label="View ${escapeHTML(r.model)} run details">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?`<div class="score-bar"><div class="score-fill" style="width:${r.score/700*100}%"></div><span class="score-value">${r.score}<small>/ 700</small></span></div>`:`<span class="incomplete-label">Run error <small>${escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${m.usage_calls} of ${m.model_calls} calls have usage">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':r.daily_percentile+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
   $('#row-count').textContent=`Showing ${rows.length} of ${state.data.runs.length} model variants · click a model to inspect its dive`;
   document.querySelectorAll('th[data-sort]').forEach(th=>{
@@ -109,7 +123,9 @@ function validate(data) {
   return data;
 }
 function install(data) {
-  state.data=validate(data);state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;
+  state.data=validate(data);
+  state.placements=new Map(data.runs.filter(r=>r.complete).sort((a,b)=>b.score-a.score||a.model.localeCompare(b.model)).map((r,i)=>[r.model,i+1]));
+  state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;
   $('#search').value='';$('#provider-filter').innerHTML='<option value="all">All providers</option>'+[...new Set(data.runs.map(r=>r.provider))].sort().map(p=>`<option value="${escapeHTML(p)}">${escapeHTML(providerName(p))}</option>`).join('');
   document.querySelectorAll('#status-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.status==='all')));
   $('#model-count').textContent=data.runs.length;$('#snapshot').textContent=`${data.date} · ${data.label}`;
@@ -131,9 +147,38 @@ $('#chart').addEventListener('pointerover',e=>{const b=e.target.closest('[data-m
 $('#chart').addEventListener('pointerleave',()=>{$('#chart-tooltip').hidden=true;});
 $('#close-dialog').addEventListener('click',()=>$('#run-dialog').close());
 $('#run-dialog').addEventListener('click',e=>{if(e.target===$('#run-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
-$('#metric-info').addEventListener('click',()=>{$('#metric-definitions').open=true;$('#metric-definitions').scrollIntoView({behavior:'smooth'});});
-$('#theme').addEventListener('click',()=>{const dark=document.body.classList.toggle('dark');$('#theme').setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');try{localStorage.setItem('krillion-theme',dark?'dark':'light');}catch{}});
-try{if(localStorage.getItem('krillion-theme')==='dark'){$('body').classList.add('dark');$('#theme').setAttribute('aria-label','Switch to light theme');}}catch{}
+$('#metric-info').addEventListener('click',()=>{$('#metric-definitions').open=true;$('#metric-definitions').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
+function setCalm(calm) {
+  document.body.classList.toggle('calm',calm);
+  $('#theme').setAttribute('aria-pressed',String(calm));
+  $('#theme').setAttribute('aria-label',calm?'Enable ocean effects':'Reduce ocean effects');
+  $('#theme').title=calm?'Enable ocean effects':'Reduce ocean effects';
+}
+$('#theme').addEventListener('click',()=>{
+  const calm=!document.body.classList.contains('calm');setCalm(calm);
+  try{localStorage.setItem('krillion-calm',String(calm));}catch{}
+  scheduleOcean();
+});
+try{setCalm(localStorage.getItem('krillion-calm')==='true');}catch{}
+const motionPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
+let oceanFrame=0;
+function updateOcean() {
+  oceanFrame=0;
+  const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+  const progress=maxScroll>0?Math.min(1,Math.max(0,window.scrollY/maxScroll)):0;
+  const still=motionPreference.matches||document.body.classList.contains('calm');
+  const travel=Math.max(0,4800-window.innerHeight);
+  $('#ocean-world').style.transform=`translate3d(0,${still?0:-progress*travel}px,0)`;
+  $('#dive-depth').textContent=`${Math.round(progress*7000).toLocaleString('en-US')}m`;
+  $('#dive-zone').textContent=progress<.06?'SURFACE':progress<.25?'SUNLIGHT':progress<.5?'MIDNIGHT':progress<.8?'ABYSSAL':'HADAL';
+  $('#depth-marker').style.top=`${progress*100}%`;
+}
+function scheduleOcean(){if(!oceanFrame)oceanFrame=requestAnimationFrame(updateOcean);}
+window.addEventListener('scroll',scheduleOcean,{passive:true});
+window.addEventListener('resize',scheduleOcean);
+motionPreference.addEventListener('change',scheduleOcean);
+new ResizeObserver(scheduleOcean).observe(document.body);
+scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});

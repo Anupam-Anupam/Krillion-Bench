@@ -10,7 +10,7 @@ endpoints. It runs as a standalone Python project with no database or job queue.
 The static leaderboard in `index.html` follows a restrained research-table layout,
 with verified score as the default ranking and the largest visual emphasis. It includes
 all 100 model variants from the final-score continuation campaign, a score-versus-metric chart, search/provider/status
-filters, light/dark themes, and a per-run dialog with every answer and rarity.
+filters, reduced-motion/effects support, and a per-run dialog with every answer and rarity.
 
 ```sh
 python3 -m http.server 8765 --bind 127.0.0.1
@@ -19,7 +19,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 No frontend build, framework, database, or API key is needed. The four public UI files
 are `index.html`, `leaderboard.css`, `leaderboard.js`, and `leaderboard-data.json`.
-They can be served together at any static host, including a GitHub Pages project path.
+Serve them alongside the bundled `krillion-*` artwork/font files at any static host, including a GitHub Pages project path. Placement badges are Krillion (1), Deep Cut (2–10), Rare (11–25), Schooler (26–50), and Plankton (51–100), fixed to global score order with model ID as the tie break. See [UI-NOTES.md](UI-NOTES.md) for behavior, accessibility, and asset credits.
 
 **Metrics:** LLM run cost (USD), output-token cost (USD), output token count, total
 elapsed time, and the game's final daily percentage. Tied scores share a rank;
