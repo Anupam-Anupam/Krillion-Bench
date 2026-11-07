@@ -26,3 +26,12 @@ body.calm .ocean-viewport{opacity:.2}body.calm::after{display:none}body.calm .fi
 @media(max-width:760px){.table-scroll>table{width:970px;min-width:970px}.table-scroll th.rank{width:26px}.table-scroll th:nth-child(2),.table-scroll td.model-cell{width:175px;max-width:175px}.table-scroll th.score-column{width:110px}.table-scroll .model-name,.table-scroll .variant{max-width:129px}.model-button{gap:6px}.rank-badge{width:28px;height:28px}.table-scroll .score-value{padding:3px 5px}.table-scroll .score-value small{font-size:12px}}
 
 .mobile-table-hint{display:none}.table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}@media(max-width:760px){.mobile-table-hint{display:block;font:13px/1.4 var(--pixel);color:var(--muted);margin:0 0 10px}}
+
+/* Keep the landing screen quiet and make the full results optional. */
+.hero-actions{margin-top:30px}
+.expand-results{text-align:center;padding:24px 0 8px}
+.expand-results:has(button[hidden]){display:none}
+#expand-results{font:20px var(--pixel);letter-spacing:1px;color:var(--accent);background:#101d33;padding:12px 28px;border:1px solid #4de3ff80;box-shadow:0 3px 0 #123048}
+#expand-results:hover{background:#18334d;color:var(--fg)}
+@media(max-width:760px){#expand-results{width:100%;font-size:19px}.hero-actions{margin-top:30px}}
+@media(max-width:760px){.table-scroll th.rank{width:38px}}

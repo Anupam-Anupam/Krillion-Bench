@@ -2,6 +2,8 @@
 
 The static leaderboard uses Krillion's pixel ocean artwork, VT323 type, cyan/pink accents, and rarity sprites. Normal page scrolling translates a fixed 4,800px ocean scene from surface to trench. The depth HUD shows **page exploration progress**, not a model's score or game depth. No framework, tracking, game scripts, or external runtime asset requests are needed.
 
+The hero omits the summary stats, and there is no visible tier legend. The results table shows the first five matching models by default, with a Show all / Show fewer button. Sorting and filters apply to the whole snapshot before the five-row preview; charts and downloads always retain all matching / all exported models respectively. Loading a campaign resets the table to five rows. The # column header sorts by overall rank, best first on the initial click and reversed on the next; shared ranks retain the model-ID tie break.
+
 ## Placement badges
 
 Completed models are ordered by verified score descending, then model ID ascending for ties. Badge placement is computed once per imported snapshot, independent of table sorting, provider filtering, or search:
@@ -49,3 +51,7 @@ Ocean artwork and rarity sprites originate from [Krillion](https://krillion.io/)
 - Desktop and 390px phone layouts checked visually. Phone page width remains 390px with the full model/score columns visible; other metrics scroll within the table.
 - Seven-round answer report, close control, campaign import, and JSON download verified. Effects setting survives reload; ocean depth reaches 7,000m at the bottom. No browser errors or warnings observed.
 - `node --check leaderboard.js` and `git diff --check` pass. The benchmark dataset remains byte-for-byte unchanged (SHA-256 `bc02aba0ef8a736a6ac65e3b84ee36234665a76e538dc5e43fba47d9cbd57fc7`).
+
+### Compact leaderboard follow-up
+
+Browser verification confirmed the default five rows expand to 100 and collapse to five; the chart still includes all 47 complete cost records. Search finds a model outside the preview, and the expansion button disappears for five or fewer matching results. The # header sorts shared ranks ascending and descending in both preview and full-list modes, including keyboard activation. No browser errors were observed.

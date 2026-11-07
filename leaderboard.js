@@ -5,7 +5,7 @@ const palette = {openai:'#4de3ff',anthropic:'#ffb787',google:'#b6e897',moonshota
 const color = provider => palette[provider] || '#96a19a';
 const providerName = p => ({openai:'OpenAI',anthropic:'Anthropic',google:'Google',moonshotai:'Moonshot','x-ai':'xAI','z-ai':'Z.ai',deepseek:'DeepSeek',meta:'Meta',qwen:'Qwen'}[p] || p);
 const axes = {run_cost_usd:'LLM cost / run · USD', output_cost_usd:'Output cost / run · USD',output_tokens:'Output tokens / run',run_duration_s:'Elapsed time / run · seconds',daily_percentile:'Better than today’s players · %'};
-const state = {data:null, query:'', status:'all', provider:'all', sort:'score', direction:-1, axis:'run_cost_usd'};
+const state = {data:null, query:'', status:'all', provider:'all', sort:'score', direction:-1, axis:'run_cost_usd', expanded:false};
 const numeric = v => typeof v === 'number' && Number.isFinite(v) && v >= 0;
 const count = v => v == null ? '—' : new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(v);
 const money = v => v == null ? '—' : v === 0 ? '$0.0000' : v < .0001 ? '$'+v.toFixed(6) : '$'+v.toFixed(4);
@@ -14,14 +14,14 @@ const costPrefix = basis => basis?.startsWith('partial_') ? (basis.includes('est
 function basisText(basis) {
   return ({reported:'API-reported account charge',provider_reported:'Provider-reported output component',estimated:'Catalog estimate',mixed:'Mixed reported and estimated',partial_reported:'Partial reported charge',partial_provider_reported:'Partial provider output cost',partial_estimated:'Partial catalog estimate',partial_mixed:'Partial mixed accounting',unavailable:'Not recorded'})[basis] || 'Not recorded';
 }
-function metric(row,key) { return ['score','daily_percentile'].includes(key) ? row[key] : key === 'model' ? row.model : row.metrics[key]; }
+function metric(row,key) { if(key==='rank')return row.complete?scoreRank(row):null; return ['score','daily_percentile'].includes(key) ? row[key] : key === 'model' ? row.model : row.metrics[key]; }
 function visibleRows() {
   return state.data.runs.filter(r => (state.status === 'all' || r.complete === (state.status === 'complete')) &&
     (state.provider === 'all' || r.provider === state.provider) && `${r.model} ${r.name}`.toLowerCase().includes(state.query));
 }
 function orderedRows(rows) {
   return [...rows].sort((a,b) => {
-    if (state.sort === 'score' && a.complete !== b.complete) return a.complete ? -1 : 1;
+    if (['score','rank'].includes(state.sort) && a.complete !== b.complete) return a.complete ? -1 : 1;
     const av=metric(a,state.sort),bv=metric(b,state.sort);
     if (av == null && bv != null) return 1;
     if (bv == null && av != null) return -1;
@@ -44,7 +44,8 @@ function badgeMarkup(row) {
   return badge ? `<img class="rank-badge ${badge.key}" src="krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
 }
 function render() {
-  const rows=orderedRows(visibleRows());
+  const matches=orderedRows(visibleRows());
+  const rows=state.expanded?matches:matches.slice(0,5);
   $('#results').innerHTML=rows.map(r=>{
     const m=r.metrics;
     const badge=badgeForPosition(state.placements.get(r.model));
@@ -53,13 +54,17 @@ function render() {
     const tokens=m.output_tokens == null ? '—' : `${m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
     return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" aria-label="View ${escapeHTML(r.model)} run details">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?`<div class="score-bar"><div class="score-fill" style="width:${r.score/700*100}%"></div><span class="score-value">${r.score}<small>/ 700</small></span></div>`:`<span class="incomplete-label">Run error <small>${escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${m.usage_calls} of ${m.model_calls} calls have usage">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':r.daily_percentile+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
-  $('#row-count').textContent=`Showing ${rows.length} of ${state.data.runs.length} model variants · click a model to inspect its dive`;
+  $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'} · click a model to inspect its dive`;
+  const expand=$('#expand-results');
+  expand.hidden=matches.length<=5;
+  expand.setAttribute('aria-expanded',String(state.expanded));
+  expand.textContent=state.expanded?'Show fewer models ↑':`Show all ${matches.length} models ↓`;
   document.querySelectorAll('th[data-sort]').forEach(th=>{
     const selected=th.dataset.sort===state.sort;
     th.setAttribute('aria-sort',selected?(state.direction===-1?'descending':'ascending'):'none');
     th.querySelector('span').textContent=selected?(state.direction===-1?'↓':'↑'):'';
   });
-  renderChart(rows);
+  renderChart(matches);
 }
 function renderChart(rows) {
   const key=state.axis;
@@ -125,16 +130,23 @@ function validate(data) {
 function install(data) {
   state.data=validate(data);
   state.placements=new Map(data.runs.filter(r=>r.complete).sort((a,b)=>b.score-a.score||a.model.localeCompare(b.model)).map((r,i)=>[r.model,i+1]));
-  state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;
+  state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;state.expanded=false;
   $('#search').value='';$('#provider-filter').innerHTML='<option value="all">All providers</option>'+[...new Set(data.runs.map(r=>r.provider))].sort().map(p=>`<option value="${escapeHTML(p)}">${escapeHTML(providerName(p))}</option>`).join('');
   document.querySelectorAll('#status-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.status==='all')));
-  $('#model-count').textContent=data.runs.length;$('#snapshot').textContent=`${data.date} · ${data.label}`;
+  $('#snapshot').textContent=`${data.date} · ${data.label}`;
   $('#completed-count').textContent=data.runs.filter(r=>r.complete).length;$('#incomplete-count').textContent=data.runs.filter(r=>!r.complete).length;
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
   $('#configuration').textContent=old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
   render();
 }
+$('#expand-results').addEventListener('click',()=>{
+  state.expanded=!state.expanded;
+  render();
+  // Keep the collapse control reachable when removing rows shortens the page.
+  const button=$('#expand-results'), bounds=button.getBoundingClientRect();
+  if(bounds.top<0||bounds.bottom>window.innerHeight)button.scrollIntoView({block:'center',behavior:'instant'});
+});
 $('#search').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();render();});
 $('#provider-filter').addEventListener('change',e=>{state.provider=e.target.value;render();});
 $('#status-filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.status=b.dataset.status;document.querySelectorAll('#status-filters button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render();});
