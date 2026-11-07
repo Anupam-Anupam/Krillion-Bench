@@ -65,3 +65,5 @@ Browser computed-style checks confirmed matching score-bar edges and daily perce
 ### Tier glow follow-up
 
 Daily percentages use the same `0 0 9px` tier-colored text shadow as Krillion’s passed depth labels (`.ds-tierline.passed .tag`). Score fills adapt that halo to their leading edge, with a softer bloom around the fill. The glow is static; Reduce ocean effects removes these metric shadows.
+
+Only the first-place row receives a gold background highlight and soft halo, with gold model/rank text and icon glow. Other rows retain their usual background and their own tier-colored metrics. Reduced effects also removes the winner’s shadows.
