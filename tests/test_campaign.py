@@ -24,6 +24,16 @@ def test_missing_model_and_short_roster_fail_instead_of_silent_replacement():
         select_models({"rows": []}, {"data": []}, 100)
 
 
+def test_paid_only_selection_records_free_exclusion_without_substituting_ids():
+    ranking = {'rows': [{'id': 'org/a:free'}, {'id': 'org/a'}]}
+    catalog = {'data': [{'id': m, 'architecture': {'output_modalities': ['text']}}
+                        for m in ['org/a:free', 'org/a']]}
+    selected, excluded = select_models(ranking, catalog, 1, paid_only=True)
+    assert [r['id'] for r in selected] == ['org/a']
+    assert excluded[0]['id'] == 'org/a:free'
+    assert 'paid-only' in excluded[0]['reason']
+
+
 def test_partial_report_never_receives_final_score_or_percentile():
     report = {"status": "deadline_exceeded", "final_score": "100", "daily_percentile": 99,
               "rounds": [{"round": "1/7", "prompt": "A color", "points": 100, "submissions": []}],

@@ -76,3 +76,15 @@ def test_verified_scorecard_fills_missing_result_with_labeled_mapping():
         assert sub['rarity'] == 'Plankton'
         assert sub['rarity_source'] == 'points_mapping'
         assert sub['evidence'] == 'verified_scorecard'
+
+
+def test_zero_scorecard_round_never_becomes_an_accepted_answer():
+    raw = dict(status='agent_finished', final_score='0',
+               scoreboard=[f'Round {n}: —, 0 pts' for n in range(1, 8)],
+               rounds=[dict(round=f'PROMPT {n} OF 7', prompt='Question', submissions=[dict(answer='—')])
+                       for n in range(1, 8)])
+    report = enrich_report(raw, "BETTER THAN 0% OF TODAY'S PLAYERS")
+    assert report['scorecard_verified'] and report['daily_percentile'] == 0
+    assert all(r['points'] == 0 and r['round_outcome'] == 'missed' for r in report['rounds'])
+    assert all(r['accepted_answer'] is None and r['rarity'] is None for r in report['rounds'])
+    assert all(r['submissions'][0]['outcome'] == 'unconfirmed' for r in report['rounds'])

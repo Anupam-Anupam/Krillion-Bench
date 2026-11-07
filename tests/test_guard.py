@@ -53,10 +53,18 @@ async def test_valid_fill_executes(tmp_path):
     obs.page.get_by_role.return_value.fill.assert_awaited_once()
 
 
-async def test_watchdog_detects_expired_round_without_model_callback(tmp_path):
+async def test_watchdog_keeps_observing_after_round_deadline(tmp_path):
+    import asyncio
+    import time
     obs = observer(tmp_path, timer="3")
-    with pytest.raises(DeadlineExceeded):
-        await obs.watch()
+    watch = asyncio.create_task(obs.watch())
+    try:
+        await asyncio.sleep(0.01)
+        assert obs.deadline.remaining(time.monotonic()) <= 0
+        assert not watch.done()
+    finally:
+        watch.cancel()
+        await asyncio.gather(watch, return_exceptions=True)
 
 
 async def test_unreadable_timer_fails_closed(tmp_path):
@@ -102,15 +110,19 @@ async def test_scoreboard_requires_unique_rounds_and_matching_total(tmp_path, sc
     assert verified_completion(obs) is expected
 
 
-async def test_model_timeout_at_round_budget_is_classified_as_deadline(tmp_path):
+async def test_model_timeout_at_round_budget_records_interruption_and_continues(tmp_path):
     from player import play_actions
     obs = observer(tmp_path)
     async def timed_out(*args, **kwargs):
         obs.deadline.expires = 0
+        obs.page.evaluate.return_value.update(answering=False, timer='', buttons=['DESCEND ▼'],
+            text='NOTHING LANDED\n—\n+0 PTS')
         raise TimeoutError()
     model = Mock(ainvoke=AsyncMock(side_effect=timed_out))
-    with pytest.raises(DeadlineExceeded):
-        await play_actions(obs, model)
+    assert await play_actions(obs, model, max_steps=1) == 'step_limit_exceeded'
+    row = next(iter(obs.rounds.values()))
+    assert row['interruptions'] == ['round_inference_deadline']
+    assert row['points'] == 0
     obs.page.get_by_role.assert_not_called()
 
 
