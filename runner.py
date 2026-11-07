@@ -23,6 +23,7 @@ from dotenv import dotenv_values
 from playwright.async_api import async_playwright
 
 from deadline import DeadlineExceeded, RoundDeadline
+from reporting import correction, read_events, rejection, result_details, write_report
 
 
 # These selectors were observed on the live UI. Read rendered state only.
@@ -34,6 +35,7 @@ READ_STATE = """() => {
   const buttons = [...document.querySelectorAll('button')].filter(visible).map(e => e.innerText.trim());
   return {prompt: text('.prompt'), round_label: text('.ds-prompt-count'),
     timer: text('.ds-time-digits'), answering: visible(input),
+    input_enabled: visible(input) && !input.disabled,
     answer: visible(input) ? input.value : '', buttons, text: body,
     results: [...document.querySelectorAll('[title^="Round "]')].filter(visible).map(e => e.getAttribute('title')),
     score: (body.match(/SCORE\\s*\\n\\s*(\\d+)/) || [])[1] || null};
@@ -51,6 +53,7 @@ class State:
     text: str
     score: str | None
     results: list[str] = field(default_factory=list)
+    input_enabled: bool = True
 
     @property
     def key(self):
@@ -94,6 +97,24 @@ class Observer:
                     self.record.event("round_open", **self.rounds[state.key])
                 self.current = state.key
                 self.deadline.observe(state.key, int(state.timer), now)
+                row = self.rounds[state.key]
+                rejected = rejection(state.text)
+                submissions = row.get("submissions", [])
+                if submissions and not state.input_enabled:
+                    submissions[-1]["saw_pending"] = True
+                if (rejected is not None and submissions and state.input_enabled
+                        and (rejected != submissions[-1].get("feedback_at_submit")
+                             or submissions[-1].get("saw_pending"))
+                        and submissions[-1]["answer"].casefold() == rejected.casefold()
+                        and submissions[-1].get("outcome") == "unconfirmed"):
+                    submissions[-1].update(outcome="rejected", evidence="visible_no_echo")
+                    self.record.event("answer_rejected", round=row["round"], answer=rejected)
+                corrected = correction(state.text)
+                if (corrected and submissions and submissions[-1].get("outcome") == "unconfirmed"
+                        and submissions[-1]["answer"].casefold() == corrected["answer"].casefold()):
+                    submissions[-1].update(outcome="confirmation_required", evidence="visible_correction",
+                                           suggested_answer=corrected["suggested_answer"])
+                    self.record.event("answer_correction", round=row["round"], **corrected)
             else:
                 if self.current and self.current in self.rounds:
                     row = self.rounds[self.current]
@@ -105,7 +126,9 @@ class Observer:
                     if points and "points" not in row:
                         row["points"] = int(points.group(1))
                         row["result_text"] = state.text
-                        self.record.event("round_result", round=row["round"], points=row["points"])
+                        details = result_details(state.text, row["points"])
+                        row.update(details)
+                        self.record.event("round_result", round=row["round"], **details)
                 self.deadline.clear()
             return state
 
@@ -223,7 +246,8 @@ async def scripted_baseline(page, observer, answers):
         answer = answers[state.prompt]
         observer.deadline.check(time.monotonic())
         await field.fill(answer)
-        await page.get_by_role("button", name="DIVE", exact=True).press("Enter")
+        from player import Action, execute
+        await execute(Action(kind="click", target="DIVE"), state, observer)
         observer.record.event("baseline_submit", round=number, answer=answer, prompt=state.prompt)
         await field.wait_for(state="hidden", timeout=10000)
         await observer.read()
@@ -242,7 +266,7 @@ async def scripted_baseline(page, observer, answers):
 
 async def play(session, observer, args):
     from player import play_actions
-    return await play_actions(observer, TimedModel(make_model(args), observer.record), args.max_steps, args.vision)
+    return await play_actions(observer, TimedModel(make_model(args), observer.record), args.max_steps, args.vision, args.navigation_recovery)
 
 
 async def run(args):
@@ -251,7 +275,7 @@ async def run(args):
     status, error = "failed", None
     record.event("config", browser=args.browser, model=args.model, provider=args.provider,
                  vision=args.vision, margin_s=args.margin, command=args.command,
-                 requested_reasoning=args.reasoning, viewport=[1280, 800], reduced_motion=True)
+                 requested_reasoning=args.reasoning, navigation_recovery=args.navigation_recovery, viewport=[1280, 800], reduced_motion=True)
     try:
         async with browser_session(args, record) as (session, page):
             if args.command == "smoke":
@@ -285,12 +309,14 @@ async def run(args):
                              for f in traceback.extract_tb(exc.__traceback__)])
     report = {"status": status, "error_type": error, "model": args.model,
               "browser": args.browser, "command": args.command,
+              "navigation_recovery": args.navigation_recovery,
               "model_call_durations_s": record.model_latencies,
               "rounds": list(observer.rounds.values()) if observer else []}
     if observer and observer.last_state:
         report["final_score"] = observer.last_state.score
         report["scoreboard"] = observer.last_state.results
-    (record.output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+    final = record.output / "final.txt"
+    write_report(report, record.output, final.read_text() if final.exists() else "", read_events(record.output))
     print(json.dumps({"status": status, "error_type": error, "output": str(record.output)}))
     return 0 if status in {"smoke_passed", "baseline_finished", "agent_finished"} else 1
 
@@ -311,6 +337,8 @@ def main():
     parser.add_argument("--margin", type=float, default=3)
     parser.add_argument("--max-steps", type=int, default=50)
     parser.add_argument("--run-timeout", type=float, default=600)
+    parser.add_argument("--navigation-recovery", choices=["off", "bounded"], default="bounded",
+                        help="Recover stalled non-answer navigation; off is the strict track")
     parser.add_argument("--reasoning", default="low", choices=["minimal", "low", "medium", "high"])
     args = parser.parse_args()
     for path in args.env_file:

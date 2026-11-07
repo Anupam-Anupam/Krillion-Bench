@@ -1,0 +1,53 @@
+{
+  "original_campaign": {
+    "models": [
+      "openai/gpt-6.1-terra",
+      "anthropic/claude-haiku-5.5",
+      "google/gemini-4-argon",
+      "deepseek/deepseek-v4.1-flash",
+      "meta-llama/llama-4-maverick",
+      "meta-llama/llama-4-scout"
+    ],
+    "endpoint": "https://openrouter.ai/api/v1",
+    "browser": "cloud",
+    "concurrency": 2,
+    "requested_reasoning": "low",
+    "vision": false,
+    "game_url": "https://krillion.io/",
+    "source_sha256": {
+      "runner.py": "07f2519347a25c053b881ab930f07a9e29f50b657f1be6c0aaca0042eae66dc0",
+      "player.py": "e08278ee10f19ef0eff3fe43593b670053e271bff556f70f69648176aac4aeb6",
+      "deadline.py": "11b1ccde407205c18883d2cc35b6e2d7b648134be4b3db08afe05f1290e1c369"
+    }
+  },
+  "followups": [
+    {
+      "run": "scout-recovery-20261107-1",
+      "model": "meta-llama/llama-4-scout",
+      "navigation_recovery": "bounded",
+      "source_sha256": {
+        "runner.py": "0598b5d9f37f364fe2fb2952b8a30b2df7724fd0e4d7224ed1f22eb4d167e2dd",
+        "player.py": "9b3e767c9cb532cfc89d1b6017abe1f14760e7cb38d607c2fc586cc92a42ba67",
+        "reporting.py": "bc58226bba4050d4e141930cde455fc557602f4c003f5553220a98e5d4e684fa",
+        "deadline.py": "11b1ccde407205c18883d2cc35b6e2d7b648134be4b3db08afe05f1290e1c369"
+      }
+    },
+    {
+      "run": "haiku-report-20261107-1",
+      "model": "anthropic/claude-haiku-5.5",
+      "navigation_recovery": "bounded",
+      "source_sha256": {
+        "runner.py": "0598b5d9f37f364fe2fb2952b8a30b2df7724fd0e4d7224ed1f22eb4d167e2dd",
+        "player.py": "8fe993142de76002c2a297b93c15df60369db8b4df913b627da727ac94c16117",
+        "reporting.py": "d42736da1ffa224369e5519399a547eaecd2bca0c4c516a8d09a42e960fa7141",
+        "deadline.py": "11b1ccde407205c18883d2cc35b6e2d7b648134be4b3db08afe05f1290e1c369"
+      }
+    }
+  ],
+  "published_source_sha256": {
+    "runner.py": "0598b5d9f37f364fe2fb2952b8a30b2df7724fd0e4d7224ed1f22eb4d167e2dd",
+    "player.py": "ccc646818fc24e6413019e0ab4140e72a2bdd60fb1f53fa7dd8ff25ac24a77ce",
+    "reporting.py": "d42736da1ffa224369e5519399a547eaecd2bca0c4c516a8d09a42e960fa7141",
+    "deadline.py": "11b1ccde407205c18883d2cc35b6e2d7b648134be4b3db08afe05f1290e1c369"
+  }
+}

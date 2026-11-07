@@ -40,8 +40,9 @@ support for structured output must be validated before a model joins the benchma
 
 ## What the model controls
 
-The model starts on the initial game page and chooses every start, next-round,
-answer-entry, submit, and final-results action. Its common action schema contains:
+The model starts on the initial game page and chooses answers and browser actions.
+The default bounded recovery can advance stalled navigation, as described below.
+Its common action schema contains:
 
 - `click`: activate an observed game button by exact visible name. The executor uses
   keyboard Enter on the button because Krillion animates button positions.
@@ -49,8 +50,9 @@ answer-entry, submit, and final-results action. Its common action schema contain
 - `wait`: wait one second, still charged to the active deadline.
 - `done`: accepted only after seven observed rounds and the rendered final scorecard.
 
-Observations contain rendered text, visible controls, the current prompt, the visible
-timer, and the current input value. No JavaScript execution, network inspection,
+Observations contain an explicit phase and allowed actions, visible game controls,
+the active prompt, timer, input value, rejection history, and correction feedback.
+Decorative ocean text and ads are omitted so they cannot be confused with a question. No JavaScript execution, network inspection,
 answer-bank access, external search, filesystem tools, or second model is exposed to
 the evaluated LLM. The harness waits through previews and animations before inference.
 It does not pause, reset, or extend the game's timer.
@@ -61,6 +63,21 @@ the model must choose its own answers and actions. `--vision` adds screenshots t
 the same DOM observations and must be reported as a separate evaluation setting.
 It is not a screenshot-only track.
 
+## Navigation recovery and evaluation tracks
+
+`--navigation-recovery bounded` is the default. After two model turns leave the same
+non-answer navigation state unchanged, the harness may activate its single visible
+BEGIN DESCENT, DESCEND, SURFACE, or results control. Each attempt goes through the
+normal fresh-state/action guard. Recovery is limited to once per state and eight
+attempts per run. It never fills a textbox, submits an answer, resets the timer,
+retries model calls, or substitutes another model. Empty transition screens have a
+15-second wait limit; the whole run remains bounded too.
+
+Use `--navigation-recovery off` for the strict navigation track. Both tracks have
+phase guidance. Reports preserve the selected mode, every recovery attempt, and
+whether assistance actually executed. Do not pool these tracks or mix them with
+older full-page-text observations in a model ranking.
+
 ## Timing and failure contract
 
 - The independent watchdog reads the visible countdown and uses monotonic time.
@@ -70,7 +87,7 @@ It is not a screenshot-only track.
   Retries and cross-model fallback are disabled in the adapters.
 - Each action rechecks the round/phase and deadline. A stale action batch is discarded.
   Once a run stops, no new actions can execute. The game does not advance to the next
-  question automatically; the model must activate DESCEND.
+  question automatically; DESCEND is activated by the model or logged bounded recovery.
 - Rejected answers may be retried within the same countdown. Rejection does not create
   a fresh budget. The input remaining open is not treated as successful submission.
 - A missed harness deadline stops the run and produces a nonzero exit code. It does
@@ -87,8 +104,9 @@ Each invocation writes a fresh directory under `artifacts/`:
 
 | File | Contents |
 |---|---|
-| `report.json` | Status, model, per-round submissions/results, model-call durations, final scorecard |
-| `events.jsonl` | Observations, actions, model responses/usage, timings, and sanitized failure locations |
+| `report.md` | Every answer attempt, outcome, rarity, points, daily percentage, and recovery log |
+| `report.json` | Structured report plus model-call durations, final scorecard, and evidence sources |
+| `events.jsonl` | Observations, actions and their results, submissions, recoveries, model usage, timings, and sanitized failures |
 | `initial.png`, `final.png` | Browser evidence when screenshots succeed |
 | `final.txt` | Rendered text at the end of the run |
 | `trace.zip` | Playwright trace with screenshots and DOM snapshots |
@@ -101,6 +119,26 @@ Trace files can include browser network data. Keep raw artifacts private; share 
 screenshots and the summary report. Exception reports omit raw exception strings because
 SDK exceptions can contain authenticated browser URLs. Failed screenshot/trace collection
 is best effort and does not replace the run's actual outcome.
+
+The daily percentage is parsed from **BETTER THAN X% OF TODAY’S PLAYERS**, only with
+a verified final scorecard. It is not score divided by 700. Missing or partial-game
+percentiles remain unavailable. Rarity comes from the displayed result; a labeled
+points-to-category mapping is available when only scorecard evidence survives.
+Every attempted submission remains in order, including rejected answers, game
+corrections requiring confirmation, and unconfirmed attempts. Rarity is attached to
+an attempt only when its text matches the accepted game result. Ambiguous attempts
+remain unconfirmed. Submissions are registered before awaiting the remote keypress;
+if that action fails, the attempt remains visible without claiming game acceptance.
+
+Backfill saved runs without overwriting their original `report.json`:
+
+```sh
+uv run python reporting.py artifacts/RUN_DIRECTORY
+```
+
+This creates `report.enriched.json` and `report.enriched.md` using the saved result
+text, final text, and event observations. See [OPENROUTER-REPORT.md](OPENROUTER-REPORT.md)
+for all six original runs and the separately labeled Scout regression run.
 
 ## Reliability checks
 

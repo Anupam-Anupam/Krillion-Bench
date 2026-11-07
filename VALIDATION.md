@@ -2,7 +2,7 @@
 
 This is a working pilot, not a proven uptime guarantee. Tests used the live Daily
 Dive starting at https://krillion.io/. Every cloud run used a fresh managed browser.
-Model runs used `groq:openai/gpt-oss-120b` through the configured OpenAI-compatible
+The initial pilot model runs used `groq:openai/gpt-oss-120b` through the configured OpenAI-compatible
 endpoint, requested low reasoning, and DOM observations without screenshots.
 Control answers were available only to the scripted baseline.
 
@@ -41,7 +41,7 @@ evolving implementations. This is not a stable-version success-rate estimate, an
 the two failures are not excluded. No live completion claim is made for the final
 model configuration.
 
-The final automated suite passed **25 tests in 4.74 seconds**, including real
+The initial release suite passed **25 tests in 4.74 seconds**, including real
 Chromium integration tests. It checks complete seven-round flow, rejected-answer
 recovery, temporarily disabled input, deadline enforcement, stale actions, allowed
 controls, premature completion, duplicate scorecard rounds, and mismatched totals.
@@ -75,7 +75,8 @@ excludes raw traces and credentials.
 
 ## Limits and next benchmark gate
 
-Only one configured model endpoint has been exercised live. Anthropic and Google
+The initial pilot used one configured endpoint; six additional models have now been
+exercised through OpenRouter (see the campaign below). Direct Anthropic and Google
 adapters are implemented but unverified. Vision input is also unverified. This
 measures constrained DOM browser actions, not general desktop or screenshot-only
 computer use. The benchmark stops an unsuccessful run rather than continuing with
@@ -93,3 +94,42 @@ closed if that UI changes incompatibly.
 The release contains only this standalone project. Credentials, local environments,
 raw browser traces, and unrelated workspace files are excluded. Git ignores `.env`,
 `.venv`, and artifacts; the local credential file has mode 600.
+
+
+## OpenRouter campaign and report/recovery validation
+
+All six original models played the actual game through Browser Use Cloud and the
+published OpenAI-compatible adapter: GPT 6.1 Terra, Claude Haiku 5.5, Gemini 4 Argon,
+DeepSeek V4.1 Flash, Llama 4 Maverick, and Llama 4 Scout. Five completed; Scout
+stalled between rounds 2 and 3. No source changes were made during that campaign.
+[OPENROUTER-REPORT.md](OPENROUTER-REPORT.md) contains every submitted answer, its
+outcome and rarity, verified final totals, daily percentages, and separate follow-up
+runs. Historic reports are derived from retained UI evidence; their original raw
+reports and timing data are preserved.
+
+The revised suite passes **44 tests**, including real Chromium tests. Added checks
+cover result-vs-legend parsing, percentiles requiring verified scorecards, corrections
+requiring confirmation, repeated rejected answers, uncertain keypresses, pre/post
+remote submission timestamp races, Markdown escaping, and labeled scorecard rarity
+fallbacks. Recovery tests replay Scout's invalid textbox fills and repeated waits,
+verify the exact next-round control is activated, and prove no answer is supplied.
+Strict mode, stale phases, ambiguous navigation, one-recovery-per-state limits, and
+unchanged question deadlines are also checked.
+
+In the live Scout regression, phase guidance got it beyond the old navigation stall
+without assistance. It accepted four answers for **60 partial points**, then the
+round-5 deadline stopped it after eight rejected song submissions. It has no final
+daily percentage and remains a failed run. This validates navigation improvement in
+one run; it does not establish overall Scout reliability or repair answer knowledge.
+
+The Scout check preceded a reporting-only correction that gives submission events
+separate run-relative and round-relative timestamps. Its gameplay and raw evidence
+are retained. The Haiku follow-up uses the corrected submission timestamps. A later diagnostic-only
+change ensures failed recovery attempts are logged too; its exception path and the
+eight-recovery run limit are covered by the automated suite.
+
+The Haiku report regression completed **7/7 rounds, 310/700 points**, with **66%**
+shown by the game as its final daily percentage. It exercised correction feedback
+and a rejected-answer retry. No navigation recovery was needed. Its final screenshot,
+seven unique scorecard entries, and sum of points agree. This repeat is listed
+separately from the original Haiku run (365 points, 85%).
