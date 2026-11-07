@@ -26,7 +26,8 @@ class Turn(BaseModel):
 
 
 SYSTEM = """Play the seven-question Krillion Daily Dive through the browser.
-Start at the initial game page. Choose valid, uncommon answers from your own knowledge.
+Start at the initial game page. Your goal is to choose the most niche answer to each question from your own knowledge. 
+The reward system is such that, the nicher the answers are, the more they are rewarded. 
 You have 25 seconds per question including inference and browser actions. Be decisive.
 The observation contains the current phase, allowed actions, exact buttons, timer, and answer field.
 Follow the phase_instruction. A result or transition phase has NO answer textbox.
