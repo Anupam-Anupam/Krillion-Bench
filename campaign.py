@@ -14,7 +14,7 @@ import sys
 from reporting import cell, markdown
 
 
-SOURCES = ("runner.py", "player.py", "deadline.py", "reporting.py", "campaign.py", "uv.lock")
+SOURCES = ("runner.py", "player.py", "deadline.py", "reporting.py", "model_policy.py", "campaign.py", "uv.lock")
 
 
 def utcnow():
@@ -27,7 +27,7 @@ def atomic_json(path, value):
     temp.replace(path)
 
 
-def select_models(ranking, catalog, count):
+def select_models(ranking, catalog, count, paid_only=False):
     by_id = {m["id"]: m for m in catalog["data"]}
     selected, excluded, seen = [], [], set()
     for row in ranking["rows"]:
@@ -37,6 +37,7 @@ def select_models(ranking, catalog, count):
         seen.add(model)
         reason = ("latest alias" if model.startswith("~") else
                   "automatic router" if model.startswith("openrouter/") else
+                  "free endpoint excluded by paid-only selection" if paid_only and model.endswith(':free') else
                   "asynchronous batch variant" if model.endswith(":batch") else None)
         if reason:
             excluded.append({**row, "reason": reason})
@@ -74,6 +75,8 @@ def summarize(row, report, events):
             "median_model_latency_s": statistics.median(durations) if durations else None,
             "max_model_latency_s": max(durations) if durations else None,
             "navigation_recoveries": len(report.get("recoveries", [])),
+            "missed_rounds": sum(r.get("round_outcome") == "missed" for r in rounds),
+            "model_issues": report.get("model_issues", []),
             "prompts": {r["round"]: r["prompt"] for r in rounds},
             "browser_ready": any(e["event"] == "browser_ready" for e in events)}
 
@@ -90,14 +93,17 @@ def update_reports(output, manifest, state):
              f"Finished: **{len(finished)}/{len(manifest['models'])}**. Verified full games: **{len(verified)}**.", "",
              "Selection: active text model variants in OpenRouter’s **Top Weekly** directory order, "
              "excluding latest aliases, automatic routers, and asynchronous batch variants. "
-             "Free and paid variants are separate entries. This is usage selection, not a quality ranking.", "",
+             + ("Free endpoints are excluded by paid-only selection. " if manifest.get('paid_only') else "Free and paid variants are separate entries. ")
+             + "This is usage selection, not a quality ranking.", "",
              f"[OpenRouter source]({manifest['ranking_source']}); captured {manifest['ranking_captured_at']}. "
              "Ranking attribution: OpenRouter, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). "
              "Directory token counts are a live seven-day window and differ from the rankings page’s completed-day buckets.", "",
              "One fresh Browser Use Cloud browser per model; DOM observations; bounded navigation recovery; "
-             "25-second game clock; 18-second maximum model call; 3-second safety margin plus timer rounding; "
-             "1,500 maximum output tokens; requested low reasoning; schema-validated actions; no model retries, "
-             "answer fallback, or replacement of failed entries. Unsupported provider settings remain recorded failures.", "",
+             "25-second game clock; inference uses remaining round time; 3-second safety margin plus timer rounding; "
+             f"output-token request cap: {manifest['settings'].get('max_output_tokens')}; "
+             f"same-model transient retries: {manifest['settings'].get('model_retries', 2)}; "
+             "requested low reasoning; schema-validated actions. Missed questions continue to the game's actual "
+             "scorecard. No answer fallback or replacement of failed entries.", "",
              f"Concurrency: {manifest['concurrency']}. Frozen harness hashes and roster: `manifest.json`. "
              "The daily percentage is the game’s live ‘better than’ comparison, not score divided by 700. "
              "Percentiles may drift as other people play. Partial scores are not ranked with completed games.", "",
@@ -139,15 +145,26 @@ async def run_campaign(args):
                 raise ValueError("Harness changed since freeze; create a new campaign")
             if args.concurrency != manifest["concurrency"]:
                 raise ValueError("Concurrency changed since freeze")
+            if manifest.get('paid_only', False) != getattr(args, 'paid_only', False):
+                raise ValueError('Paid-only selection changed since freeze')
+            for key, default in (("max_output_tokens", None), ("model_retries", 2), ("navigation_timeout", 60)):
+                if manifest['settings'].get(key) != getattr(args, key, default):
+                    raise ValueError(f"{key} changed since freeze")
         else:
             ranking = json.loads(args.ranking.read_text())
-            models, excluded = select_models(ranking, json.loads(args.catalog.read_text()), args.count)
+            models, excluded = select_models(ranking, json.loads(args.catalog.read_text()), args.count,
+                                              getattr(args, 'paid_only', False))
             manifest = {"created_at": utcnow(), "utc_date": utcnow()[:10], "models": models,
                         "excluded": excluded, "source_sha256": source_hashes(root),
                         "ranking_source": ranking["source"], "ranking_captured_at": ranking["captured_at"],
                         "concurrency": args.concurrency, "outer_timeout_s": 780,
+                        "paid_only": getattr(args, 'paid_only', False),
                         "settings": {"provider": "openai", "browser": "cloud", "vision": False,
                                      "navigation_recovery": "bounded", "reasoning": "low",
+                                     "max_output_tokens": getattr(args, 'max_output_tokens', None),
+                                     "model_retries": getattr(args, 'model_retries', 2),
+                                     "navigation_timeout": getattr(args, 'navigation_timeout', 60),
+                                     "round_timeout_policy": "continue",
                                      "max_steps": 50, "run_timeout_s": 600, "margin_s": 3}}
             atomic_json(manifest_path, manifest)
         state_path = output / "state.json"
@@ -181,6 +198,10 @@ async def run_campaign(args):
                 command = [sys.executable, str(root / "runner.py"), "play", "--env-file", str(args.env_file.resolve()),
                            "--provider", "openai", "--model", model_id, "--navigation-recovery", "bounded",
                            "--output", str(output / directory)]
+                command += ['--model-retries', str(manifest['settings']['model_retries']),
+                            '--navigation-timeout', str(manifest['settings']['navigation_timeout'])]
+                if manifest['settings']['max_output_tokens'] is not None:
+                    command += ['--max-output-tokens', str(manifest['settings']['max_output_tokens'])]
                 proc = None
                 try:
                     with (output / (directory + ".log")).open("w") as log:
@@ -235,9 +256,17 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--concurrency", type=int, default=4)
+    parser.add_argument("--max-output-tokens", type=int, default=None)
+    parser.add_argument("--model-retries", type=int, default=2)
+    parser.add_argument("--navigation-timeout", type=float, default=60)
+    parser.add_argument("--paid-only", action="store_true", help="Exclude :free endpoints and record roster exclusions")
     args = parser.parse_args()
     if not 1 <= args.concurrency <= 8 or args.count < 1:
         parser.error("Concurrency must be 1–8 and count must be positive")
+    if args.max_output_tokens is not None and args.max_output_tokens < 1:
+        parser.error('Output-token cap must be positive or omitted')
+    if not 0 <= args.model_retries <= 10 or not 1 <= args.navigation_timeout <= 120:
+        parser.error('Retries must be 0–10 and navigation timeout must be 1–120 seconds')
     if not os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENAI_BASE_URL") != "https://openrouter.ai/api/v1":
         parser.error("Set OPENAI_API_KEY and OPENAI_BASE_URL for OpenRouter in the environment")
     raise SystemExit(asyncio.run(run_campaign(args)))

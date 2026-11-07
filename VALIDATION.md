@@ -79,8 +79,9 @@ The initial pilot used one configured endpoint; six additional models have now b
 exercised through OpenRouter (see the campaign below). Direct Anthropic and Google
 adapters are implemented but unverified. Vision input is also unverified. This
 measures constrained DOM browser actions, not general desktop or screenshot-only
-computer use. The benchmark stops an unsuccessful run rather than continuing with
-an automatically skipped question; failures must stay in the denominator.
+computer use. The initial pilot and historical top-100 campaign stopped an unsuccessful run.
+The revised harness below continues missed questions to an observed final scorecard;
+all interruptions and incomplete runs still remain in the results.
 
 Do not rank models from this one day's questions or cherry-pick a successful retry.
 Before publishing rankings, freeze the harness and model settings, run matched
@@ -172,3 +173,25 @@ are [TOP100-SUMMARY.json](TOP100-SUMMARY.json) and
 daily puzzle under this configuration; they are not a general model-quality ranking.
 The live game's daily percentages can drift during the campaign. Raw traces and
 credentials remain excluded from publication.
+
+## Continuation and provider compatibility follow-up
+
+The revised harness omits the OpenRouter output-token cap by default, replaces the
+18-second inference cutoff with the remaining round budget, and continues after
+missed questions to a verified final scorecard. The game clock and safety margin
+remain unchanged. Same-model retries and a logged prompt-JSON compatibility fallback
+are bounded by the original deadline; provider diagnostics retain sanitized causes.
+
+The final suite passed **60 tests in 9.04 seconds**, including six real Chromium
+tests. Five targeted live games completed: a deliberately missed scripted control,
+Cohere North Mini, GPT-OSS20B, an intermediate Ling run, and a final-version Ling run.
+Final Ling recovered from Novita's HTTP 400 structured-output rejection, missed one
+question, and reached **250 points / better than 38%** with seven verified rounds.
+
+[RECOVERY-REPORT.md](RECOVERY-REPORT.md) records the version boundaries, source hashes,
+provider diagnosis limitations, all answers/rarities, and final daily percentages.
+All scorecards, point totals, submission counts, and zero-point rarity handling were
+audited; live-regression gameplay source hashes matched the pre-run snapshot. The newer
+GitHub niche-answer prompt wording was merged afterward and the full suite rerun;
+the live scores predate that wording-only merge. The old 100-model
+results were not rerun or rewritten.

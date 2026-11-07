@@ -23,6 +23,8 @@ def correction(text):
 
 
 def result_details(text, points=None):
+    if re.search(r'NOTHING LANDED\s*\n[^\n]*\n\+0 PTS', text, re.I):
+        return dict(accepted_answer=None, rarity=None, points=0, rarity_source='displayed_timeout')
     match = RESULT.search(text)
     if match:
         return dict(accepted_answer=match[2], rarity=match[1].title(),
@@ -43,7 +45,7 @@ def scorecard_verified(report):
 def enrich_report(report, final_text='', events=()):
     """Copy, never rewrite historical observations or timing measurements."""
     report = deepcopy(report)
-    report['report_version'] = 2
+    report['report_version'] = 3
     report['scorecard_verified'] = scorecard_verified(report)
     pct = re.search(r"BETTER THAN\s+(\d+(?:\.\d+)?)%\s+OF TODAY['’]S PLAYERS", final_text, re.I)
     report['daily_percentile'] = (float(pct[1]) if pct and 0 <= float(pct[1]) <= 100
@@ -51,6 +53,9 @@ def enrich_report(report, final_text='', events=()):
     report.setdefault('navigation_recovery', 'off (historical)')
     report['recoveries'] = [e for e in events if e['event'] == 'navigation_recovery']
     report['assisted'] = any(e.get('result') == 'ok' for e in report['recoveries'])
+    report['model_issues'] = [e for e in events if e['event'] == 'model_issue']
+    report['inference_interruptions'] = [e for e in events if e['event'] == 'inference_interruption']
+    report['compatibility_changes'] = [e for e in events if e['event'] == 'model_compatibility']
     opened = {e['round']: e['elapsed_s'] for e in events if e['event'] == 'round_open'}
     for row in report['rounds']:
         details = result_details(row.get('result_text', ''), row.get('points'))
@@ -61,8 +66,14 @@ def enrich_report(report, final_text='', events=()):
             entry = next((m for m in entries if number and m[1] == number[1]), None)
             if entry:
                 details = result_details('', int(entry[3]))
-                details['accepted_answer'] = entry[2]
+                if int(entry[3]) > 0:
+                    details['accepted_answer'] = entry[2]
+                else:
+                    details['rarity_source'] = 'verified_scorecard_timeout'
         row.update({k: v for k, v in details.items() if k != 'points'})
+        if details['points'] is not None:
+            row['points'] = details['points']
+            row['round_outcome'] = 'missed' if details['points'] == 0 else 'accepted'
         submissions = row.setdefault('submissions', [])
         for sub in submissions:
             sub.setdefault('outcome', 'unconfirmed')
@@ -100,7 +111,7 @@ def enrich_report(report, final_text='', events=()):
         # Attribute an accepted result only when it matches the final submitted text.
         # If the game canonicalizes spelling unexpectedly, retain the round result
         # separately rather than pretending an unconfirmed attempt was accepted.
-        if submissions and details['accepted_answer'] is not None:
+        if submissions and details['accepted_answer'] is not None and (details['points'] or 0) > 0:
             sub = submissions[-1]
             if sub['answer'].strip().casefold() == details['accepted_answer'].strip().casefold():
                 sub.update(outcome='accepted', rarity=details['rarity'], points=details['points'],
@@ -133,11 +144,27 @@ def markdown(report):
             lines += ['| — | No recorded submission | — | — | — | — |']
         if row.get('points') is not None:
             lines += ['', f"Round result: {cell(row.get('accepted_answer'))} · {cell(row['rarity'])} · {row['points']} points (source: {cell(row['rarity_source'])})."]
+        if row.get('round_outcome') == 'missed':
+            lines += ['', 'Round missed: the game awarded 0 points. Continued to the next round.']
+        if row.get('interruptions'):
+            lines += ['', 'Round interruptions: ' + ', '.join(map(cell, row['interruptions'])) + '.']
         lines += ['']
     if report['recoveries']:
         lines += ['## Navigation recovery log', '']
         for e in report['recoveries']:
             lines += [f"- {e['elapsed_s']:.2f}s: {cell(e['target'])} — {cell(e['result'])} ({cell(e['reason'])})."]
+        lines += ['']
+    if report.get('model_issues'):
+        lines += ['## Model/API diagnostics', '', '| Round | Category | HTTP status | Provider | Detail |',
+                  '|---|---|---:|---|---|']
+        for e in report['model_issues']:
+            lines += ['| ' + ' | '.join(map(cell, [e.get('round'), e.get('category'), e.get('http_status'),
+                        e.get('provider_name'), e.get('provider_message') or e.get('message')])) + ' |']
+        lines += ['']
+    if report.get('compatibility_changes'):
+        lines += ['## Output compatibility changes', '']
+        for e in report['compatibility_changes']:
+            lines += [f"- {cell(e.get('round'))}: {cell(e['mode'])}; same model and validated action schema retained ({cell(e['reason'])})."]
         lines += ['']
     return '\n'.join(lines)
 

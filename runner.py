@@ -24,6 +24,7 @@ from playwright.async_api import async_playwright
 
 from deadline import DeadlineExceeded, RoundDeadline
 from reporting import correction, read_events, rejection, result_details, write_report
+from model_policy import error_details
 
 
 # These selectors were observed on the live UI. Read rendered state only.
@@ -135,7 +136,8 @@ class Observer:
     async def watch(self):
         while True:
             await self.read()
-            self.deadline.check(time.monotonic())
+            # Expiry stops answering, not observation or the entire seven-round game.
+            # Model calls/actions own cancellable deadlines; player waits for the UI result.
             await asyncio.sleep(0.25)
 
 
@@ -154,6 +156,12 @@ class TimedModel:
     def __getattr__(self, key):
         return getattr(self.wrapped, key)
 
+    def enable_prompt_json(self):
+        if isinstance(self.wrapped, ChatOpenAI) and not self.wrapped.dont_force_structured_output:
+            self.wrapped.dont_force_structured_output = True
+            return True
+        return False
+
     async def ainvoke(self, *args, **kwargs):
         start = time.monotonic()
         try:
@@ -169,12 +177,15 @@ def make_model(args):
         if not os.environ.get("OPENAI_API_KEY"):
             raise ValueError("Set OPENAI_API_KEY")
         return ChatOpenAI(model=args.model, base_url=os.environ.get("OPENAI_BASE_URL") or None,
-                          max_retries=0, timeout=18, temperature=None, frequency_penalty=None,
-                          max_completion_tokens=1500, reasoning_effort=args.reasoning)
+                          max_retries=0, timeout=None, temperature=None, frequency_penalty=None,
+                          max_completion_tokens=args.max_output_tokens, reasoning_effort=args.reasoning)
     if args.provider == "anthropic":
-        return ChatAnthropic(model=args.model, max_retries=0, timeout=18)
+        if args.max_output_tokens is None:
+            raise ValueError("Native Anthropic requires --max-output-tokens; use OpenRouter to omit the request cap")
+        return ChatAnthropic(model=args.model, max_retries=0, timeout=None,
+                             max_tokens=args.max_output_tokens)
     # This adapter counts attempts (not retries); one means no retries.
-    return ChatGoogle(model=args.model, max_retries=1)
+    return ChatGoogle(model=args.model, max_retries=1, max_output_tokens=args.max_output_tokens)
 
 
 @asynccontextmanager
@@ -266,7 +277,8 @@ async def scripted_baseline(page, observer, answers):
 
 async def play(session, observer, args):
     from player import play_actions
-    return await play_actions(observer, TimedModel(make_model(args), observer.record), args.max_steps, args.vision, args.navigation_recovery)
+    return await play_actions(observer, TimedModel(make_model(args), observer.record), args.max_steps,
+                              args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
 
 
 async def run(args):
@@ -275,6 +287,8 @@ async def run(args):
     status, error = "failed", None
     record.event("config", browser=args.browser, model=args.model, provider=args.provider,
                  vision=args.vision, margin_s=args.margin, command=args.command,
+                 max_output_tokens=args.max_output_tokens, model_retries=args.model_retries,
+                 navigation_timeout_s=args.navigation_timeout, round_timeout_policy="continue",
                  requested_reasoning=args.reasoning, navigation_recovery=args.navigation_recovery, viewport=[1280, 800], reduced_motion=True)
     try:
         async with browser_session(args, record) as (session, page):
@@ -304,12 +318,14 @@ async def run(args):
         error = type(exc).__name__
         if isinstance(exc, DeadlineExceeded):
             status = "deadline_exceeded"
-        record.event("failure", error_type=error,
+        record.event("failure", **error_details(exc),
                      frames=[{"file": Path(f.filename).name, "line": f.lineno, "function": f.name}
                              for f in traceback.extract_tb(exc.__traceback__)])
     report = {"status": status, "error_type": error, "model": args.model,
               "browser": args.browser, "command": args.command,
               "navigation_recovery": args.navigation_recovery,
+              "max_output_tokens": args.max_output_tokens, "model_retries": args.model_retries,
+              "round_timeout_policy": "continue",
               "model_call_durations_s": record.model_latencies,
               "rounds": list(observer.rounds.values()) if observer else []}
     if observer and observer.last_state:
@@ -337,6 +353,12 @@ def main():
     parser.add_argument("--margin", type=float, default=3)
     parser.add_argument("--max-steps", type=int, default=50)
     parser.add_argument("--run-timeout", type=float, default=600)
+    parser.add_argument("--max-output-tokens", type=int, default=None,
+                        help="Optional API output cap; default omits it (provider limits still apply)")
+    parser.add_argument("--navigation-timeout", type=float, default=60,
+                        help="Inference timeout outside questions; questions use the game deadline")
+    parser.add_argument("--model-retries", type=int, default=2,
+                        help="Additional same-model retries for transient API failures, within remaining time")
     parser.add_argument("--navigation-recovery", choices=["off", "bounded"], default="bounded",
                         help="Recover stalled non-answer navigation; off is the strict track")
     parser.add_argument("--reasoning", default="low", choices=["minimal", "low", "medium", "high"])
@@ -352,6 +374,10 @@ def main():
         parser.error("--answers-file is only allowed for the scripted baseline")
     if not 1 <= args.margin <= 10:
         parser.error("--margin must be between 1 and 10 seconds")
+    if args.max_output_tokens is not None and args.max_output_tokens < 1:
+        parser.error("--max-output-tokens must be positive or omitted")
+    if not 0 <= args.model_retries <= 10 or not 1 <= args.navigation_timeout <= 120:
+        parser.error("--model-retries must be 0–10 and --navigation-timeout must be 1–120")
     args.output = (args.output or Path("artifacts") / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")).resolve()
     raise SystemExit(asyncio.run(run(args)))
 

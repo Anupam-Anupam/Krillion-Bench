@@ -20,6 +20,8 @@ only from explicitly named files; environment variables take precedence. `.env` 
 run artifacts are ignored by Git.
 
 See [VALIDATION.md](VALIDATION.md) for measured live results and known limitations.
+[RECOVERY-REPORT.md](RECOVERY-REPORT.md) documents the timeout/provider fixes and
+every answer in the targeted follow-up checks.
 
 The 100-model OpenRouter campaign uses `campaign.py`. It freezes an observed ranking,
 API catalog, source hashes, and settings before launching one fresh browser per model.
@@ -36,7 +38,7 @@ Change models without changing the agent:
 
 ```sh
 uv run runner.py play --env-file .env --provider openai --model YOUR_MODEL
-uv run runner.py play --env-file .env --provider anthropic --model YOUR_MODEL
+uv run runner.py play --env-file .env --provider anthropic --model YOUR_MODEL --max-output-tokens 16000
 uv run runner.py play --env-file .env --provider google --model YOUR_MODEL
 ```
 
@@ -58,9 +60,10 @@ uv run campaign.py --ranking ranking.json --catalog catalog.json \
 ```
 
 The selector excludes automatic routers, latest aliases, and asynchronous batch variants.
-Free and paid variants remain separate. Unknown IDs, duplicates, and an undersized roster
-fail selection. Unsupported structured-output models are attempted and retained as failures;
-they are not silently removed from the denominator or replaced.
+Free and paid variants remain separate by default. Use `--paid-only` to exclude `:free`
+endpoints explicitly; exclusions are recorded and model IDs are never silently substituted.
+Unknown IDs, duplicates, and an undersized roster fail selection. Output compatibility
+fallbacks and unsuccessful attempts remain visible in the results.
 
 The output contains a frozen `manifest.json`, atomic `state.json`, `summary.json`, combined
 `REPORT.md`, and each model's normal answer reports and browser artifacts. The same command
@@ -70,10 +73,47 @@ before resuming. Scheduling stops at a UTC date change or mismatching daily prom
 already active at detection finish and retain their actual prompt evidence. A hard outer timeout
 can prevent browser cleanup; the cloud session's 15-minute lease still bounds its lifetime.
 
-Campaigns measure this complete timed model-and-harness configuration. A reasoning model may
-consume its 1,500-token budget before emitting actions. Schema incompatibility, provider errors,
-timeouts, and navigation failures are meaningful separate failure modes, not zero game scores.
+Campaigns measure this complete timed model-and-harness configuration. The current default
+omits an output-token cap; model/provider output and context limits still apply. Optional
+`--max-output-tokens`, `--model-retries`, and `--navigation-timeout` settings are frozen in
+the campaign manifest. The published TOP100 results used the earlier 1,500-token/18-second
+configuration and stop-on-failure policy; they are preserved as historical results.
+Current missed questions continue to a real final scorecard; provider interruptions,
+missed rounds, and incomplete games are reported separately.
 One daily puzzle per model is an exploratory comparison, not a statistically stable quality ranking.
+
+## Output limits, API failures, and rate limits
+
+`runner.py make_model()` uses `max_completion_tokens=None` by default for OpenRouter /
+OpenAI-compatible APIs, so the parameter is absent on the wire. To set a cap deliberately:
+
+```sh
+uv run runner.py play --env-file .env --model MODEL_ID --max-output-tokens 16000
+```
+
+Omit that flag to remove the harness cap again. Google also omits its output cap by default.
+The native Anthropic API requires a cap; specify one explicitly or use its OpenRouter endpoint.
+Provider/model limits still exist even when the harness supplies none.
+
+The same JSON action schema is included in the prompt and checked locally. Native structured
+output is attempted first. If it is unsupported or the response is malformed/empty, the
+OpenAI-compatible adapter can switch once to prompt-only JSON within the configured attempt
+budget. This removes the native `response_format` parameter, not validation. The same model
+must still return valid constrained actions. Reports log the compatibility change.
+
+`--model-retries 2` permits at most two additional attempts for transient errors such as
+429/503 or transport failures. Backoff respects `Retry-After`, including HTTP-date values;
+all attempts still share the question's original deadline. A long cooldown carries across
+rounds and is waited out before opening the next question. Authentication, insufficient
+credit, and incompatible requests are diagnosed rather than retried blindly. There is no
+cross-model fallback. `--model-retries 0` disables retries and compatibility reattempts.
+
+The harness has no requests-per-minute quota to disable. OpenRouter and upstream providers
+can impose their own limits, including on paid accounts. Prefer explicitly selected paid
+endpoints (`campaign.py --paid-only`) over shared free pools for reliability. This reduces
+exposure to free-tier restrictions but does not guarantee that 429s disappear. See
+[OpenRouter limits](https://openrouter.ai/docs/api_reference/limits) and
+[error handling](https://openrouter.ai/docs/api_reference/errors-and-debugging).
 
 ## What the model controls
 
@@ -106,8 +146,9 @@ It is not a screenshot-only track.
 non-answer navigation state unchanged, the harness may activate its single visible
 BEGIN DESCENT, DESCEND, SURFACE, or results control. Each attempt goes through the
 normal fresh-state/action guard. Recovery is limited to once per state and eight
-attempts per run. It never fills a textbox, submits an answer, resets the timer,
-retries model calls, or substitutes another model. Empty transition screens have a
+attempts per run. An exhausted navigation inference timeout/API failure can also trigger
+one logged recovery for that state. It never fills a textbox, submits an answer, resets
+the timer, or substitutes another model. Empty transition screens have a
 15-second wait limit; the whole run remains bounded too.
 
 Use `--navigation-recovery off` for the strict navigation track. Both tracks have
@@ -120,15 +161,19 @@ older full-page-text observations in a model ranking.
 - The independent watchdog reads the visible countdown and uses monotonic time.
   It reserves `--margin` seconds (default 3), plus one second for integer rounding.
   Repeated or frozen timer readings cannot extend a round's deadline.
-- Each model call is bounded by the smaller of 18 seconds and the remaining budget.
-  Retries and cross-model fallback are disabled in the adapters.
+- During a question, inference and any retries share the remaining round budget; there
+  is no separate 18-second cutoff. Outside questions, `--navigation-timeout` defaults
+  to 60 seconds. The SDK does not retry invisibly; explicit retries are logged.
 - Each action rechecks the round/phase and deadline. A stale action batch is discarded.
   Once a run stops, no new actions can execute. The game does not advance to the next
   question automatically; DESCEND is activated by the model or logged bounded recovery.
 - Rejected answers may be retried within the same countdown. Rejection does not create
   a fresh budget. The input remaining open is not treated as successful submission.
-- A missed harness deadline stops the run and produces a nonzero exit code. It does
-  not silently skip the question, substitute another model, or fabricate an answer.
+- A missed question deadline cancels inference/actions for that question, waits for
+  the real game timer and result, and continues through DESCEND. The game awards
+  zero for NOTHING LANDED. A submission that actually landed despite a delayed browser
+  acknowledgement retains its real result. No answer or score is fabricated. A stalled
+  game UI or a permanent authentication/request failure can still end the run.
 - Completion requires the real final scorecard, seven round entries, and the Copy
   result control. All seven round numbers must be unique and their points must sum
   to the displayed total. The model's own claim of completion is insufficient.
@@ -154,7 +199,9 @@ uv run playwright show-trace artifacts/RUN_DIRECTORY/trace.zip
 
 Trace files can include browser network data. Keep raw artifacts private; share selected
 screenshots and the summary report. Exception reports omit raw exception strings because
-SDK exceptions can contain authenticated browser URLs. Failed screenshot/trace collection
+SDK exceptions can contain authenticated browser URLs. Model diagnostics retain scrubbed,
+bounded messages, HTTP/provider codes, provider name, rate-limit source, and Retry-After
+when available; they omit credentials, raw headers, and arbitrary response objects. Failed screenshot/trace collection
 is best effort and does not replace the run's actual outcome.
 
 The daily percentage is parsed from **BETTER THAN X% OF TODAY’S PLAYERS**, only with
