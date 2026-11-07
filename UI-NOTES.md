@@ -61,3 +61,7 @@ Browser verification confirmed the default five rows expand to 100 and collapse 
 ### Tier metric colors follow-up
 
 Browser computed-style checks confirmed matching score-bar edges and daily percentages across all five tiers (1 / 9 / 15 / 25 / 50 rows). Rank sorting and search preserve the global placement color, and the compact five-row view remains intact. The stylesheet URL is versioned to invalidate cached styling.
+
+### Tier glow follow-up
+
+Daily percentages use the same `0 0 9px` tier-colored text shadow as Krillion’s passed depth labels (`.ds-tierline.passed .tag`). Score fills adapt that halo to their leading edge, with a softer bloom around the fill. The glow is static; Reduce ocean effects removes these metric shadows.

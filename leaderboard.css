@@ -46,3 +46,10 @@ tr[data-tier=plankton]{--tier-color:#8fa3c4}
 tr[data-tier] .score-bar{background:color-mix(in srgb,var(--tier-color) 3%,transparent)}
 tr[data-tier] .score-fill{background:linear-gradient(90deg,color-mix(in srgb,var(--tier-color) 8%,transparent),color-mix(in srgb,var(--tier-color) 32%,transparent));border-color:var(--tier-color)}
 tr[data-tier] .daily{color:var(--tier-color)}
+
+/* Match the game's 9px tier-label halo and soft neon bloom. */
+tr[data-tier] .daily{text-shadow:0 0 9px var(--tier-color)}
+tr[data-tier] .score-fill{box-shadow:0 0 12px color-mix(in srgb,var(--tier-color) 25%,transparent),inset 0 0 10px color-mix(in srgb,var(--tier-color) 15%,transparent)}
+tr[data-tier] .score-fill::after{content:"";position:absolute;right:-2px;top:0;bottom:0;width:2px;background:var(--tier-color);box-shadow:0 0 9px var(--tier-color),0 0 18px color-mix(in srgb,var(--tier-color) 55%,transparent)}
+body.calm tr[data-tier] .daily{text-shadow:none}
+body.calm tr[data-tier] .score-fill,body.calm tr[data-tier] .score-fill::after{box-shadow:none}
