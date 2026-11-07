@@ -1,0 +1,114 @@
+from unittest.mock import AsyncMock, Mock
+
+import pytest
+from pydantic import ValidationError
+
+from deadline import DeadlineExceeded
+from player import Action, Turn, execute, verified_completion
+from runner import Observer, Recorder
+
+
+def observer(tmp_path, **changes):
+    data = dict(prompt="Name a fruit.", round_label="PROMPT 1 OF 7", timer="25",
+                answering=True, answer="", buttons=["DIVE"], text="", score="0")
+    data.update(changes)
+    page = Mock()
+    page.evaluate = AsyncMock(return_value=data)
+    page.get_by_role.return_value = AsyncMock()
+    return Observer(page, Recorder(tmp_path / "run"))
+
+
+async def test_late_model_response_cannot_execute_action(tmp_path):
+    obs = observer(tmp_path)
+    before = await obs.read()
+    obs.deadline.expires = 0
+    with pytest.raises(DeadlineExceeded):
+        await execute(Action(kind="fill", target="Your answer", text="quince"), before, obs)
+    obs.page.get_by_role.assert_not_called()
+
+
+async def test_action_for_previous_question_is_rejected(tmp_path):
+    obs = observer(tmp_path)
+    before = await obs.read()
+    obs.page.evaluate.return_value["prompt"] = "Name a country."
+    result = await execute(Action(kind="fill", target="Your answer", text="quince"), before, obs)
+    assert "Page changed" in result
+    obs.page.get_by_role.assert_not_called()
+
+
+async def test_action_cannot_leak_from_preview_into_answer_phase(tmp_path):
+    obs = observer(tmp_path, answering=False, timer="")
+    before = await obs.read()
+    obs.page.evaluate.return_value.update(answering=True, timer="25")
+    result = await execute(Action(kind="fill", target="Your answer", text="quince"), before, obs)
+    assert "Page changed" in result
+    obs.page.get_by_role.assert_not_called()
+
+
+async def test_valid_fill_executes(tmp_path):
+    obs = observer(tmp_path)
+    before = await obs.read()
+    result = await execute(Action(kind="fill", target="Your answer", text="quince"), before, obs)
+    assert result == "ok"
+    obs.page.get_by_role.return_value.fill.assert_awaited_once()
+
+
+async def test_watchdog_detects_expired_round_without_model_callback(tmp_path):
+    obs = observer(tmp_path, timer="3")
+    with pytest.raises(DeadlineExceeded):
+        await obs.watch()
+
+
+async def test_unreadable_timer_fails_closed(tmp_path):
+    obs = observer(tmp_path, timer="unknown")
+    with pytest.raises(RuntimeError, match="cannot safely determine deadline"):
+        await obs.read()
+
+
+async def test_ads_and_unknown_buttons_cannot_be_activated(tmp_path):
+    obs = observer(tmp_path, buttons=["DIVE", "BUY NOW"])
+    before = await obs.read()
+    result = await execute(Action(kind="click", target="BUY NOW"), before, obs)
+    assert result != "ok"
+    obs.page.get_by_role.assert_not_called()
+
+
+async def test_model_cannot_claim_early_completion(tmp_path):
+    obs = observer(tmp_path)
+    before = await obs.read()
+    obs.rounds = {str(i): {"points": 100} for i in range(7)}
+    assert not verified_completion(obs)
+    assert await execute(Action(kind="done"), before, obs) != "done"
+
+
+def test_invalid_model_actions_rejected():
+    with pytest.raises(ValidationError):
+        Turn.model_validate({"actions": [{"kind": "evaluate", "text": "fetch('/answers')"}]})
+    with pytest.raises(ValidationError):
+        Turn(actions=[])
+
+
+@pytest.mark.parametrize("score,numbers,expected", [
+    ("70", list(range(1, 8)), True),
+    ("71", list(range(1, 8)), False),
+    ("70", [1, 2, 3, 4, 5, 6, 6], False),
+    ("60", list(range(1, 7)), False),
+])
+async def test_scoreboard_requires_unique_rounds_and_matching_total(tmp_path, score, numbers, expected):
+    obs = observer(tmp_path, answering=False, text="DIVE COMPLETE", buttons=["Copy result"],
+                   score=score, results=[f"Round {n}: answer, 10 pts" for n in numbers])
+    obs.rounds = {str(n): {} for n in range(7)}
+    await obs.read()
+    assert verified_completion(obs) is expected
+
+
+async def test_model_timeout_at_round_budget_is_classified_as_deadline(tmp_path):
+    from player import play_actions
+    obs = observer(tmp_path)
+    async def timed_out(*args, **kwargs):
+        obs.deadline.expires = 0
+        raise TimeoutError()
+    model = Mock(ainvoke=AsyncMock(side_effect=timed_out))
+    with pytest.raises(DeadlineExceeded):
+        await play_actions(obs, model)
+    obs.page.get_by_role.assert_not_called()
