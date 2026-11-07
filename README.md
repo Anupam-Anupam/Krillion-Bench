@@ -21,6 +21,12 @@ run artifacts are ignored by Git.
 
 See [VALIDATION.md](VALIDATION.md) for measured live results and known limitations.
 
+The 100-model OpenRouter campaign uses `campaign.py`. It freezes an observed ranking,
+API catalog, source hashes, and settings before launching one fresh browser per model.
+See [TOP100-REPORT.md](TOP100-REPORT.md) for the campaign results, failure breakdown,
+and every submitted answer. Machine-readable results are in
+[TOP100-SUMMARY.json](TOP100-SUMMARY.json) and [TOP100-ANSWERS.json](TOP100-ANSWERS.json).
+
 ```sh
 uv run runner.py smoke --env-file .env
 uv run runner.py play --env-file .env
@@ -35,8 +41,39 @@ uv run runner.py play --env-file .env --provider google --model YOUR_MODEL
 ```
 
 Anthropic uses `ANTHROPIC_API_KEY`; Google uses `GOOGLE_API_KEY`. Only the configured
-OpenAI-compatible endpoint has been exercised in the live pilot. Provider/model
-support for structured output must be validated before a model joins the benchmark.
+OpenAI-compatible endpoint has been exercised in the live pilot. Structured-output
+support varies by provider and model; compatibility failures remain in campaign results.
+
+## Multi-model campaign
+
+Export `OPENAI_API_KEY` and `OPENAI_BASE_URL=https://openrouter.ai/api/v1` in your shell.
+Keep the Browser Use key in an explicit `.env` file. The ranking input has `source`,
+`captured_at`, and ordered `rows` containing `id`, `directory_rank`, `name`, and
+`weekly_tokens_display`; the catalog is the response from OpenRouter's public
+`GET /api/v1/models`. Preserve both inputs with the campaign.
+
+```sh
+uv run campaign.py --ranking ranking.json --catalog catalog.json \
+  --env-file .env --output artifacts/my-campaign --count 100 --concurrency 4
+```
+
+The selector excludes automatic routers, latest aliases, and asynchronous batch variants.
+Free and paid variants remain separate. Unknown IDs, duplicates, and an undersized roster
+fail selection. Unsupported structured-output models are attempted and retained as failures;
+they are not silently removed from the denominator or replaced.
+
+The output contains a frozen `manifest.json`, atomic `state.json`, `summary.json`, combined
+`REPORT.md`, and each model's normal answer reports and browser artifacts. The same command
+resumes pending models without rerunning finished attempts, provided source hashes and
+concurrency still match. A live/stale lock or interrupted running entry requires investigation
+before resuming. Scheduling stops at a UTC date change or mismatching daily prompts. Runs
+already active at detection finish and retain their actual prompt evidence. A hard outer timeout
+can prevent browser cleanup; the cloud session's 15-minute lease still bounds its lifetime.
+
+Campaigns measure this complete timed model-and-harness configuration. A reasoning model may
+consume its 1,500-token budget before emitting actions. Schema incompatibility, provider errors,
+timeouts, and navigation failures are meaningful separate failure modes, not zero game scores.
+One daily puzzle per model is an exploratory comparison, not a statistically stable quality ranking.
 
 ## What the model controls
 

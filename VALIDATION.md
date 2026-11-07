@@ -133,3 +133,42 @@ shown by the game as its final daily percentage. It exercised correction feedbac
 and a rejected-answer retry. No navigation recovery was needed. Its final screenshot,
 seven unique scorecard entries, and sum of points agree. This repeat is listed
 separately from the original Haiku run (365 points, 85%).
+
+## Frozen 100-model OpenRouter campaign
+
+The November 7 campaign ran from 20:29:52 to 21:08:25 UTC with four concurrent
+fresh Browser Use Cloud sessions. All 100 selected model variants were attempted
+exactly once: **45 verified complete games and 55 incomplete runs**. Browser readiness
+was observed for all 100. There was no daily-prompt mismatch or scheduling stop.
+The frozen roster, settings, source hashes, and ranking provenance are in
+[TOP100-MANIFEST.json](TOP100-MANIFEST.json) and [TOP100-RANKING.json](TOP100-RANKING.json).
+
+Final audit matched all **642 submission events** to report entries: 453 accepted,
+136 rejected, 50 requiring correction confirmation, and 3 unconfirmed. All completed
+games had seven round entries whose points sum to the displayed total and a parsed
+daily percentage. Every incomplete run had no final daily percentage; every
+nonaccepted attempt had no attributed rarity. Source hashes matched the frozen
+manifest after the campaign. Navigation recovery logged 35 attempts across 18 runs.
+
+Failures were 17 output truncations, 17 round-deadline expiries, 15 timeouts,
+5 provider errors, and 1 rate limit. Stack-frame review separates the timeouts into
+12 model calls and 3 actions (two DIVE submissions and one wait near the deadline).
+Provider error types are retained, but sanitized logs do not establish their
+underlying HTTP/provider cause. The song question accounted for 120 of 136 rejected
+attempts and 26 runs' fatal failures. A fatal error ends the run: later rounds are
+unattempted, not additional failed answers. No failed run was retried or replaced.
+
+The full prelaunch suite passed **47 tests in 7.25 seconds**, including four real
+Chromium tests. A subsequent campaign concurrency/resume test brought the current
+suite to 48 distinct tests; the four campaign tests passed together in 0.05 seconds.
+They cover roster exclusions, catalog validation, incomplete-score handling,
+bounded concurrency, and resume without retrying completed failures. Gameplay code
+and settings were unchanged during the campaign.
+
+[TOP100-REPORT.md](TOP100-REPORT.md) contains every answer, rarity, final daily
+percentage, failure breakdown, and the completed-game results. Structured exports
+are [TOP100-SUMMARY.json](TOP100-SUMMARY.json) and
+[TOP100-ANSWERS.json](TOP100-ANSWERS.json). These are exploratory results on one
+daily puzzle under this configuration; they are not a general model-quality ranking.
+The live game's daily percentages can drift during the campaign. Raw traces and
+credentials remain excluded from publication.
