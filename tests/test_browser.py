@@ -20,10 +20,10 @@ function next() {
 function submitAnswer(e) {
  e.preventDefault();
  if (document.querySelector('input').value !== 'answer '+round) {
-  document.getElementById('feedback').textContent='no echo. try again'; return;
+  document.getElementById('feedback').textContent='"'+document.querySelector('input').value+'": no echo. try again'; return;
  }
  score+=10;
- root.innerHTML=`<div>+10 PTS</div><div>SCORE</div><div>${score}</div>`+
+ root.innerHTML=`<div>PLANKTON</div><div>“answer ${round}”</div><div>+10 PTS</div><div>SCORE</div><div>${score}</div>`+
  (round<7?'<button onclick="next()">DESCEND ▼</button>':'<button onclick="finish()">SURFACE ▲</button>');
 }
 function finish() {
@@ -73,6 +73,11 @@ async def test_rejection_can_recover_within_same_round(page, tmp_path):
     assert not accepted.answering
     assert obs.rounds[before.key]['points'] == 10
     assert len(obs.rounds[before.key]['submissions']) == 2
+    assert obs.rounds[before.key]['submissions'][0]['outcome'] == 'rejected'
+    from reporting import enrich_report
+    report = enrich_report(dict(status='partial', rounds=list(obs.rounds.values())))
+    attempts = report['rounds'][0]['submissions']
+    assert [(s['outcome'], s['rarity']) for s in attempts] == [('rejected', None), ('accepted', 'Plankton')]
 
 
 async def test_disabled_input_during_submission_does_not_reset_deadline(page, tmp_path):
@@ -87,3 +92,26 @@ async def test_disabled_input_during_submission_does_not_reset_deadline(page, tm
     await page.get_by_role('textbox').evaluate('(el) => el.disabled = false')
     await obs.read()
     assert obs.deadline.expires <= deadline
+
+
+async def test_real_browser_recovers_scout_between_rounds_without_answering(page, tmp_path):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock, Mock
+    from player import Turn, play_actions
+    obs = Observer(page, Recorder(tmp_path/'run'))
+    await page.get_by_role('button', name='▼ BEGIN DESCENT ▼').press('Enter')
+    for n in (1, 2):
+        state = await obs.read()
+        await execute(Action(kind='fill', target='Your answer', text=f'answer {n}'), state, obs)
+        await execute(Action(kind='click', target='DIVE'), state, obs)
+        state = await obs.read()
+        if n == 1:
+            await execute(Action(kind='click', target='DESCEND ▼'), state, obs)
+    model = Mock(ainvoke=AsyncMock(return_value=SimpleNamespace(
+        completion=Turn(actions=[Action(kind='fill', target='Your answer', text='midnight zone')]), usage=None)))
+    await play_actions(obs, model, max_steps=3)
+    state = await obs.read()
+    assert state.prompt == 'Question 3'
+    assert state.answering and state.answer == ''
+    assert obs.rounds[state.key].get('submissions', []) == []
+    assert len(obs.rounds) == 3

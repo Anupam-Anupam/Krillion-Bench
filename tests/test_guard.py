@@ -112,3 +112,31 @@ async def test_model_timeout_at_round_budget_is_classified_as_deadline(tmp_path)
     with pytest.raises(DeadlineExceeded):
         await play_actions(obs, model)
     obs.page.get_by_role.assert_not_called()
+
+
+async def test_submission_is_logged_even_when_keypress_times_out(tmp_path):
+    import json
+    obs = observer(tmp_path, answer='quince')
+    before = await obs.read()
+    obs.page.get_by_role.return_value.press.side_effect = TimeoutError()
+    with pytest.raises(TimeoutError):
+        await execute(Action(kind='click', target='DIVE'), before, obs)
+    sub = obs.rounds[before.key]['submissions'][0]
+    assert sub['answer'] == 'quince' and sub['outcome'] == 'unconfirmed'
+    events = [json.loads(l) for l in (obs.record.output / 'events.jsonl').read_text().splitlines()]
+    event = next(e for e in events if e['event'] == 'submission')
+    assert event['round_elapsed_s'] == sub['elapsed_s']
+    assert events[-1]['event'] == 'action_result' and events[-1]['result'] == 'TimeoutError'
+
+
+async def test_old_rejection_does_not_grade_a_repeat_submission(tmp_path):
+    obs = observer(tmp_path, answer='wrong', text='"wrong": no echo. try again')
+    before = await obs.read()
+    await execute(Action(kind='click', target='DIVE'), before, obs)
+    await obs.read()
+    assert obs.rounds[before.key]['submissions'][0]['outcome'] == 'unconfirmed'
+    obs.page.evaluate.return_value['input_enabled'] = False
+    await obs.read()
+    obs.page.evaluate.return_value['input_enabled'] = True
+    await obs.read()
+    assert obs.rounds[before.key]['submissions'][0]['outcome'] == 'rejected'
