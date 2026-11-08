@@ -163,3 +163,43 @@ def test_changed_correction_policy_requires_separate_panel(tmp_path):
     del original['settings']['autocorrection_policy']
     with pytest.raises(ValueError, match='gameplay settings'):
         execution_revision(original, current, 'Accept corrections')
+
+
+async def test_public_progress_contains_only_counts_and_preserves_private_reports(tmp_path):
+    import base64
+    import json
+    import httpx
+    from archive_campaign import CampaignProgress
+    requests = []
+    async def handler(request):
+        requests.append(request)
+        if request.method == 'GET':
+            assert request.url.params['ref'] == 'campaign-status'
+            return httpx.Response(200, json={'sha':'old-snapshot'})
+        body = json.loads(request.content)
+        assert body['branch'] == 'campaign-status' and body['sha'] == 'old-snapshot'
+        public = json.loads(base64.b64decode(body['content']))
+        assert set(public) == {'campaign','verified','total','active','workers','status','updated_at'}
+        assert public['verified'] == 4 and public['total'] == 7500
+        assert public['active'] == 8 and public['workers'] == 8
+        assert body['author']['email'].endswith('Anupam-Anupam@users.noreply.github.com')
+        return httpx.Response(200)
+    async with httpx.AsyncClient(base_url='https://api.github.com', transport=httpx.MockTransport(handler)) as client:
+        progress = CampaignProgress('archive-75-20261106-v3',4,8,tmp_path/'status.json',SimpleNamespace(client=client),True)
+        progress.active = 8
+        await progress.emit()
+    assert len(requests) == 2
+    assert all('/Anupam-Anupam/Krillion-Bench/contents/campaign-progress.json' in r.url.path for r in requests)
+    assert json.loads((tmp_path/'status.json').read_text())['verified'] == 4
+    assert '4 / 7,500 (0.05%)' in progress.render()
+
+
+async def test_progress_publish_failure_does_not_abort_games(tmp_path,capsys):
+    import httpx
+    from archive_campaign import CampaignProgress
+    async with httpx.AsyncClient(base_url='https://api.github.com', transport=httpx.MockTransport(lambda r:httpx.Response(429))) as client:
+        progress = CampaignProgress('archive-75-20261106-v3',23,8,tmp_path/'status.json',SimpleNamespace(client=client),True)
+        await progress.emit()
+    assert progress.completed == 23
+    assert 'progress_publish_failed' in capsys.readouterr().out
+    assert (tmp_path/'status.json').exists()

@@ -512,3 +512,35 @@ async def test_case_only_correction_stale_banner_is_not_a_new_correction(page):
         assert await accept_correction(await obs.read(), obs)
     assert await page.evaluate('correctionPresses') == 2
     assert obs.rounds[state.key]['submissions'][-1]['outcome'] == 'unconfirmed'
+
+
+async def test_live_progress_shows_verified_counts_and_marks_stale_updates(page):
+    import json
+    from datetime import datetime, timezone, timedelta
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    snapshot = dict(campaign='archive-75-20261106-v3',verified=4,total=7500,
+                    active=8,workers=8,status='running',updated_at=datetime.now(timezone.utc).isoformat())
+    async def website(route):
+        filename = route.request.url.split('bench.test/',1)[1].split('?',1)[0] or 'index.html'
+        path = root/filename
+        if path.is_file():
+            content_type = {'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json'}.get(path.suffix,'application/octet-stream')
+            await route.fulfill(body=path.read_bytes(),content_type=content_type)
+        else: await route.fulfill(status=404)
+    await page.route('https://bench.test/**',website)
+    await page.route('https://raw.githubusercontent.com/**',lambda route: route.fulfill(json=snapshot))
+    await page.goto('https://bench.test/')
+    await page.wait_for_function("document.querySelector('#campaign-progress-count').textContent.includes('4 / 7,500')")
+    assert await page.locator('#campaign-progress-state').inner_text() == '8 games running · 8 workers'
+    assert await page.locator('#campaign-progress-bar').get_attribute('max') == '7500'
+    await page.evaluate("campaignProgress.updated_at = new Date(Date.now()-240000).toISOString(); renderCampaignProgress()")
+    assert 'Update delayed' in await page.locator('#campaign-progress-state').inner_text()
+    assert await page.locator('#campaign-progress-bar').evaluate('el => el.value') == 4
+    snapshot.update(verified=5,status='paused',active=0,updated_at=datetime.now(timezone.utc).isoformat())
+    await page.evaluate('refreshCampaignProgress()')
+    assert await page.locator('#campaign-progress-state').inner_text() == 'Paused'
+    assert await page.locator('#campaign-progress-bar').evaluate('el => el.value') == 5
+    snapshot.update(verified=9000)
+    await page.evaluate('refreshCampaignProgress()')
+    assert await page.locator('#campaign-progress-bar').evaluate('el => el.value') == 5

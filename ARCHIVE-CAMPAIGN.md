@@ -99,8 +99,9 @@ results. Each new browser must show its expected archive label and exact URL bef
 model inference starts. A SHA-256 fingerprint of the seven visible prompts must
 match other models on the same date.
 
-Default concurrency is two. Keep at most two workers under the current user
-instruction; reliability takes priority over throughput. The game deadline and all existing same-model retry and
+The CLI defaults to two workers. The user has now authorized eight concurrent
+workers for the active campaign; start it with `--concurrency 8`. Reliability
+still takes priority over throughput, and concurrency is not raised automatically. The game deadline and all existing same-model retry and
 final-score recovery rules remain unchanged. Completed remote checkpoints are
 resumed without replay. The orchestrator emits progress counts, never answer logs.
 The rolling worker pool refills a slot immediately after its report is durably
@@ -146,3 +147,25 @@ rounds with matching prompts and verified scorecards. The game's replay control
 was verified to restore a clean initial state after completion. The full panel
 requires the corrected capture path to pass its live pilot before expansion;
 no archive aggregates have been published.
+
+
+## Live progress
+
+`--publish-progress` publishes aggregate counters once per minute to
+`campaign-progress.json` on the public repository's `campaign-status` branch.
+Create that branch from the public main branch before enabling publication. It
+contains only the campaign ID, verified/total counts, active/configured worker
+counts, status, and timestamp. No answers, prompts, per-run scores, session URLs,
+credentials, or private reports are published. Counts advance only after private
+storage acknowledges a verified scorecard with the correct prompt fingerprint.
+The same aggregate snapshot is written to ignored
+`artifacts/campaign-progress.json`, and a terminal progress bar appears during the
+run. Session IDs/model names and inference-interruption reasons appear in console
+status messages so a live browser can be identified without revealing answers.
+
+The leaderboard polls the status branch every minute, separate from the published
+score dataset. It marks running/draining snapshots older than three minutes as
+stale rather than implying the workers are still healthy. Public progress outages
+are logged and retried on the next minute; they never abort private games. After
+all 7,500 games are verified, publishing aggregate scores is still a separate,
+validated step. Final shutdown publishes paused, needs-attention, or complete.

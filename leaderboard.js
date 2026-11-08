@@ -223,3 +223,41 @@ $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if
 fetch('leaderboard-data.json').then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart(visibleRows());});
+
+
+// This endpoint contains aggregate counts only; private reports never reach the site.
+let campaignProgress = null;
+function renderCampaignProgress() {
+  if (!campaignProgress) return;
+  const p = campaignProgress;
+  const age = Date.now() - Date.parse(p.updated_at);
+  const stale = age > 180000 && ['running', 'draining'].includes(p.status);
+  $('#campaign-progress').dataset.stale = String(stale);
+  $('#campaign-progress-count').textContent = `${count(p.verified)} / ${count(p.total)} · ${(100*p.verified/p.total).toFixed(2)}%`;
+  $('#campaign-progress-bar').value = p.verified;
+  const status = {running:`${p.active} games running · ${p.workers} workers`,draining:`Finishing ${p.active} games before pausing`,paused:'Paused',needs_attention:'Paused for a health check',complete:'All games verified'}[p.status];
+  $('#campaign-progress-state').textContent = stale ? 'Update delayed · showing last verified count' : status;
+  $('#campaign-progress-time').textContent = `Updated ${new Date(p.updated_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+}
+async function refreshCampaignProgress() {
+  try {
+    const url = 'https://raw.githubusercontent.com/Anupam-Anupam/Krillion-Bench/campaign-status/campaign-progress.json';
+    const response = await fetch(`${url}?minute=${Math.floor(Date.now()/60000)}`, {cache:'no-store', signal:AbortSignal.timeout(12000)});
+    if (!response.ok) throw new Error('Progress unavailable');
+    const p = await response.json();
+    if (p.campaign !== 'archive-75-20261106-v3' || p.total !== 7500 ||
+        ![p.verified,p.active,p.workers].every(Number.isInteger) || p.verified < 0 || p.verified > p.total ||
+        p.active < 0 || p.active > p.workers || p.workers < 1 || p.workers > 20 ||
+        !['running','draining','paused','needs_attention','complete'].includes(p.status) ||
+        !Number.isFinite(Date.parse(p.updated_at))) throw new Error('Invalid progress');
+    // A cache must never move an already displayed counter backward.
+    if (!campaignProgress || Date.parse(p.updated_at) >= Date.parse(campaignProgress.updated_at)) campaignProgress = p;
+    renderCampaignProgress();
+  } catch {
+    if (campaignProgress) renderCampaignProgress();
+    else $('#campaign-progress-state').textContent = 'Progress temporarily unavailable';
+  }
+}
+refreshCampaignProgress();
+setInterval(refreshCampaignProgress, 60000);
+setInterval(renderCampaignProgress, 15000);

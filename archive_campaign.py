@@ -1,5 +1,6 @@
 """Resume a fixed archived-game panel using only private remote checkpoints."""
 import argparse
+import base64
 import asyncio
 from datetime import datetime, timezone
 import hashlib
@@ -195,6 +196,64 @@ async def run_pending(pending, concurrency, one, stop, stop_file):
         raise failures[0]
 
 
+class CampaignProgress:
+    """Aggregate counters only; never serialize models, prompts, or trajectories."""
+    public_repo = "Anupam-Anupam/Krillion-Bench"
+    branch = "campaign-status"
+
+    def __init__(self, campaign_id, completed, workers, output, store, publish=False):
+        self.campaign_id, self.completed, self.workers = campaign_id, completed, workers
+        self.output, self.store, self.publish = output, store, publish
+        self.active, self.status = 0, "running"
+
+    def snapshot(self):
+        return dict(campaign=self.campaign_id, verified=self.completed, total=7500,
+                    active=self.active, workers=self.workers, status=self.status,
+                    updated_at=datetime.now(timezone.utc).isoformat())
+
+    def render(self):
+        filled = int(30 * self.completed / 7500)
+        bar = "#" * filled + "-" * (30 - filled)
+        return f"[{bar}] {self.completed:,} / 7,500 ({self.completed/75:.2f}%) | {self.active}/{self.workers} active | {self.status}"
+
+    async def emit(self):
+        snapshot = self.snapshot()
+        # The sole local live output is an aggregate snapshot, not a run report.
+        self.output.parent.mkdir(parents=True, exist_ok=True)
+        temp = self.output.with_suffix('.tmp')
+        temp.write_text(json.dumps(snapshot, indent=2) + '\n')
+        temp.replace(self.output)
+        print(self.render(), flush=True)
+        if not self.publish:
+            return
+        try:
+            async with asyncio.timeout(20):
+                endpoint = f'/repos/{self.public_repo}/contents/campaign-progress.json'
+                response = await self.store.client.get(endpoint, params={'ref': self.branch})
+                if response.status_code not in (200, 404):
+                    raise RuntimeError('Progress checkpoint lookup failed')
+                body = dict(message='Update aggregate benchmark progress', branch=self.branch,
+                            content=base64.b64encode(json.dumps(snapshot).encode()).decode(),
+                            author=dict(name='Anupam Chettimada',
+                                        email='92892810+Anupam-Anupam@users.noreply.github.com'))
+                if response.status_code == 200:
+                    body['sha'] = response.json()['sha']
+                response = await self.store.client.put(endpoint, json=body)
+                if response.status_code not in (200, 201):
+                    raise RuntimeError('Progress checkpoint update failed')
+        except Exception as exc:
+            # A public status outage must not cancel an in-flight private game.
+            # The UI ages out stale status; retry on the next minute, not in a loop.
+            print(json.dumps(dict(event='progress_publish_failed', error_type=type(exc).__name__)), flush=True)
+
+    async def watch(self, stop, stop_file):
+        while True:
+            if stop.is_set() or stop_file.exists():
+                self.status = 'draining'
+            await self.emit()
+            await asyncio.sleep(60)
+
+
 async def campaign(args):
     for env in args.env_file:
         load_config(env)
@@ -269,6 +328,16 @@ async def campaign(args):
                 if stop.is_set():
                     return
                 record = MemoryRecorder(hashlib.sha256(path.encode()).hexdigest()[:24])
+                original_event = record.event
+                def event(kind, **data):
+                    original_event(kind, **data)
+                    if kind == 'cloud_session':
+                        print(json.dumps(dict(event=kind, model=model['id'],
+                                              session_id=data['session_id'])), flush=True)
+                    elif kind == 'inference_interruption':
+                        print(json.dumps(dict(event=kind, model=model['id'],
+                                              round=data.get('round'), reason=data.get('reason'))), flush=True)
+                record.event = event
                 async def prepare(page):
                     replayed = await verify_archive_page(page, game, record)
                     record.event('archive_prepared', game_date=game['date'], replayed=replayed)
@@ -301,11 +370,30 @@ async def campaign(args):
                     stop.set()
                     raise RuntimeError('Different prompts observed for the same archive date; scheduling paused')
                 completed.append(public_inputs(saved))
+                progress.completed = len(completed)
+                print(progress.render(), flush=True)
                 print(json.dumps(dict(model=model['id'], game_date=game['date'],
                                       verified=len(completed), planned=7500)), flush=True)
+        progress = CampaignProgress(campaign_id, len(completed), args.concurrency,
+                                    getattr(args, 'progress_output', Path('artifacts/campaign-progress.json')),
+                                    store, getattr(args, 'publish_progress', False))
+        async def tracked_one(*item):
+            progress.active += 1
+            try:
+                await one(*item)
+            finally:
+                progress.active -= 1
+        progress_task = asyncio.create_task(progress.watch(stop, stop_file))
         try:
-            await run_pending(pending, args.concurrency, one, stop, stop_file)
+            await run_pending(pending, args.concurrency, tracked_one, stop, stop_file)
+            progress.status = 'complete' if len(completed) == 7500 else 'paused'
+        except BaseException:
+            progress.status = 'needs_attention'
+            raise
         finally:
+            progress_task.cancel()
+            await asyncio.gather(progress_task, return_exceptions=True)
+            await progress.emit()
             for sig in (signal.SIGTERM, signal.SIGINT):
                 loop.remove_signal_handler(sig)
         if stop.is_set() or stop_file.exists():
@@ -338,6 +426,8 @@ if __name__ == '__main__':
     parser.add_argument('--concurrency', type=int, default=2)
     parser.add_argument('--campaign-id', default='archive-75-20261106-v3')
     parser.add_argument('--execution-revision-reason')
+    parser.add_argument('--publish-progress', action='store_true', help='Publish aggregate counters to the personal public status branch')
+    parser.add_argument('--progress-output', type=Path, default=Path('artifacts/campaign-progress.json'))
     parser.add_argument('--stop-file', type=Path, default=Path('.campaign-stop'))
     parser.add_argument('--limit', type=int, help='Pilot: only this many pending games')
     parser.add_argument('--public-output', type=Path, default=Path('archive-leaderboard.json'))
