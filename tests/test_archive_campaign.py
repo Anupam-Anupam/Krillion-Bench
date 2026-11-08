@@ -53,4 +53,4 @@ async def test_archive_redirect_cannot_be_mistaken_for_requested_game():
     page.get_by_text.return_value.wait_for = AsyncMock()
     with pytest.raises(RuntimeError, match='URL changed'):
         await verify_archive_page(page, {'url': 'https://krillion.io/test-only/date', 'visible_label': 'Archive date'})
-    page.get_by_text.assert_called_once_with('Archive date', exact=True)
+    page.get_by_text.assert_not_called()

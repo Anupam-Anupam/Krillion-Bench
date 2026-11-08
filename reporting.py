@@ -10,6 +10,7 @@ TIERS = {10: 'Plankton', 15: 'Too Clever', 30: 'Schooler', 60: 'Rare',
          85: 'Deep Cut', 100: 'One in a Krillion'}
 RESULT = re.compile(r'(PLANKTON|TOO CLEVER|SCHOOLER|RARE|DEEP CUT|ONE IN A KRILLION)\s*\n[“"](.+?)[”"]\s*\n\+(\d+) PTS', re.I)
 REJECTION = re.compile(r'["“](.+?)["”]:\s*no echo\. try again', re.I)
+PERCENTILE = re.compile(r"BETTER THAN\s+(\d+(?:\.\d+)?)%\s+OF\s+(?:TODAY['’]S|DAY\s+#(\d+)['’]S\s+ORIGINAL)\s+PLAYERS", re.I)
 
 
 def rejection(text):
@@ -47,9 +48,10 @@ def enrich_report(report, final_text='', events=()):
     report = deepcopy(report)
     report['report_version'] = 3
     report['scorecard_verified'] = scorecard_verified(report)
-    pct = re.search(r"BETTER THAN\s+(\d+(?:\.\d+)?)%\s+OF TODAY['’]S PLAYERS", final_text, re.I)
+    pct = PERCENTILE.search(final_text)
     report['daily_percentile'] = (float(pct[1]) if pct and 0 <= float(pct[1]) <= 100
                                   and report['scorecard_verified'] else None)
+    report['percentile_reference_day'] = int(pct[2]) if pct and pct[2] and report['daily_percentile'] is not None else None
     report.setdefault('navigation_recovery', 'off (historical)')
     report['recoveries'] = [e for e in events if e['event'] == 'navigation_recovery']
     report['assisted'] = any(e.get('result') == 'ok' for e in report['recoveries'])

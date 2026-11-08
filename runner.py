@@ -361,6 +361,9 @@ async def execute_report(args, record, pricing=None):
             else:
                 observer = Observer(page, record, args.margin)
                 status, error = await run_game(session, observer, args)
+                finalize = getattr(args, 'finalize_page', None)
+                if finalize:
+                    await finalize(page)
                 state = await observer.read()
                 record.event("final_state", score=state.score, buttons=state.buttons, text=state.text)
     except Exception as exc:

@@ -88,3 +88,15 @@ def test_zero_scorecard_round_never_becomes_an_accepted_answer():
     assert all(r['points'] == 0 and r['round_outcome'] == 'missed' for r in report['rounds'])
     assert all(r['accepted_answer'] is None and r['rarity'] is None for r in report['rounds'])
     assert all(r['submissions'][0]['outcome'] == 'unconfirmed' for r in report['rounds'])
+
+
+def test_archive_percentile_uses_original_players_and_requires_score_evidence():
+    raw = dict(status='agent_finished', final_score='70',
+               scoreboard=[f'Round {n}: Answer {n}, 10 pts' for n in range(1, 8)],
+               rounds=[dict(round=f'PROMPT {n} OF 7', prompt='Question') for n in range(1, 8)])
+    report = enrich_report(raw, "BETTER THAN 99% OF DAY #114'S ORIGINAL PLAYERS")
+    assert report['daily_percentile'] == 99
+    assert report['percentile_reference_day'] == 114
+    assert enrich_report(raw, "BETTER THAN 101% OF DAY #114'S ORIGINAL PLAYERS")['daily_percentile'] is None
+    raw['scoreboard'].pop()
+    assert enrich_report(raw, "BETTER THAN 99% OF DAY #114'S ORIGINAL PLAYERS")['daily_percentile'] is None

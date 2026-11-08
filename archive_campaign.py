@@ -5,19 +5,24 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlsplit
 
 import httpx
+from playwright.async_api import TimeoutError as BrowserTimeout
 
 from archive_aggregate import export_archive, game_dates
 from campaign import source_hashes
 from private_storage import MemoryRecorder, PrivateGitHubStore, github_token
-from runner import execute_report, load_config
+from runner import READ_STATE, execute_report, load_config
+from reporting import PERCENTILE
 
 
-def plan(roster, games, catalog, root, concurrency):
+def plan(roster, games, catalog, root, concurrency, campaign_id='archive-75-20261106-v2'):
+    if not re.fullmatch(r'archive-75-20261106(?:-[a-z0-9]+)*', campaign_id):
+        raise ValueError('Invalid archive campaign identifier')
     dates = game_dates()
     if len(roster['runs']) != 100 or len({r['model'] for r in roster['runs']}) != 100:
         raise ValueError('Use the existing 100-model leaderboard roster')
@@ -38,7 +43,7 @@ def plan(roster, games, catalog, root, concurrency):
     hashes = source_hashes(root)
     for filename in ('private_storage.py', 'archive_campaign.py', 'archive_aggregate.py'):
         hashes[filename] = hashlib.sha256((root / filename).read_bytes()).hexdigest()
-    return dict(version=1, campaign='archive-75-20261106', dates=dates, games=games,
+    return dict(version=2, campaign=campaign_id, dates=dates, games=games,
                 models=[dict(id=r['model'], name=r.get('name', r['model']), rank=i+1,
                              pricing=meta[r['model']].get('pricing', {})) for i, r in enumerate(roster['runs'])],
                 source_sha256=hashes, concurrency=concurrency,
@@ -55,9 +60,34 @@ def report_path(manifest, model, day):
 
 async def verify_archive_page(page, game):
     # Evidence supplied from actual calendar navigation, never inferred from a URL pattern.
-    await page.get_by_text(game['visible_label'], exact=True).wait_for(timeout=20000)
     if page.url != game['url']:
         raise RuntimeError('Archive URL changed; refusing to benchmark a different puzzle')
+    begin = page.get_by_role('button', name='▼ BEGIN DESCENT ▼', exact=True)
+    replay = page.get_by_role('button', name='PLAY THIS ONE AGAIN ↻', exact=True)
+    await begin.or_(replay).wait_for(timeout=20000)
+    replayed = await replay.is_visible()
+    if replayed:
+        # Use the game's own replay control; retain login and purchase entitlement.
+        await replay.press('Enter')
+    await begin.wait_for(timeout=20000)
+    # Krillion uppercases labels with CSS; inner_text and locator text can differ in case.
+    label = re.compile(r'^' + re.escape(game['visible_label']) + r'$', re.IGNORECASE)
+    await page.get_by_text(label).wait_for(timeout=20000)
+    if page.url != game['url']:
+        raise RuntimeError('Archive URL changed; refusing to benchmark a different puzzle')
+    state = await page.evaluate(READ_STATE)
+    if state['score'] != '0' or state['answering'] or state['results'] or not await begin.is_enabled():
+        raise RuntimeError('Archive did not reset to a clean initial game')
+    return replayed
+
+
+async def capture_archive_percentile(page, record, timeout=10000):
+    try:
+        await page.wait_for_function(
+            "pattern => new RegExp(pattern, 'i').test(document.body.innerText)",
+            arg=PERCENTILE.pattern, timeout=timeout)
+    except BrowserTimeout:
+        record.event('archive_percentile_unavailable')
 
 
 async def campaign(args):
@@ -76,7 +106,10 @@ async def campaign(args):
         root = Path(__file__).parent
         roster = json.loads(args.roster.read_text())
         games = json.loads(args.games.read_text())
-        manifest_path = 'archive-75-20261106/manifest.json.gz'
+        campaign_id = getattr(args, 'campaign_id', 'archive-75-20261106-v2')
+        if not re.fullmatch(r'archive-75-20261106(?:-[a-z0-9]+)*', campaign_id):
+            raise ValueError('Invalid archive campaign identifier')
+        manifest_path = campaign_id + '/manifest.json.gz'
         existing = await store.read(manifest_path)
         if existing:
             # Freeze original prices, sources, roster, dates, and controls on resume.
@@ -86,7 +119,7 @@ async def campaign(args):
                 response = await client.get('https://openrouter.ai/api/v1/models')
                 response.raise_for_status()
                 catalog = response.json()
-        manifest = plan(roster, games, catalog, root, args.concurrency)
+        manifest = plan(roster, games, catalog, root, args.concurrency, campaign_id)
         if existing is not None and existing != manifest:
             raise ValueError('Campaign manifest differs; do not mix harness versions or rosters')
         if existing is None:
@@ -124,9 +157,13 @@ async def campaign(args):
                     return
                 record = MemoryRecorder(hashlib.sha256(path.encode()).hexdigest()[:24])
                 async def prepare(page):
-                    await verify_archive_page(page, game)
+                    replayed = await verify_archive_page(page, game)
+                    record.event('archive_prepared', game_date=game['date'], replayed=replayed)
+                async def finalize(page):
+                    await capture_archive_percentile(page, record)
                 run_args = SimpleNamespace(command='play', browser='cloud', provider='openai',
                     model=model['id'], url=game['url'], profile_id=profile_id, prepare_page=prepare,
+                    finalize_page=finalize,
                     margin=3, max_steps=50, run_timeout=600, max_output_tokens=None,
                     model_retries=2, navigation_timeout=60, reasoning='low',
                     navigation_recovery='bounded', vision=False, answers_file=None)
@@ -185,6 +222,7 @@ if __name__ == '__main__':
     parser.add_argument('--roster', type=Path, default=Path('leaderboard-data.json'))
     parser.add_argument('--env-file', type=Path, action='append', default=[])
     parser.add_argument('--concurrency', type=int, default=4)
+    parser.add_argument('--campaign-id', default='archive-75-20261106-v2')
     parser.add_argument('--limit', type=int, help='Pilot: only this many pending games')
     parser.add_argument('--public-output', type=Path, default=Path('archive-leaderboard.json'))
     args = parser.parse_args()

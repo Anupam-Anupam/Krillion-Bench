@@ -61,6 +61,38 @@ async def test_scripted_seven_rounds_reach_verified_scoreboard(page, tmp_path):
     assert len(obs.last_state.results) == 7
 
 
+async def test_archive_replay_clears_saved_results_before_model_observation(page):
+    from archive_campaign import verify_archive_page
+    await page.set_content('''<div id="game"><div>SCORE</div><div>545</div>
+      <div title="Round 1: old answer, 85 pts">Saved result</div>
+      <button onclick="document.getElementById('game').innerHTML = document.getElementById('fresh').innerHTML">PLAY THIS ONE AGAIN ↻</button></div>
+      <template id="fresh"><div style="text-transform:uppercase">resurfaced day #114</div>
+      <div>SCORE</div><div>0</div><button>▼ BEGIN DESCENT ▼</button></template>''')
+    game = dict(url=page.url, visible_label='RESURFACED DAY #114')
+    assert await verify_archive_page(page, game) is True
+    assert await page.locator('[title^="Round "]').count() == 0
+    assert await verify_archive_page(page, game) is False
+    await page.get_by_role('button', name='▼ BEGIN DESCENT ▼').evaluate(
+        "el => el.insertAdjacentHTML('beforebegin', '<input aria-label=\"Your answer\">')")
+    with pytest.raises(RuntimeError, match='clean initial'):
+        await verify_archive_page(page, game)
+
+
+async def test_archive_waits_for_delayed_percentile_but_preserves_missing(page):
+    from archive_campaign import capture_archive_percentile
+    from private_storage import MemoryRecorder
+    record = MemoryRecorder('synthetic-archive')
+    await page.set_content('''<div>DIVE COMPLETE</div><script>
+      setTimeout(() => document.body.insertAdjacentHTML('beforeend',
+      "<div>BETTER THAN 99% OF DAY #114'S ORIGINAL PLAYERS</div>"), 100);
+      </script>''')
+    await capture_archive_percentile(page, record, timeout=2000)
+    assert record.events == []
+    await page.set_content('<div>DIVE COMPLETE</div>')
+    await capture_archive_percentile(page, record, timeout=50)
+    assert record.events[-1]['event'] == 'archive_percentile_unavailable'
+
+
 async def test_rejection_can_recover_within_same_round(page, tmp_path):
     obs = Observer(page, Recorder(tmp_path/'run'))
     before = await obs.read()

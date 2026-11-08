@@ -45,6 +45,21 @@ python archive_campaign.py --games archive-games.json --limit 2
 python archive_campaign.py --games archive-games.json
 ```
 
+The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
+`archive-75-20261106` runs are diagnostic pilots, excluded from the final panel
+because they preceded archive replay and historical-percentile capture fixes.
+They remain immutable in private storage; no best-of selection is performed.
+Use the same `--concurrency` and `--campaign-id` when resuming a frozen campaign.
+
+The observed calendar manifest is checked in as `archive-games.json` and contains
+dates, public archive URLs, and visible labels only. Each run uses Krillion's own
+`PLAY THIS ONE AGAIN` control if a prior completion is present, then verifies a
+zero score, no saved results, and an enabled start button before exposing the page
+to the model. Login and Unlimited entitlement remain in the cloud profile.
+After a completed game, the harness waits up to ten seconds for the historical
+percentile to render; it recognizes the game's original-players wording and
+records missing data when that statistic remains unavailable.
+
 The roster comes from `leaderboard-data.json`; original model IDs, including free
 variants, are preserved. The initial OpenRouter catalog freezes prices. Missing
 model IDs stop preparation. A private manifest freezes source hashes, settings,
@@ -88,6 +103,9 @@ loaded; it does not fabricate intervals for the existing single-day snapshot.
 Private repository creation and direct in-memory upload/readback are verified.
 Unit tests cover no local report writes, private-only uploads, immutable checkpoints,
 complete-panel aggregation, missing metric handling, and reproducible intervals.
-The aggregate UI is checked with clearly synthetic test data. Archived live-game
-replay and the paid 7,500-game campaign remain pending entitlement restoration and
-the pilot; no archive scores have been claimed or published.
+The aggregate UI is checked with clearly synthetic test data. Unlimited login
+persists into fresh cloud sessions. Both initial live pilots completed seven
+rounds with matching prompts and verified scorecards. The game's replay control
+was verified to restore a clean initial state after completion. The full panel
+requires the corrected capture path to pass its live pilot before expansion;
+no archive aggregates have been published.
