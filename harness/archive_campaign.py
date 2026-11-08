@@ -182,7 +182,27 @@ async def persist_checkpoint(store, path, saved):
             await asyncio.sleep(min(10 * attempt, 60))
 
 
-async def load_checkpoint(store, known_paths, manifest, model, day, connection_recovery=None):
+def infrastructure_recovery_paths(document, campaign):
+    if (not isinstance(document, dict) or document.get('campaign') != campaign
+            or document.get('authorization') != 'user_requested_infrastructure_failure_retries'):
+        raise ValueError('Invalid infrastructure recovery authorization')
+    normalized = dict(document, authorization='user_requested_connection_drop_retries')
+    return connection_recovery_paths(normalized, campaign)
+
+
+def infrastructure_affected(saved):
+    return (not saved['report'].get('scorecard_verified') or any(
+        issue.get('category') in ('credit_or_budget', 'rate_limit', 'transport_error',
+                                 'transport_timeout', 'authentication_or_permission')
+        or (issue.get('category') == 'provider_error'
+            and (issue.get('provider_status') or issue.get('http_status')) in (408, 409, 500, 502, 503, 504))
+        or (issue.get('category') == 'invalid_request'
+            and 'no longer available on OpenRouter' in issue.get('message', ''))
+        for issue in saved['report'].get('model_issues', [])))
+
+
+async def load_checkpoint(store, known_paths, manifest, model, day, connection_recovery=None,
+                          infrastructure_recovery=None):
     """Preserve every attempt; a verified score is terminal, including zero."""
     original = report_path(manifest, model, day)
     retry_root = original.replace('/runs/', '/startup-retries/').removesuffix('.json.gz')
@@ -195,11 +215,15 @@ async def load_checkpoint(store, known_paths, manifest, model, day, connection_r
         saved = await store.read(path)
         if not saved or saved.get('model') != model or saved.get('game_date') != day:
             raise ValueError('Checkpoint identity mismatch')
-        if saved['report'].get('scorecard_verified'):
+        authorized_infrastructure = (
+            (infrastructure_recovery or {}).get(path) == hashlib.sha256(encode_document(saved)).hexdigest()
+            and infrastructure_affected(saved))
+        if saved['report'].get('scorecard_verified') and not authorized_infrastructure:
             if any(p in known_paths for p in paths[i+1:]):
                 raise ValueError('A verified score must not have subsequent attempts')
             return saved, path, None
-        if not (retryable_startup_failure(saved) or authorized_connection_retry(saved, path, connection_recovery)):
+        if not (retryable_startup_failure(saved) or authorized_connection_retry(saved, path, connection_recovery)
+                or authorized_infrastructure):
             raise ValueError('An unverified saved run needs diagnosis before resuming')
     raise ValueError('Archive startup retry limit reached; manual diagnosis required')
 
@@ -412,15 +436,25 @@ async def campaign(args):
             if not recovery_path.startswith(campaign_id + '/connection-recoveries/'):
                 raise ValueError('Connection recovery must belong to this campaign')
             recovery = connection_recovery_paths(await store.read(recovery_path), campaign_id)
+        infrastructure_path = getattr(args, 'infrastructure_recovery', None)
+        infrastructure = {}
+        if infrastructure_path:
+            if not infrastructure_path.startswith(campaign_id + '/infrastructure-recoveries/'):
+                raise ValueError('Infrastructure recovery must belong to this campaign')
+            infrastructure = infrastructure_recovery_paths(await store.read(infrastructure_path), campaign_id)
+        blocked = set(getattr(args, 'blocked_model', None) or [])
+        if blocked - {m['id'] for m in manifest['models']}:
+            raise ValueError('Blocked model must belong to the frozen roster')
         pending = []
         completed = []
         known_paths = await store.paths()
         for game in games:
             for model in manifest['models']:
                 saved, path, retry_of = await load_checkpoint(
-                    store, known_paths, manifest, model['id'], game['date'], recovery)
+                    store, known_paths, manifest, model['id'], game['date'], recovery, infrastructure)
                 if saved is None:
-                    pending.append((game, model, path, retry_of))
+                    if model['id'] not in blocked:
+                        pending.append((game, model, path, retry_of))
                 else:
                     # Keep only aggregate fields in campaign memory after reading the report.
                     completed.append(public_inputs(saved))
@@ -433,6 +467,7 @@ async def campaign(args):
         print(json.dumps(dict(verified=len(completed), pending=len(pending), planned=7500)), flush=True)
         if args.limit:
             pending = pending[:args.limit]
+        pending.sort(key=lambda item: item[3] not in infrastructure)
         stop = asyncio.Event()
         stop_file = getattr(args, 'stop_file', Path('.campaign-stop'))
         loop = asyncio.get_running_loop()
@@ -470,6 +505,7 @@ async def campaign(args):
                     [r['prompt'] for r in report['rounds']], ensure_ascii=False).encode()).hexdigest()
                 saved = dict(model=model['id'], game_date=game['date'], execution_id=execution_id,
                              connection_recovery=recovery_path if retry_of in recovery else None,
+                             infrastructure_recovery=infrastructure_path if retry_of in infrastructure else None,
                              retry_of=retry_of, answer_word_limit_instruction=5,
                              captured_at=datetime.now(timezone.utc).isoformat(), report=report,
                              prompt_fingerprint=prompt_fingerprint, events=record.events)
@@ -482,6 +518,9 @@ async def campaign(args):
                 if not report.get('scorecard_verified'):
                     stop.set()
                     raise RuntimeError('Unverified archived scorecard saved privately; scheduling paused')
+                if infrastructure_affected(saved):
+                    stop.set()
+                    raise RuntimeError('Infrastructure-affected report saved privately; scheduling paused for diagnosis')
                 expected = fingerprints.setdefault(game['date'], prompt_fingerprint)
                 if expected != prompt_fingerprint:
                     stop.set()
@@ -546,6 +585,8 @@ if __name__ == '__main__':
     parser.add_argument('--gcs-project-number')
     parser.add_argument('--gcs-credentials', type=Path)
     parser.add_argument('--connection-recovery', help='Immutable private authorization for exact connection-drop retries')
+    parser.add_argument('--infrastructure-recovery', help='Immutable authorization to supersede exact infrastructure-affected attempts')
+    parser.add_argument('--blocked-model', action='append', default=[], help='Hold an unavailable endpoint without changing the frozen roster')
     parser.add_argument('--accept-gcs-migration', action='store_true', help='Apply the exact audited storage-only migration; preserve historical checkpoints')
     parser.add_argument('--games', type=Path, required=True, help='Observed archive URL/date/label manifest')
     parser.add_argument('--roster', type=Path, default=Path(__file__).resolve().parents[1] / 'web/data/leaderboard-data.json')
