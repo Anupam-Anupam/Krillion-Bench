@@ -35,7 +35,7 @@ this organization does not add a local or public report sink.
 
 The ongoing `archive-75-20261106-v3` campaign runs from the separate checkout
 `/private/tmp/Krillion-Bench-9pnucipl` at `583a4b6`. Leave that checkout, its paths,
-and its eight-worker coordinator untouched. Do not pull this reorganization into
+and its ten-worker coordinator untouched. Do not pull this reorganization into
 it, restart it from the organized checkout, or relax its source-hash checks.
 Use that original source/layout for any necessary continuation or final export.
 The five-word system prompt and automatic correction acceptance remain unchanged.

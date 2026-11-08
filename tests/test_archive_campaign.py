@@ -76,22 +76,39 @@ def test_scheduler_revision_preserves_gameplay_and_requires_audit_reason(tmp_pat
         execution_revision(original, current, 'reason')
 
 
-async def test_rolling_pool_refills_before_slowest_run_finishes(tmp_path):
-    release, third_started = asyncio.Event(), asyncio.Event()
-    completed = []
+@pytest.mark.parametrize('concurrency', [2, 10])
+async def test_rolling_pool_refills_before_slowest_run_finishes(tmp_path, concurrency):
+    initial_full, replacement_started, release = asyncio.Event(), asyncio.Event(), asyncio.Event()
+    completed, active, peak = [], set(), 0
     async def one(n):
-        if n == 0:
-            await release.wait()
-        if n == 2:
-            third_started.set()
-        completed.append(n)
-    task = asyncio.create_task(run_pending([(n,) for n in range(3)], 2, one,
-                                          asyncio.Event(), tmp_path/'stop'))
-    await asyncio.wait_for(third_started.wait(), 1)
-    assert 0 not in completed
-    release.set()
-    await task
-    assert sorted(completed) == [0, 1, 2]
+        nonlocal peak
+        active.add(n)
+        peak = max(peak, len(active))
+        if len(active) == concurrency:
+            initial_full.set()
+        try:
+            if n == 1:
+                # One fast game finishes only after every initial slot is occupied.
+                await initial_full.wait()
+            else:
+                if n == concurrency:
+                    replacement_started.set()
+                await release.wait()
+            completed.append(n)
+        finally:
+            active.remove(n)
+    task = asyncio.create_task(run_pending([(n,) for n in range(concurrency + 1)],
+                                          concurrency, one, asyncio.Event(), tmp_path/'stop'))
+    try:
+        await asyncio.wait_for(replacement_started.wait(), 1)
+        assert completed == [1]
+        assert len(active) == concurrency
+        assert 0 in active  # Slow initial game is still running when replacement starts.
+    finally:
+        release.set()
+        await task
+    assert peak == concurrency
+    assert sorted(completed) == list(range(concurrency + 1))
 
 
 async def test_stop_request_drains_inflight_without_starting_more(tmp_path):

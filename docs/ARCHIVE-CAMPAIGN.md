@@ -99,13 +99,16 @@ results. Each new browser must show its expected archive label and exact URL bef
 model inference starts. A SHA-256 fingerprint of the seven visible prompts must
 match other models on the same date.
 
-The CLI defaults to two workers. The user has now authorized eight concurrent
-workers for the active campaign; start it with `--concurrency 8`. Reliability
+The CLI defaults to two workers. The user has now authorized ten concurrent
+workers for the active campaign; start it with `--concurrency 10`. Reliability
 still takes priority over throughput, and concurrency is not raised automatically. The game deadline and all existing same-model retry and
 final-score recovery rules remain unchanged. Completed remote checkpoints are
 resumed without replay. The orchestrator emits progress counts, never answer logs.
-The rolling worker pool refills a slot immediately after its report is durably
-uploaded; a slow model does not hold up unrelated runs. The live capacity probe
+The rolling worker pool keeps ten slots occupied while work remains, refilling each
+slot immediately after its report is durably uploaded. It does not wait for a batch
+of ten games to finish; a slow model does not hold up unrelated runs. Browser setup
+and durable uploads are part of each slot, so active browser counts can briefly
+dip during turnover. Health failures still pause scheduling for diagnosis. The live capacity probe
 on this account reached ten total concurrent browsers. SIGTERM, SIGINT, or the
 local `.campaign-stop` sentinel drain in-flight runs before exiting. Remove the
 sentinel before resuming. Do not kill the process forcibly: unuploaded RAM-only
