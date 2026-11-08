@@ -84,3 +84,9 @@ body.calm .score-interval{box-shadow:none}
 .campaign-progress-footer{font-size:15px;color:var(--muted)}
 .campaign-progress[data-stale=true] .campaign-progress-footer{color:#ffd166}
 @media(max-width:760px){.campaign-progress{padding:14px 12px;font-size:16px}.campaign-progress-footer{font-size:14px}}
+
+/* One typeface across page text, SVG labels, native controls, and dialogs. */
+html,body,*,*::before,*::after,input::placeholder{font-family:var(--pixel)!important}
+#provider-filter,#provider-filter option,#search,#chart-tooltip{font-size:18px}
+#chart-tooltip{line-height:1.35}
+.detail-id,.detail-notes,.detail-metrics dd small,.round-meta,.round-detail td{font-size:16px}

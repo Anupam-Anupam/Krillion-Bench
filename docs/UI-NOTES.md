@@ -75,3 +75,7 @@ Removed the Run errors filter tab, completion/error/ranking summary, campaign la
 ### Aggregate score intervals
 
 Archive-mean datasets render a 95% bootstrap confidence whisker under each score bar, with matching tier color and pixel-font interval bounds. Mean scores use one decimal and daily percentages use two. Aggregate dialogs show per-metric sample counts and intervals without individual answers. Single-day snapshots retain their original presentation and have no fabricated interval. Synthetic aggregate data is used only for local UI validation.
+
+### Site-wide Krillion typography
+
+All page text now uses the bundled Krillion VT323 font, including SVG chart labels, the chart tooltip, model detail dialogs, provider options, model search and its placeholder, and diagnostic text. A final shared font-family rule prevents older component font shorthands from restoring Arial or system monospace. Provider/search/tooltip and detailed report text are sized for the pixel font. The stylesheet URL is versioned for cache invalidation.
