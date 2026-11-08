@@ -201,13 +201,61 @@ def infrastructure_affected(saved):
         for issue in saved['report'].get('model_issues', [])))
 
 
+async def load_supersessions(store, known_paths, campaign, connection_recovery, infrastructure_recovery):
+    """Validate private deletion receipts before allowing any missing attempt."""
+    result = {}
+    for receipt_path in sorted(p for p in known_paths if p.startswith(campaign + '/superseded-reports/')):
+        receipt = await store.read(receipt_path)
+        if (not isinstance(receipt, dict) or receipt.get('campaign') != campaign
+                or receipt.get('authorization') != 'user_requested_affected_report_cleanup'):
+            raise ValueError('Invalid supersession receipt')
+        path = receipt.get('path', '')
+        expected_receipt = campaign + '/superseded-reports/' + hashlib.sha256(path.encode()).hexdigest() + '.json.gz'
+        if receipt_path != expected_receipt or path in result:
+            raise ValueError('Invalid supersession receipt path')
+        kind = receipt.get('recovery_kind')
+        authorized = connection_recovery if kind == 'connection_recovery' else infrastructure_recovery if kind == 'infrastructure_recovery' else {}
+        if authorized.get(path) != receipt.get('sha256'):
+            raise ValueError('Supersession lacks exact recovery authorization')
+        model, day = receipt.get('model'), receipt.get('game_date')
+        original = report_path({'campaign': campaign}, model, day)
+        root = original.replace('/runs/', '/startup-retries/').removesuffix('.json.gz')
+        attempts = [original] + [f'{root}/attempt-{n}.json.gz' for n in range(1, 4)]
+        if path not in attempts[:-1] or receipt.get('replacement_path') != attempts[attempts.index(path)+1]:
+            raise ValueError('Supersession must reference the immediate replacement')
+        replacement = await store.read(receipt['replacement_path'])
+        if (not replacement or replacement.get('model') != model or replacement.get('game_date') != day
+                or hashlib.sha256(encode_document(replacement)).hexdigest() != receipt.get('replacement_sha256')
+                or replacement.get('retry_of') != path
+                or replacement.get(kind) != receipt.get('recovery_path')
+                or not replacement['report'].get('scorecard_verified')
+                or len(replacement['report'].get('rounds', [])) != 7 or infrastructure_affected(replacement)):
+            raise ValueError('Supersession replacement verification failed')
+        authorization = await store.read(receipt['recovery_path'])
+        parse = connection_recovery_paths if kind == 'connection_recovery' else infrastructure_recovery_paths
+        if parse(authorization, campaign).get(path) != receipt['sha256']:
+            raise ValueError('Supersession recovery provenance mismatch')
+        if path in known_paths:
+            old = await store.read(path)
+            if not old or hashlib.sha256(encode_document(old)).hexdigest() != receipt['sha256']:
+                raise ValueError('Superseded original checksum changed')
+        result[path] = receipt
+    return result
+
+
 async def load_checkpoint(store, known_paths, manifest, model, day, connection_recovery=None,
-                          infrastructure_recovery=None):
+                          infrastructure_recovery=None, supersessions=None):
     """Preserve every attempt; a verified score is terminal, including zero."""
     original = report_path(manifest, model, day)
     retry_root = original.replace('/runs/', '/startup-retries/').removesuffix('.json.gz')
     paths = [original] + [f'{retry_root}/attempt-{n}.json.gz' for n in range(1, 4)]
     for i, path in enumerate(paths):
+        if path in (supersessions or {}):
+            receipt = supersessions[path]
+            if (receipt['model'] != model or receipt['game_date'] != day or i == 3
+                    or receipt['replacement_path'] != paths[i+1] or paths[i+1] not in known_paths):
+                raise ValueError('Supersession identity mismatch')
+            continue
         if path not in known_paths:
             if any(p in known_paths for p in paths[i+1:]):
                 raise ValueError('Checkpoint attempt history has a gap')
@@ -448,10 +496,11 @@ async def campaign(args):
         pending = []
         completed = []
         known_paths = await store.paths()
+        supersessions = await load_supersessions(store, known_paths, campaign_id, recovery, infrastructure)
         for game in games:
             for model in manifest['models']:
                 saved, path, retry_of = await load_checkpoint(
-                    store, known_paths, manifest, model['id'], game['date'], recovery, infrastructure)
+                    store, known_paths, manifest, model['id'], game['date'], recovery, infrastructure, supersessions)
                 if saved is None:
                     if model['id'] not in blocked:
                         pending.append((game, model, path, retry_of))
