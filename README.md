@@ -27,6 +27,8 @@ and how to publish without disturbing the source-pinned campaign already running
 
 The 75-game campaign uses a separate [private-report pipeline](docs/ARCHIVE-CAMPAIGN.md). It streams compressed run reports directly to a personal private GitHub repository, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Live archive replay still requires the restored Unlimited profile and a validated pilot.
 
+A private GCS backend is being prepared; see [storage layout and cutover status](docs/GCS-STORAGE.md). The live campaign remains on private GitHub storage until authentication and the staged cutover are verified.
+
 ## Leaderboard UI
 
 The static leaderboard in `index.html` follows a restrained research-table layout,

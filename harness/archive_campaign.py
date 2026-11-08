@@ -67,8 +67,17 @@ FIVE_WORD_PLAYER_HASHES = (
     "568e9c0053f24330a13975667d28f51349a933eec4f54f76237d7b08fb99f952",
 )
 
+# Audited storage-only dependency addition: existing dependency versions stay fixed.
+# The adapter is pinned separately so this switch cannot admit arbitrary new code.
+GCS_STORAGE_SOURCE_CHANGES = {
+    'uv.lock': ('83aea2ba8223fab2f874ae9e739f89b08352e020889ec55823c9c4640e395547',
+                '027ee0d5be64ea49068bb72de46d5dd8de94df2dd9abdcc8c195096b8ff2fc34'),
+    'gcs_storage.py': (None, 'dd3e4cce00db8657b36c4d554a7478437840d3f662ec9ba96eead6591e021153'),
+}
 
-def execution_revision(original, current, reason, *, allow_five_word_prompt=False):
+
+def execution_revision(original, current, reason, *, allow_five_word_prompt=False,
+                       allow_gcs_storage=False):
     """Allow orchestration changes or the user's exact, audited prompt amendment."""
     stable = lambda m: {k: v for k, v in m.items() if k not in ('concurrency', 'source_sha256')}
     comparable = stable(current)
@@ -86,6 +95,11 @@ def execution_revision(original, current, reason, *, allow_five_word_prompt=Fals
     changed = {name for name in original['source_sha256'].keys() | current['source_sha256'].keys()
                if original['source_sha256'].get(name) != current['source_sha256'].get(name)}
     allowed = {'archive_campaign.py', 'player.py'} if amendment else {'archive_campaign.py'}
+    if allow_gcs_storage:
+        for filename, hashes in GCS_STORAGE_SOURCE_CHANGES.items():
+            if (original['source_sha256'].get(filename), current['source_sha256'].get(filename)) != hashes:
+                raise ValueError('GCS migration must match the exact audited storage-only source change')
+        allowed |= GCS_STORAGE_SOURCE_CHANGES.keys()
     if changed - allowed:
         raise ValueError('Only scheduler source may change within an existing campaign')
     if not reason or not reason.strip():
@@ -96,6 +110,8 @@ def execution_revision(original, current, reason, *, allow_five_word_prompt=Fals
     if amendment:
         revision.update(policy_amendment=amendment, answer_word_limit_instruction=5,
                         preserve_prior_results=True)
+    if allow_gcs_storage:
+        revision.update(storage_amendment='gcs_private_reports_v1', preserve_prior_results=True)
     return revision
 
 
@@ -285,11 +301,25 @@ async def campaign(args):
         raise ValueError('Browser Use and OpenRouter credentials are required')
     if os.environ.get('OPENAI_BASE_URL') != 'https://openrouter.ai/api/v1':
         raise ValueError('This campaign requires the explicit OpenRouter API endpoint')
+    roster = json.loads(args.roster.read_text())
+    use_gcs = getattr(args, 'storage', 'github') == 'gcs'
+    if use_gcs and not all(getattr(args, k, None) for k in
+                           ('gcs_bucket', 'gcs_project', 'gcs_project_number', 'gcs_credentials')):
+        raise ValueError('GCS requires explicit bucket, project, project number and credential file')
     store = PrivateGitHubStore(args.repo, github_token())
+    if use_gcs:
+        from gcs_storage import PrivateGCSStore, ReadThroughStore, ReportLayout
+        try:
+            destination = PrivateGCSStore(args.gcs_bucket, args.gcs_project, args.gcs_project_number,
+                                         ReportLayout(r['model'] for r in roster['runs']),
+                                         credentials_file=args.gcs_credentials)
+            store = ReadThroughStore(destination, store)
+        except BaseException:
+            await store.close()
+            raise
     try:
         await store.verify()
         root = Path(__file__).parent
-        roster = json.loads(args.roster.read_text())
         games = json.loads(args.games.read_text())
         campaign_id = getattr(args, 'campaign_id', 'archive-75-20261106-v3')
         if not re.fullmatch(r'archive-75-20261106(?:-[a-z0-9]+)*', campaign_id):
@@ -305,6 +335,8 @@ async def campaign(args):
                 response.raise_for_status()
                 catalog = response.json()
         manifest = plan(roster, games, catalog, root, args.concurrency, campaign_id)
+        if use_gcs:
+            manifest['source_sha256']['gcs_storage.py'] = hashlib.sha256((root / 'gcs_storage.py').read_bytes()).hexdigest()
         execution_id = hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()
         if existing is not None and existing != manifest:
             revision_path = campaign_id + '/execution-revisions/' + execution_id + '.json.gz'
@@ -312,13 +344,17 @@ async def campaign(args):
             reason = (prior_revision or {}).get('reason') or getattr(args, 'execution_revision_reason', None)
             revision = execution_revision(existing, manifest, reason,
                 allow_five_word_prompt=(getattr(args, 'accept_five_word_prompt', False)
-                    or (prior_revision or {}).get('policy_amendment') == 'five_word_system_prompt_v1'))
+                    or (prior_revision or {}).get('policy_amendment') == 'five_word_system_prompt_v1'),
+                allow_gcs_storage=(use_gcs and (getattr(args, 'accept_gcs_migration', False)
+                    or (prior_revision or {}).get('storage_amendment') == 'gcs_private_reports_v1')))
             if prior_revision is not None and prior_revision != revision:
                 raise ValueError('Execution revision differs from its immutable checkpoint')
             if prior_revision is None:
                 await store.put(revision_path, revision)
         if existing is None:
             await store.put(manifest_path, manifest)
+        if use_gcs:
+            await store.prepare_campaign(existing or manifest)
         pending = []
         completed = []
         known_paths = await store.paths()
@@ -446,6 +482,12 @@ def public_inputs(saved):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', default='Anupam-Anupam/Krillion-Bench-Private-Runs')
+    parser.add_argument('--storage', choices=('github', 'gcs'), default='github')
+    parser.add_argument('--gcs-bucket')
+    parser.add_argument('--gcs-project')
+    parser.add_argument('--gcs-project-number')
+    parser.add_argument('--gcs-credentials', type=Path)
+    parser.add_argument('--accept-gcs-migration', action='store_true', help='Apply the exact audited storage-only migration; preserve historical checkpoints')
     parser.add_argument('--games', type=Path, required=True, help='Observed archive URL/date/label manifest')
     parser.add_argument('--roster', type=Path, default=Path(__file__).resolve().parents[1] / 'web/data/leaderboard-data.json')
     parser.add_argument('--env-file', type=Path, action='append', default=[])

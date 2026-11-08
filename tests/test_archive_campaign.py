@@ -8,7 +8,8 @@ import pytest
 
 from archive_aggregate import game_dates
 from archive_campaign import (execution_revision, load_checkpoint, plan, report_path,
-                              retryable_startup_failure, run_pending, verify_archive_page)
+                              retryable_startup_failure, run_pending, verify_archive_page,
+                              GCS_STORAGE_SOURCE_CHANGES)
 from campaign import SOURCES
 
 
@@ -74,6 +75,36 @@ def test_scheduler_revision_preserves_gameplay_and_requires_audit_reason(tmp_pat
     current['settings']['margin'] = 1
     with pytest.raises(ValueError, match='gameplay settings'):
         execution_revision(original, current, 'reason')
+
+
+def test_gcs_migration_accepts_only_exact_adapter_and_dependency_addition(tmp_path):
+    original = plan(*inputs(tmp_path), tmp_path, 10)
+    for filename, (before, _) in GCS_STORAGE_SOURCE_CHANGES.items():
+        if before is not None:
+            original['source_sha256'][filename] = before
+    current = deepcopy(original)
+    for filename, (_, after) in GCS_STORAGE_SOURCE_CHANGES.items():
+        current['source_sha256'][filename] = after
+    with pytest.raises(ValueError, match='Only scheduler'):
+        execution_revision(original, current, 'Storage cutover')
+    revision = execution_revision(original, current, 'Storage cutover', allow_gcs_storage=True)
+    assert revision['storage_amendment'] == 'gcs_private_reports_v1'
+    assert revision['preserve_prior_results'] is True
+    current['source_sha256']['runner.py'] = 'changed gameplay'
+    with pytest.raises(ValueError, match='Only scheduler'):
+        execution_revision(original, current, 'Storage cutover', allow_gcs_storage=True)
+    current['source_sha256']['runner.py'] = original['source_sha256']['runner.py']
+    current['source_sha256']['uv.lock'] = 'unreviewed dependencies'
+    with pytest.raises(ValueError, match='exact audited'):
+        execution_revision(original, current, 'Storage cutover', allow_gcs_storage=True)
+
+
+def test_pinned_gcs_sources_match_reviewed_files():
+    import hashlib
+    root = Path(__file__).resolve().parents[1]
+    for filename, (_, expected) in GCS_STORAGE_SOURCE_CHANGES.items():
+        path = root / ('harness/' + filename if filename.endswith('.py') else filename)
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
 
 
 @pytest.mark.parametrize('concurrency', [2, 10])
