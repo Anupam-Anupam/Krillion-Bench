@@ -20,9 +20,10 @@ from campaign import source_hashes
 from private_storage import MemoryRecorder, PrivateGitHubStore, github_token
 from runner import READ_STATE, execute_report, load_config
 from reporting import PERCENTILE
+from player import AUTOCORRECTION_POLICY
 
 
-def plan(roster, games, catalog, root, concurrency, campaign_id='archive-75-20261106-v2'):
+def plan(roster, games, catalog, root, concurrency, campaign_id='archive-75-20261106-v3'):
     if not re.fullmatch(r'archive-75-20261106(?:-[a-z0-9]+)*', campaign_id):
         raise ValueError('Invalid archive campaign identifier')
     dates = game_dates()
@@ -49,7 +50,7 @@ def plan(roster, games, catalog, root, concurrency, campaign_id='archive-75-2026
                 models=[dict(id=r['model'], name=r.get('name', r['model']), rank=i+1,
                              pricing=meta[r['model']].get('pricing', {})) for i, r in enumerate(roster['runs'])],
                 source_sha256=hashes, concurrency=concurrency,
-                settings=dict(max_output_tokens=None, model_retries=2, navigation_timeout=60,
+                settings=dict(autocorrection_policy=AUTOCORRECTION_POLICY, max_output_tokens=None, model_retries=2, navigation_timeout=60,
                               navigation_recovery='bounded', round_timeout_policy='continue',
                               terminal_failure_policy='collect_actual_scorecard', reasoning='low',
                               margin=3, vision=False))
@@ -210,7 +211,7 @@ async def campaign(args):
         root = Path(__file__).parent
         roster = json.loads(args.roster.read_text())
         games = json.loads(args.games.read_text())
-        campaign_id = getattr(args, 'campaign_id', 'archive-75-20261106-v2')
+        campaign_id = getattr(args, 'campaign_id', 'archive-75-20261106-v3')
         if not re.fullmatch(r'archive-75-20261106(?:-[a-z0-9]+)*', campaign_id):
             raise ValueError('Invalid archive campaign identifier')
         manifest_path = campaign_id + '/manifest.json.gz'
@@ -334,8 +335,8 @@ if __name__ == '__main__':
     parser.add_argument('--games', type=Path, required=True, help='Observed archive URL/date/label manifest')
     parser.add_argument('--roster', type=Path, default=Path('leaderboard-data.json'))
     parser.add_argument('--env-file', type=Path, action='append', default=[])
-    parser.add_argument('--concurrency', type=int, default=4)
-    parser.add_argument('--campaign-id', default='archive-75-20261106-v2')
+    parser.add_argument('--concurrency', type=int, default=2)
+    parser.add_argument('--campaign-id', default='archive-75-20261106-v3')
     parser.add_argument('--execution-revision-reason')
     parser.add_argument('--stop-file', type=Path, default=Path('.campaign-stop'))
     parser.add_argument('--limit', type=int, help='Pilot: only this many pending games')

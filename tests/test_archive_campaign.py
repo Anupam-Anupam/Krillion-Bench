@@ -153,3 +153,13 @@ async def test_checkpoint_retry_limit_and_identity_fail_closed():
     store.read = AsyncMock(return_value=failed)
     with pytest.raises(ValueError, match='identity'):
         await load_checkpoint(store, paths, manifest, 'test/model', '2026-11-06')
+
+
+def test_changed_correction_policy_requires_separate_panel(tmp_path):
+    current = plan(*inputs(tmp_path), tmp_path, 2)
+    assert current['campaign'] == 'archive-75-20261106-v3'
+    assert current['settings']['autocorrection_policy'] == 'confirm_site_suggestion_v1'
+    original = deepcopy(current)
+    del original['settings']['autocorrection_policy']
+    with pytest.raises(ValueError, match='gameplay settings'):
+        execution_revision(original, current, 'Accept corrections')

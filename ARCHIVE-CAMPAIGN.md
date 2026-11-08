@@ -45,7 +45,18 @@ python archive_campaign.py --games archive-games.json --concurrency 1 --limit 1
 python archive_campaign.py --games archive-games.json --concurrency 1
 ```
 
-The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
+The default checkpoint namespace is `archive-75-20261106-v3`. Version 3 uses
+`confirm_site_suggestion_v1`: after Krillion explicitly corrects this round's own
+submitted answer and updates the textbox, the harness confirms that exact value
+without another model decision. It never changes the round deadline or invents a
+replacement. It rechecks the live round, correction, enabled input, and deadline
+before pressing DIVE. Duplicate/stalled confirmations are not resubmitted, and a
+chain is bounded to three corrections per round. Private events and submissions
+record both the original and canonical answers plus the automatic action result.
+The existing v2 panel (23 verified games) remains intact but is excluded from v3
+aggregates because assistance changed. All 100 models start the same v3 protocol;
+no previous score is selected or substituted. The v3 manifest retains v2's fixed
+roster, dates, and frozen prices. The two initial
 `archive-75-20261106` runs are diagnostic pilots, excluded from the final panel
 because they preceded archive replay and historical-percentile capture fixes.
 They remain immutable in private storage; no best-of selection is performed.
@@ -88,8 +99,8 @@ results. Each new browser must show its expected archive label and exact URL bef
 model inference starts. A SHA-256 fingerprint of the seven visible prompts must
 match other models on the same date.
 
-Default concurrency is four; raise it only after measuring the pilot and checking
-browser/provider capacity. The game deadline and all existing same-model retry and
+Default concurrency is two. Keep at most two workers under the current user
+instruction; reliability takes priority over throughput. The game deadline and all existing same-model retry and
 final-score recovery rules remain unchanged. Completed remote checkpoints are
 resumed without replay. The orchestrator emits progress counts, never answer logs.
 The rolling worker pool refills a slot immediately after its report is durably

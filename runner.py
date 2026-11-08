@@ -116,6 +116,7 @@ class Observer:
                     self.record.event("answer_rejected", round=row["round"], answer=rejected)
                 corrected = correction(state.text)
                 if (corrected and submissions and submissions[-1].get("outcome") == "unconfirmed"
+                        and submissions[-1].get("automatic_correction") != corrected
                         and submissions[-1]["answer"].casefold() == corrected["answer"].casefold()):
                     submissions[-1].update(outcome="confirmation_required", evidence="visible_correction",
                                            suggested_answer=corrected["suggested_answer"])
@@ -347,10 +348,12 @@ async def run_game(session, observer, args):
 
 async def execute_report(args, record, pricing=None):
     """Run once; a memory recorder keeps all trajectory data off the filesystem."""
+    from player import AUTOCORRECTION_POLICY
     observer = None
     status, error = "failed", None
     record.event("config", browser=args.browser, model=args.model, provider=args.provider,
                  vision=args.vision, margin_s=args.margin, command=args.command,
+                 autocorrection_policy=AUTOCORRECTION_POLICY,
                  max_output_tokens=args.max_output_tokens, model_retries=args.model_retries,
                  navigation_timeout_s=args.navigation_timeout, round_timeout_policy="continue",
                  requested_reasoning=args.reasoning, navigation_recovery=args.navigation_recovery, viewport=[1280, 800], reduced_motion=True)
@@ -379,6 +382,7 @@ async def execute_report(args, record, pricing=None):
               "navigation_recovery": args.navigation_recovery,
               "max_output_tokens": args.max_output_tokens, "model_retries": args.model_retries,
               "round_timeout_policy": "continue",
+              "autocorrection_policy": AUTOCORRECTION_POLICY,
               "model_call_durations_s": record.model_latencies,
               "rounds": list(observer.rounds.values()) if observer else []}
     if observer and observer.last_state:

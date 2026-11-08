@@ -360,3 +360,155 @@ async def test_optional_screenshot_failure_is_recorded_without_aborting_game(tmp
     page = Mock(screenshot=AsyncMock(side_effect=TimeoutError('font animation timeout')))
     await capture_screenshot(page, record, 'initial.png')
     assert read_events(record.output)[0]['event'] == 'artifact_error'
+
+
+async def correction_fixture(page):
+    # The real UI normalizes the field, then asks for a second DIVE.
+    await page.evaluate('''() => {
+      next(); window.correctionPresses = 0;
+      window.submitAnswer = e => {
+        e.preventDefault(); correctionPresses++;
+        if (correctionPresses === 1) {
+          document.querySelector('input').value = 'answer 1';
+          document.querySelector('#feedback').textContent =
+            '“Answer one” → corrects to “answer 1” submit again to confirm · or edit';
+        } else {
+          score = 10; results.push('Round 1: answer 1, 10 pts');
+          root.innerHTML = '<div>PLANKTON</div><div>“answer 1”</div><div>+10 PTS</div>'+
+            '<div>SCORE</div><div>10</div><button onclick="next()">DESCEND ▼</button>';
+        }
+      };
+    }''')
+    from private_storage import MemoryRecorder
+    obs = Observer(page, MemoryRecorder('synthetic-correction'))
+    state = await obs.read()
+    await execute(Action(kind='fill', target='Your answer', text='Answer one'), state, obs)
+    await execute(Action(kind='click', target='DIVE'), state, obs)
+    return obs, await obs.read()
+
+
+async def test_autocorrection_preempts_model_and_records_canonical_acceptance(page):
+    from player import accept_correction
+    from reporting import enrich_report
+    obs, state = await correction_fixture(page)
+    deadline = obs.deadline.expires
+    assert await accept_correction(state, obs)
+    assert await page.evaluate('correctionPresses') == 2
+    await obs.read()
+    report = enrich_report(dict(status='partial', rounds=list(obs.rounds.values())))
+    attempts = report['rounds'][0]['submissions']
+    assert [s['answer'] for s in attempts] == ['Answer one', 'answer 1']
+    assert [s['outcome'] for s in attempts] == ['confirmation_required', 'accepted']
+    assert attempts[-1]['rarity'] == 'Plankton'
+    assert attempts[-1]['automatic_correction']['suggested_answer'] == 'answer 1'
+    event = next(e for e in obs.record.events if e['event'] == 'automatic_correction_confirmation')
+    assert event['result'] == 'ok'
+    assert obs.rounds[state.key]['observed_at'] < deadline
+
+
+async def test_autocorrection_discards_leftover_model_fill(page):
+    obs, state = await correction_fixture(page)
+    result = await execute(Action(kind='fill', target='Your answer', text='Answer one'), state, obs)
+    assert 'remaining model actions discarded' in result
+    assert await page.evaluate('correctionPresses') == 2
+    assert len(obs.rounds[state.key]['submissions']) == 2
+
+
+async def test_autocorrection_loop_never_asks_model_to_reconsider(page):
+    from player import play_actions
+    class StopAtNextPhase:
+        async def ainvoke(self, messages, output_format):
+            import json
+            state = json.loads(messages[-1].content[0].text)['page']
+            assert state['phase'] == 'between_rounds'
+            raise LookupError('reached result without inference on correction')
+    obs, _ = await correction_fixture(page)
+    with pytest.raises(LookupError, match='reached result'):
+        await play_actions(obs, StopAtNextPhase(), max_steps=1)
+    assert await page.evaluate('correctionPresses') == 2
+
+
+async def test_autocorrection_never_confirms_expired_or_changed_round(page):
+    from player import accept_correction
+    from deadline import DeadlineExceeded
+    import time
+    obs, state = await correction_fixture(page)
+    obs.deadline.expires = time.monotonic() - 1
+    with pytest.raises(DeadlineExceeded):
+        await accept_correction(state, obs)
+    assert await page.evaluate('correctionPresses') == 1
+    await page.evaluate('next()')
+    await accept_correction(state, obs)
+    assert await page.evaluate('correctionPresses') == 1
+
+
+async def test_autocorrection_checks_live_state_again_before_press(page):
+    from player import accept_correction
+    obs, state = await correction_fixture(page)
+    await page.get_by_role('textbox').fill('unrelated')
+    assert await accept_correction(state, obs)
+    assert await page.evaluate('correctionPresses') == 1
+    assert obs.record.events[-1]['result'].startswith('Correction changed')
+
+
+async def test_autocorrection_waits_for_enabled_input_and_does_not_repeat_confirmation(page):
+    from player import accept_correction
+    obs, state = await correction_fixture(page)
+    await page.get_by_role('textbox').evaluate('el => el.disabled = true')
+    assert await accept_correction(await obs.read(), obs)
+    assert await page.evaluate('correctionPresses') == 1
+    await page.get_by_role('textbox').evaluate('el => el.disabled = false')
+    # A server acknowledgement stalls; keep the old correction banner visible.
+    await page.evaluate('() => { window.submitAnswer = e => { e.preventDefault(); correctionPresses++; }; }')
+    state = await obs.read()
+    deadline = obs.deadline.expires
+    assert await accept_correction(state, obs)
+    for _ in range(3):
+        assert await accept_correction(await obs.read(), obs)
+    assert await page.evaluate('correctionPresses') == 2
+    assert obs.deadline.expires <= deadline
+
+
+async def test_unowned_correction_banner_cannot_trigger_submission(page):
+    from player import accept_correction
+    obs, state = await correction_fixture(page)
+    obs.rounds[state.key]['submissions'].clear()
+    assert not await accept_correction(state, obs)
+    assert await page.evaluate('correctionPresses') == 1
+
+
+async def test_correction_chain_is_bounded_without_extending_timer(page, monkeypatch):
+    from player import accept_correction
+    from unittest.mock import AsyncMock
+    obs, state = await correction_fixture(page)
+    deadline = obs.deadline.expires
+    await page.evaluate('''() => { window.submitAnswer = e => {
+      e.preventDefault(); correctionPresses++;
+      const input = document.querySelector('input');
+      const prior = input.value; input.value = 'canonical ' + correctionPresses;
+      document.querySelector('#feedback').textContent =
+        '“' + prior + '” → corrects to “' + input.value + '” submit again to confirm';
+    }; }''')
+    settle = AsyncMock()
+    monkeypatch.setattr('player.settle_interrupted_round', settle)
+    for _ in range(4):
+        assert await accept_correction(await obs.read(), obs)
+    assert await page.evaluate('correctionPresses') == 4  # original + 3 confirmations
+    assert obs.deadline.expires <= deadline
+    assert settle.await_args.args[2] == 'autocorrection_limit'
+
+
+async def test_case_only_correction_stale_banner_is_not_a_new_correction(page):
+    from player import accept_correction
+    obs, state = await correction_fixture(page)
+    # Equivalent spelling differing only in case; the stale original banner
+    # must not turn the pending canonical submission into a new correction.
+    obs.rounds[state.key]['submissions'][-1].update(answer='ANSWER 1')
+    await page.locator('#feedback').evaluate('el => { el.textContent = \'“ANSWER 1” → corrects to “answer 1” submit again to confirm\'; }')
+    obs.rounds[state.key]['submissions'][-1]['suggested_answer'] = 'answer 1'
+    await page.evaluate('() => { window.submitAnswer = e => { e.preventDefault(); correctionPresses++; }; }')
+    assert await accept_correction(await obs.read(), obs)
+    for _ in range(3):
+        assert await accept_correction(await obs.read(), obs)
+    assert await page.evaluate('correctionPresses') == 2
+    assert obs.rounds[state.key]['submissions'][-1]['outcome'] == 'unconfirmed'
