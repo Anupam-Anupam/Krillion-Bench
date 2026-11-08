@@ -6,12 +6,12 @@
   "date": "2026-11-06",
   "date_start": "2026-08-24",
   "date_end": "2026-11-06",
-  "updated_at": "2026-11-08T19:37:37.512955+00:00",
-  "verified_games": 1887,
+  "updated_at": "2026-11-08T20:55:33.661360+00:00",
+  "verified_games": 1888,
   "target_games": 7500,
   "games_per_model": 75,
   "coverage": {
-    "min": 0,
+    "min": 1,
     "max": 21
   },
   "settings": {
@@ -5324,21 +5324,21 @@
       "model": "qwen/qwen3.8-max-prime",
       "name": "Qwen: Qwen3.8 Max Prime",
       "provider": "qwen",
-      "complete": false,
-      "status": "awaiting_first_run",
-      "score": null,
+      "complete": true,
+      "status": "provisional_average",
+      "score": 495.0,
       "score_ci95": null,
-      "daily_percentile": null,
-      "games": 0,
+      "daily_percentile": 98.0,
+      "games": 1,
       "aggregate_stats": {
         "score": {
-          "mean": null,
-          "n": 0,
+          "mean": 495.0,
+          "n": 1,
           "ci95": null
         },
         "daily_percentile": {
-          "mean": null,
-          "n": 0,
+          "mean": 98.0,
+          "n": 1,
           "ci95": null
         },
         "run_cost_usd": {
@@ -5357,27 +5357,34 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": null,
-          "n": 0,
+          "mean": 147.255,
+          "n": 1,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": null,
-          "n": 0,
+          "mean": 100.4036970436573,
+          "n": 1,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": null,
+        "cost_basis": "partial_reported",
+        "inference_duration_s": 100.4036970436573,
+        "input_tokens": 17763.0,
+        "model_calls": 20,
+        "output_cost_basis": "partial_provider_reported",
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": null,
-        "inference_duration_s": null,
-        "cost_basis": "unavailable",
-        "output_cost_basis": "unavailable",
-        "usage_complete": true,
-        "usage_calls": null,
-        "model_calls": null
+        "pricing": {
+          "completion": "0.000012",
+          "input_cache_read": "0.0000005",
+          "prompt": "0.000004"
+        },
+        "reasoning_tokens": 4530.0,
+        "run_cost_usd": null,
+        "run_duration_s": 147.255,
+        "usage_calls": 19,
+        "usage_complete": false
       },
       "rounds": [],
       "replacement_for": "xingchen-agi/xing4.0-29b-a4b:free"

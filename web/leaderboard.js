@@ -239,6 +239,13 @@ function install(data) {
   validate(data);
   state.aggregate=['archive_mean','archive_partial_mean'].includes(data.aggregation)?data:(state.publishedAverage||null);
   state.days=state.publishedDays?[data,...state.publishedDays.map(validate)]:['archive_mean','archive_partial_mean'].includes(data.aggregation)?(data.daily_snapshots||[]).map(validate):[data,...(data.daily_snapshots||[]).map(validate)];
+  // Only expose dates with one verified result for every model in the current roster.
+  const roster=new Set((state.aggregate||data).runs.map(r=>r.model));
+  state.days=state.days.filter(day=>{
+    const clean=day.runs.filter(r=>r.complete&&numeric(r.score));
+    const models=new Set(clean.map(r=>r.model));
+    return models.size===clean.length&&[...roster].every(model=>models.has(model));
+  }).map(day=>({...day,runs:day.runs.filter(r=>roster.has(r.model))}));
   if(new Set(state.days.map(d=>d.date)).size!==state.days.length)throw new Error('Duplicate daily snapshot.');
   if(!state.publishedDays&&state.days.some(d=>JSON.stringify(d.settings)!==JSON.stringify(state.days[0].settings)||JSON.stringify(d.source_sha256)!==JSON.stringify(state.days[0].source_sha256)))throw new Error('Daily snapshots must use the same tested configuration.');
   state.days.sort((a,b)=>b.date.localeCompare(a.date));
@@ -320,6 +327,6 @@ scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-replacement').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-daily-reports').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-clean-calendar').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-clean-calendar').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
