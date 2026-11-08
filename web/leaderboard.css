@@ -94,3 +94,5 @@ html,body,*,*::before,*::after,input::placeholder{font-family:var(--pixel)!impor
 /* Independent model and time-view controls keep a visible gap at every width. */
 .table-toolbar{flex-wrap:wrap;gap:16px}.view-controls{display:flex;flex-wrap:wrap;align-items:center;gap:18px}.view-controls .segmented{flex-shrink:0}.view-controls button{font-size:18px}.filters{margin-left:auto}.daily-controls{display:flex;align-items:center;gap:12px;margin:14px 0}.daily-controls[hidden]{display:none}#view-note{font-size:17px;color:var(--muted);margin:12px 0 18px}.segmented button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:760px){.view-controls{gap:14px}.view-controls button{font-size:17px;padding:8px 9px}.filters{margin-left:0;width:100%}.daily-controls select{max-width:none}}
+
+.model-button[aria-disabled="true"]{cursor:default}.plot-point{cursor:default}

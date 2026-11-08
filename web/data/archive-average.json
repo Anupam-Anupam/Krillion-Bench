@@ -1,0 +1,6036 @@
+{
+  "schema_version": 1,
+  "aggregation": "archive_partial_mean",
+  "campaign": "archive-75-20261106-v3",
+  "provisional": true,
+  "date": "2026-11-06",
+  "date_start": "2026-08-24",
+  "date_end": "2026-11-06",
+  "updated_at": "2026-11-08T19:28:56.260753+00:00",
+  "verified_games": 1871,
+  "target_games": 7500,
+  "games_per_model": 75,
+  "coverage": {
+    "min": 0,
+    "max": 21
+  },
+  "settings": {
+    "autocorrection_policy": "confirm_site_suggestion_v1",
+    "margin": 3,
+    "max_output_tokens": null,
+    "model_retries": 2,
+    "navigation_recovery": "bounded",
+    "navigation_timeout": 60,
+    "reasoning": "low",
+    "round_timeout_policy": "continue",
+    "terminal_failure_policy": "collect_actual_scorecard",
+    "vision": false
+  },
+  "runs": [
+    {
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 532.3809523809524,
+      "daily_percentile": 98.77190476190476,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 532.3809523809524,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.77190476190476,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00431854215519375,
+          "n": 16,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.002940015166875,
+          "n": 16,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5229.3125,
+          "n": 16,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 90.64510476190476,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 40.17627417084406,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00431854215519375,
+        "output_cost_usd": 0.002940015166875,
+        "output_tokens": 5229.3125,
+        "run_duration_s": 90.64510476190476,
+        "inference_duration_s": 40.17627417084406,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash",
+      "name": "DeepSeek: DeepSeek V4.1 Flash",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 520.2380952380952,
+      "daily_percentile": 97.63904761904762,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 520.2380952380952,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.63904761904762,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00718091055,
+          "n": 15,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.005521085426666667,
+          "n": 15,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 7342.666666666667,
+          "n": 15,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 93.0026,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 40.82698183997889,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00718091055,
+        "output_cost_usd": 0.005521085426666667,
+        "output_tokens": 7342.666666666667,
+        "run_duration_s": 93.0026,
+        "inference_duration_s": 40.82698183997889,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "name": "Z.ai: GLM 5.3 Flash",
+      "provider": "z-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 443.3333333333333,
+      "daily_percentile": 92.19047619047619,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 443.3333333333333,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.19047619047619,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0043335431865,
+          "n": 6,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0024268986666666666,
+          "n": 6,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 6366.166666666667,
+          "n": 6,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 107.45407142857142,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 58.409696275434854,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0043335431865,
+        "output_cost_usd": 0.0024268986666666666,
+        "output_tokens": 6366.166666666667,
+        "run_duration_s": 107.45407142857142,
+        "inference_duration_s": 58.409696275434854,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "tencent/hy4",
+      "name": "Tencent: Hy4",
+      "provider": "tencent",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 7.25,
+      "daily_percentile": 0.05,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 7.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 0.05,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 327.777415,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 264.6328046769369,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 327.777415,
+        "inference_duration_s": 264.6328046769369,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "name": "OpenAI: GPT-6 Luna",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 512.8571428571429,
+      "daily_percentile": 98.69809523809523,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 512.8571428571429,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.69809523809523,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00308894355,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.001110725,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 2221.45,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 99.1045380952381,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 54.121172785570494,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00308894355,
+        "output_cost_usd": 0.001110725,
+        "output_tokens": 2221.45,
+        "run_duration_s": 99.1045380952381,
+        "inference_duration_s": 54.121172785570494,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "stepfun/step-5-preview",
+      "name": "StepFun: Step 5 Preview",
+      "provider": "stepfun",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 309.5,
+      "daily_percentile": 55.6,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 309.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 55.6,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 176.830355,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 123.15173676246778,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 176.830355,
+        "inference_duration_s": 123.15173676246778,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-opus-5.5",
+      "name": "Anthropic: Claude Opus 5.5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 486.42857142857144,
+      "daily_percentile": 97.03238095238095,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 486.42857142857144,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.03238095238095,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.16802238315789475,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.03780842105263158,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1890.421052631579,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 104.00550476190476,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 61.53546796978584,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.16802238315789475,
+        "output_cost_usd": 0.03780842105263158,
+        "output_tokens": 1890.421052631579,
+        "run_duration_s": 104.00550476190476,
+        "inference_duration_s": 61.53546796978584,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "minimax/minimax-m3.1-flash",
+      "name": "MiniMax: MiniMax M3.1 Flash",
+      "provider": "minimax",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 348.0,
+      "daily_percentile": 73.75,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 348.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 73.75,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00333018972,
+          "n": 15,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00194792,
+          "n": 15,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3246.5333333333333,
+          "n": 15,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 87.91155499999999,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 33.812696987309025,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00333018972,
+        "output_cost_usd": 0.00194792,
+        "output_tokens": 3246.5333333333333,
+        "run_duration_s": 87.91155499999999,
+        "inference_duration_s": 33.812696987309025,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "tencent/hy4-preview",
+      "name": "Tencent: Hy4 preview",
+      "provider": "tencent",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 28.0,
+      "daily_percentile": 0.25,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 28.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 0.25,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 395.70829,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 333.7452230792493,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 395.70829,
+        "inference_duration_s": 333.7452230792493,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6.1-sol",
+      "name": "OpenAI: GPT-6.1 Sol",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 487.0,
+      "daily_percentile": 97.3615,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 487.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.3615,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.052041132000000004,
+          "n": 5,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.009982,
+          "n": 5,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 998.2,
+          "n": 5,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 130.87144,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 77.165680964489,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.052041132000000004,
+        "output_cost_usd": 0.009982,
+        "output_tokens": 998.2,
+        "run_duration_s": 130.87144,
+        "inference_duration_s": 77.165680964489,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "name": "OpenAI: GPT-5.6 Luna",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 470.23809523809524,
+      "daily_percentile": 95.61904761904762,
+      "games": 21,
+      "aggregate_stats": {
+        "score": {
+          "mean": 470.23809523809524,
+          "n": 21,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 95.61904761904762,
+          "n": 21,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.005686209692307692,
+          "n": 13,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0017902153846153846,
+          "n": 13,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1491.8461538461538,
+          "n": 13,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 116.9629380952381,
+          "n": 21,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 67.26878221794253,
+          "n": 21,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.005686209692307692,
+        "output_cost_usd": 0.0017902153846153846,
+        "output_tokens": 1491.8461538461538,
+        "run_duration_s": 116.9629380952381,
+        "inference_duration_s": 67.26878221794253,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "moonshotai/kimi-k3.1-pro",
+      "name": "MoonshotAI: Kimi K3.1 Pro",
+      "provider": "moonshotai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 511.0,
+      "daily_percentile": 98.106,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 511.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.106,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.09130659197,
+          "n": 9,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.05420911111111111,
+          "n": 9,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5436.777777777777,
+          "n": 9,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 123.820545,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 71.9474906668067,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.09130659197,
+        "output_cost_usd": 0.05420911111111111,
+        "output_tokens": 5436.777777777777,
+        "run_duration_s": 123.820545,
+        "inference_duration_s": 71.9474906668067,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "z-ai/glm-5.3",
+      "name": "Z.ai: GLM 5.3",
+      "provider": "z-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 490.0,
+      "daily_percentile": 97.18,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 490.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.18,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.018990948174,
+          "n": 9,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.013550058888888888,
+          "n": 9,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 4658.666666666667,
+          "n": 9,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 110.696255,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 59.1047435502871,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.018990948174,
+        "output_cost_usd": 0.013550058888888888,
+        "output_tokens": 4658.666666666667,
+        "run_duration_s": 110.696255,
+        "inference_duration_s": 59.1047435502871,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "name": "DeepSeek: DeepSeek V4 Flash 0731",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 475.75,
+      "daily_percentile": 96.02,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 475.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.02,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 146.140025,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 95.49186455643503,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 146.140025,
+        "inference_duration_s": 95.49186455643503,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "provider": "nvidia",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 293.3333333333333,
+      "daily_percentile": 51.666666666666664,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 293.3333333333333,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 51.666666666666664,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 192.25515000000001,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 134.46532890914628,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 192.25515000000001,
+        "inference_duration_s": 134.46532890914628,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "stealth/crouton-alpha",
+      "name": "Crouton Alpha",
+      "provider": "stealth",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 456.25,
+      "daily_percentile": 92.4255,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 456.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.4255,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0,
+          "n": 15,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0,
+          "n": 15,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 604.4,
+          "n": 15,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 125.62953,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 77.6184748087544,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0,
+        "output_cost_usd": 0.0,
+        "output_tokens": 604.4,
+        "run_duration_s": 125.62953,
+        "inference_duration_s": 77.6184748087544,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "nvidia/nemotron-3.5-super-vl:free",
+      "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
+      "provider": "nvidia",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 457.5,
+      "daily_percentile": 94.66666666666667,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 457.5,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 94.66666666666667,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0,
+          "n": 3,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0,
+          "n": 3,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 11227.0,
+          "n": 3,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 168.1573,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 122.84839245071635,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0,
+        "output_cost_usd": 0.0,
+        "output_tokens": 11227.0,
+        "run_duration_s": 168.1573,
+        "inference_duration_s": 122.84839245071635,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "tencent/hy3",
+      "name": "Tencent: Hy3",
+      "provider": "tencent",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 367.25,
+      "daily_percentile": 73.893,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 367.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 73.893,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 213.644835,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 157.62208073170623,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 213.644835,
+        "inference_duration_s": 157.62208073170623,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "meta/muse-spark-1.3-contributor",
+      "name": "Meta: Muse Spark 1.3 Contributor",
+      "provider": "meta",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 493.5,
+      "daily_percentile": 97.4285,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 493.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.4285,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0032542915679999998,
+          "n": 10,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00186018,
+          "n": 10,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 9300.9,
+          "n": 10,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 148.784195,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 102.93719024575549,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0032542915679999998,
+        "output_cost_usd": 0.00186018,
+        "output_tokens": 9300.9,
+        "run_duration_s": 148.784195,
+        "inference_duration_s": 102.93719024575549,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "name": "Anthropic: Claude Haiku 5.5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 488.25,
+      "daily_percentile": 96.0685,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 488.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.0685,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0058103038125,
+          "n": 16,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00225628125,
+          "n": 16,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 4512.5625,
+          "n": 16,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 95.91330500000001,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 41.669509429018945,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0058103038125,
+        "output_cost_usd": 0.00225628125,
+        "output_tokens": 4512.5625,
+        "run_duration_s": 95.91330500000001,
+        "inference_duration_s": 41.669509429018945,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-flash",
+      "name": "Xiaomi: MiMo-V2.6-Flash",
+      "provider": "xiaomi",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 436.75,
+      "daily_percentile": 92.25,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 436.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.25,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0024740486496,
+          "n": 15,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0004827148,
+          "n": 15,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1725.0666666666666,
+          "n": 15,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 103.91024,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 49.71671635273378,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0024740486496,
+        "output_cost_usd": 0.0004827148,
+        "output_tokens": 1725.0666666666666,
+        "run_duration_s": 103.91024,
+        "inference_duration_s": 49.71671635273378,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek: DeepSeek V4 Flash 0423",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 386.0,
+      "daily_percentile": 83.9,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 386.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 83.9,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0014382430318079999,
+          "n": 5,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.000671069312,
+          "n": 5,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5414.8,
+          "n": 5,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 141.95284,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 91.21819419756066,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0014382430318079999,
+        "output_cost_usd": 0.000671069312,
+        "output_tokens": 5414.8,
+        "run_duration_s": 141.95284,
+        "inference_duration_s": 91.21819419756066,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "name": "Anthropic: Claude Sonnet 5.5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 487.0,
+      "daily_percentile": 97.5595,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 487.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.5595,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.08183747647058824,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.018181764705882352,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1818.1764705882354,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 93.72223,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 43.11395975244231,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.08183747647058824,
+        "output_cost_usd": 0.018181764705882352,
+        "output_tokens": 1818.1764705882354,
+        "run_duration_s": 93.72223,
+        "inference_duration_s": 43.11395975244231,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "moonshotai/kimi-k3",
+      "name": "MoonshotAI: Kimi K3",
+      "provider": "moonshotai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 496.75,
+      "daily_percentile": 96.1095,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 496.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.1095,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.05727121092,
+          "n": 16,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.036533227125,
+          "n": 16,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 2971.6875,
+          "n": 16,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 101.795075,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 47.453726938914045,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.05727121092,
+        "output_cost_usd": 0.036533227125,
+        "output_tokens": 2971.6875,
+        "run_duration_s": 101.795075,
+        "inference_duration_s": 47.453726938914045,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "name": "Google: Gemini 3.8 Flash",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 489.25,
+      "daily_percentile": 97.367,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 489.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.367,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.03792138428571429,
+          "n": 14,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.024027589285714284,
+          "n": 14,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 6407.357142857143,
+          "n": 14,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 139.729525,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 90.45580175829818,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.03792138428571429,
+        "output_cost_usd": 0.024027589285714284,
+        "output_tokens": 6407.357142857143,
+        "run_duration_s": 139.729525,
+        "inference_duration_s": 90.45580175829818,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "upstage/solar-mini4",
+      "name": "Upstage: Solar Mini 4",
+      "provider": "upstage",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 187.5,
+      "daily_percentile": 18.15,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 187.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 18.15,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0013175491153846154,
+          "n": 13,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00018252307692307693,
+          "n": 13,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 912.6153846153846,
+          "n": 13,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 109.58676,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 55.26990230290685,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0013175491153846154,
+        "output_cost_usd": 0.00018252307692307693,
+        "output_tokens": 912.6153846153846,
+        "run_duration_s": 109.58676,
+        "inference_duration_s": 55.26990230290685,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "name": "Google: Gemini 4 Argon",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 459.5,
+      "daily_percentile": 96.08,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 459.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.08,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.06478305428571428,
+          "n": 14,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.012719285714285714,
+          "n": 14,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1271.9285714285713,
+          "n": 14,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 167.914025,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 118.98444014993729,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.06478305428571428,
+        "output_cost_usd": 0.012719285714285714,
+        "output_tokens": 1271.9285714285713,
+        "run_duration_s": 167.914025,
+        "inference_duration_s": 118.98444014993729,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "provider": "nvidia",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 380.0,
+      "daily_percentile": 76.83333333333333,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 380.0,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 76.83333333333333,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 8248.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 251.60256666666666,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 201.15706955703595,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0,
+        "output_cost_usd": 0.0,
+        "output_tokens": 8248.0,
+        "run_duration_s": 251.60256666666666,
+        "inference_duration_s": 201.15706955703595,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "name": "Xiaomi: MiMo-V2.6-Pro",
+      "provider": "xiaomi",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 495.0,
+      "daily_percentile": 95.8985,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 495.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 95.8985,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0054755830739076925,
+          "n": 13,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0018681978461538463,
+          "n": 13,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 2270.769230769231,
+          "n": 13,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 121.317875,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 71.84597389957635,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0054755830739076925,
+        "output_cost_usd": 0.0018681978461538463,
+        "output_tokens": 2270.769230769231,
+        "run_duration_s": 121.317875,
+        "inference_duration_s": 71.84597389957635,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6.1-terra",
+      "name": "OpenAI: GPT-6.1 Terra",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 487.5,
+      "daily_percentile": 96.341,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 487.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.341,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.04014412875,
+          "n": 2,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00944,
+          "n": 2,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1888.0,
+          "n": 2,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 202.84386,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 143.0897155438899,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.04014412875,
+        "output_cost_usd": 0.00944,
+        "output_tokens": 1888.0,
+        "run_duration_s": 202.84386,
+        "inference_duration_s": 143.0897155438899,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "name": "Z.ai: GLM 5.2",
+      "provider": "z-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 506.25,
+      "daily_percentile": 98.127,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 506.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.127,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.01768396252764706,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.008995100588235294,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3227.176470588235,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 91.92139,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 37.92313832951477,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.01768396252764706,
+        "output_cost_usd": 0.008995100588235294,
+        "output_tokens": 3227.176470588235,
+        "run_duration_s": 91.92139,
+        "inference_duration_s": 37.92313832951477,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "nvidia/nemotron-3.5-super-vl",
+      "name": "NVIDIA: Nemotron 3.5 Super VL",
+      "provider": "nvidia",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 406.75,
+      "daily_percentile": 86.23,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 406.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 86.23,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0112413411,
+          "n": 12,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.008311533333333333,
+          "n": 12,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 16650.583333333332,
+          "n": 12,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 112.64897500000001,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 65.42163858114509,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0112413411,
+        "output_cost_usd": 0.008311533333333333,
+        "output_tokens": 16650.583333333332,
+        "run_duration_s": 112.64897500000001,
+        "inference_duration_s": 65.42163858114509,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4-pro-0813",
+      "name": "DeepSeek: DeepSeek V4 Pro 0813",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 478.0,
+      "daily_percentile": 96.2025,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 478.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.2025,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.03182234717772,
+          "n": 10,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.022498271144,
+          "n": 10,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5534.9,
+          "n": 10,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 129.06626,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 79.65786085658473,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.03182234717772,
+        "output_cost_usd": 0.022498271144,
+        "output_tokens": 5534.9,
+        "run_duration_s": 129.06626,
+        "inference_duration_s": 79.65786085658473,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "name": "Qwen: Qwen3.8 Flash",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 415.0,
+      "daily_percentile": 88.388,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 415.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 88.388,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 195.679705,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 140.85674066040664,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 195.679705,
+        "inference_duration_s": 140.85674066040664,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "provider": "dots-studio",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 265.0,
+      "daily_percentile": 41.333333333333336,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 265.0,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 41.333333333333336,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 191.20069999999998,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 136.26586827860834,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 191.20069999999998,
+        "inference_duration_s": 136.26586827860834,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.8-27b",
+      "name": "Qwen: Qwen3.8 27B",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 420.5,
+      "daily_percentile": 87.517,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 420.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 87.517,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.018325516522499998,
+          "n": 4,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0163523275,
+          "n": 4,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 7008.0,
+          "n": 4,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 135.014535,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 82.75623192398344,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.018325516522499998,
+        "output_cost_usd": 0.0163523275,
+        "output_tokens": 7008.0,
+        "run_duration_s": 135.014535,
+        "inference_duration_s": 82.75623192398344,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "minimax/minimax-m3",
+      "name": "MiniMax: MiniMax M3",
+      "provider": "minimax",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 377.5,
+      "daily_percentile": 81.45,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 377.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 81.45,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.004478753226315789,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0009372231578947368,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 715.3684210526316,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 70.9166,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 11.5300489867921,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.004478753226315789,
+        "output_cost_usd": 0.0009372231578947368,
+        "output_tokens": 715.3684210526316,
+        "run_duration_s": 70.9166,
+        "inference_duration_s": 11.5300489867921,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3-flash-preview",
+      "name": "Google: Gemini 3 Flash Preview",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 505.5,
+      "daily_percentile": 98.061,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 505.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.061,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.014112004499999999,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00232965,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 776.55,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 84.00397,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 26.58574200848816,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.014112004499999999,
+        "output_cost_usd": 0.00232965,
+        "output_tokens": 776.55,
+        "run_duration_s": 84.00397,
+        "inference_duration_s": 26.58574200848816,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6-luna-pro",
+      "name": "OpenAI: GPT-6 Luna Pro",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 523.25,
+      "daily_percentile": 98.742,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 523.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.742,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.007317455475,
+          "n": 12,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00260825,
+          "n": 12,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5216.5,
+          "n": 12,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 145.98549,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 96.38100042326842,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.007317455475,
+        "output_cost_usd": 0.00260825,
+        "output_tokens": 5216.5,
+        "run_duration_s": 145.98549,
+        "inference_duration_s": 96.38100042326842,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4-pro",
+      "name": "DeepSeek: DeepSeek V4 Pro 0423",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 387.5,
+      "daily_percentile": 82.3,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 387.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 82.3,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 186.304545,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 137.31022050778847,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 186.304545,
+        "inference_duration_s": 137.31022050778847,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "name": "Google: Gemini 3.1 Flash Lite",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 442.25,
+      "daily_percentile": 92.081,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 442.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.081,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00757614825,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.001818075,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1212.05,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 88.10317500000001,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 32.96360636629397,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00757614825,
+        "output_cost_usd": 0.001818075,
+        "output_tokens": 1212.05,
+        "run_duration_s": 88.10317500000001,
+        "inference_duration_s": 32.96360636629397,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "name": "Anthropic: Claude Sonnet 5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 408.5,
+      "daily_percentile": 88.6285,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 408.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 88.6285,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.07668032625,
+          "n": 16,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.009468125,
+          "n": 16,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 946.8125,
+          "n": 16,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 90.966155,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 36.37554704392096,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.07668032625,
+        "output_cost_usd": 0.009468125,
+        "output_tokens": 946.8125,
+        "run_duration_s": 90.966155,
+        "inference_duration_s": 36.37554704392096,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "name": "Google: Gemma 4 31B",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 370.0,
+      "daily_percentile": 80.15,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 370.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 80.15,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.002749887642857143,
+          "n": 7,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0003562242857142857,
+          "n": 7,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 898.5714285714286,
+          "n": 7,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 110.60328,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 55.176250504166816,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.002749887642857143,
+        "output_cost_usd": 0.0003562242857142857,
+        "output_tokens": 898.5714285714286,
+        "run_duration_s": 110.60328,
+        "inference_duration_s": 55.176250504166816,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.7-flash",
+      "name": "Qwen: Qwen3.7 Flash",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 110.25,
+      "daily_percentile": 7.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 110.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 7.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 242.06793,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 181.49321083348477,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 242.06793,
+        "inference_duration_s": 181.49321083348477,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "upstage/solar-pro4",
+      "name": "Upstage: Solar Pro 4",
+      "provider": "upstage",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 294.0,
+      "daily_percentile": 56.85,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 294.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 56.85,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0032785204736842104,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0004588105263157895,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 764.6842105263158,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 80.394105,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 26.80759655169677,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0032785204736842104,
+        "output_cost_usd": 0.0004588105263157895,
+        "output_tokens": 764.6842105263158,
+        "run_duration_s": 80.394105,
+        "inference_duration_s": 26.80759655169677,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it",
+      "name": "Google: Gemma 4 26B A4B",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 328.25,
+      "daily_percentile": 67.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 328.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 67.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0014810928,
+          "n": 3,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00012959,
+          "n": 3,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 826.3333333333334,
+          "n": 3,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 134.85695,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 78.8827068545157,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0014810928,
+        "output_cost_usd": 0.00012959,
+        "output_tokens": 826.3333333333334,
+        "run_duration_s": 134.85695,
+        "inference_duration_s": 78.8827068545157,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.7-flash",
+      "name": "Google: Gemini 3.7 Flash",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 502.75,
+      "daily_percentile": 97.984,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 502.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.984,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.028704875294117648,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.013838823529411765,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3690.3529411764707,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 107.247225,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 57.92940283394419,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.028704875294117648,
+        "output_cost_usd": 0.013838823529411765,
+        "output_tokens": 3690.3529411764707,
+        "run_duration_s": 107.247225,
+        "inference_duration_s": 57.92940283394419,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6-astra",
+      "name": "OpenAI: GPT-6 Astra",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 541.0,
+      "daily_percentile": 99.203,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 541.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 99.203,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.21700503,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0429325,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 858.65,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 106.73664,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 54.57079828524729,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.21700503,
+        "output_cost_usd": 0.0429325,
+        "output_tokens": 858.65,
+        "run_duration_s": 106.73664,
+        "inference_duration_s": 54.57079828524729,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "name": "OpenAI: gpt-oss-120b",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 430.25,
+      "daily_percentile": 88.28,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 430.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 88.28,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0028093397475,
+          "n": 12,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.001642809276050662,
+          "n": 12,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5295.916666666667,
+          "n": 12,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 98.29732,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 45.52649484353606,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0028093397475,
+        "output_cost_usd": 0.001642809276050662,
+        "output_tokens": 5295.916666666667,
+        "run_duration_s": 98.29732,
+        "inference_duration_s": 45.52649484353606,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "stepfun/step-3.7-flash",
+      "name": "StepFun: Step 3.7 Flash",
+      "provider": "stepfun",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 352.5,
+      "daily_percentile": 69.75,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 352.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 69.75,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 198.66782,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 146.0628099252004,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 198.66782,
+        "inference_duration_s": 146.0628099252004,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.6-sol",
+      "name": "OpenAI: GPT-5.6 Sol",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 545.5,
+      "daily_percentile": 99.237,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 545.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 99.237,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.10017653684210526,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.025902105263157893,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1295.1052631578948,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 100.634275,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 46.78752108926419,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.10017653684210526,
+        "output_cost_usd": 0.025902105263157893,
+        "output_tokens": 1295.1052631578948,
+        "run_duration_s": 100.634275,
+        "inference_duration_s": 46.78752108926419,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "mistralai/mistral-nemo",
+      "name": "Mistral: Mistral Nemo",
+      "provider": "mistralai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 276.0,
+      "daily_percentile": 49.6,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 276.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 49.6,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.000477413244,
+          "n": 5,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 3.0042e-05,
+          "n": 5,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 952.6,
+          "n": 5,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 132.550395,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 74.7115761209745,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.000477413244,
+        "output_cost_usd": 3.0042e-05,
+        "output_tokens": 952.6,
+        "run_duration_s": 132.550395,
+        "inference_duration_s": 74.7115761209745,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "name": "Google: Gemini 2.5 Flash Lite",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 233.5,
+      "daily_percentile": 32.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 233.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 32.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 544.855305,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 489.8687293356634,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 544.855305,
+        "inference_duration_s": 489.8687293356634,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "name": "DeepSeek: DeepSeek V3.2",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 384.5,
+      "daily_percentile": 83.75,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 384.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 83.75,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00322608704,
+          "n": 9,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0004063133333333333,
+          "n": 9,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1013.5555555555555,
+          "n": 9,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 110.57421000000001,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 54.216613881173544,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00322608704,
+        "output_cost_usd": 0.0004063133333333333,
+        "output_tokens": 1013.5555555555555,
+        "run_duration_s": 110.57421000000001,
+        "inference_duration_s": 54.216613881173544,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-fable-5.1",
+      "name": "Anthropic: Claude Fable 5.1",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 460.25,
+      "daily_percentile": 94.6445,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 460.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 94.6445,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.3785026235294118,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.07065882352941176,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1413.1764705882354,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 114.47202,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 66.9577962061041,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.3785026235294118,
+        "output_cost_usd": 0.07065882352941176,
+        "output_tokens": 1413.1764705882354,
+        "run_duration_s": 114.47202,
+        "inference_duration_s": 66.9577962061041,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.6-35b-a3b",
+      "name": "Qwen: Qwen3.6 35B A3B",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 230.75,
+      "daily_percentile": 34.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 230.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 34.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 221.957355,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 163.14253583534156,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 221.957355,
+        "inference_duration_s": 163.14253583534156,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "name": "Google: Gemini 2.5 Flash",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 363.0,
+      "daily_percentile": 78.2,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 363.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 78.2,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 302.695475,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 246.96482611618703,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 302.695475,
+        "inference_duration_s": 246.96482611618703,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.5-flash-lite",
+      "name": "Google: Gemini 3.5 Flash Lite",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 450.5,
+      "daily_percentile": 94.9,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 450.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 94.9,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.01020987,
+          "n": 18,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0026220833333333335,
+          "n": 18,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1048.8333333333333,
+          "n": 18,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 83.097525,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 22.869248669128865,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.01020987,
+        "output_cost_usd": 0.0026220833333333335,
+        "output_tokens": 1048.8333333333333,
+        "run_duration_s": 83.097525,
+        "inference_duration_s": 22.869248669128865,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-6-sol",
+      "name": "OpenAI: GPT-6 Sol",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 560.0,
+      "daily_percentile": 99.5645,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 560.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 99.5645,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0497806155,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.014132,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1413.2,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 96.15329,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 39.016264773020524,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0497806155,
+        "output_cost_usd": 0.014132,
+        "output_tokens": 1413.2,
+        "run_duration_s": 96.15329,
+        "inference_duration_s": 39.016264773020524,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "x-ai/grok-4.7",
+      "name": "SpaceXAI: Grok 4.7",
+      "provider": "x-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 339.0,
+      "daily_percentile": 66.538,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 339.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 66.538,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.07145622,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.033066,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5511.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 198.76884,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 141.92582279383205,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.07145622,
+        "output_cost_usd": 0.033066,
+        "output_tokens": 5511.0,
+        "run_duration_s": 198.76884,
+        "inference_duration_s": 141.92582279383205,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-opus-5",
+      "name": "Anthropic: Claude Opus 5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 506.0,
+      "daily_percentile": 97.154,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 506.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.154,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.214276975,
+          "n": 18,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.035026388888888885,
+          "n": 18,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1401.0555555555557,
+          "n": 18,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 103.76056,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 46.35064923141617,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.214276975,
+        "output_cost_usd": 0.035026388888888885,
+        "output_tokens": 1401.0555555555557,
+        "run_duration_s": 103.76056,
+        "inference_duration_s": 46.35064923141617,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "name": "OpenAI: GPT-4o-mini",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 317.5,
+      "daily_percentile": 62.6,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 317.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 62.6,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.003992664789473684,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0004271368421052632,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 711.8947368421053,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 79.040715,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 21.64884424363263,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.003992664789473684,
+        "output_cost_usd": 0.0004271368421052632,
+        "output_tokens": 711.8947368421053,
+        "run_duration_s": 79.040715,
+        "inference_duration_s": 21.64884424363263,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.6",
+      "name": "Anthropic: Claude Sonnet 4.6",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 416.5,
+      "daily_percentile": 90.15,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 416.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 90.15,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.08891367157894736,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.010827631578947368,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 721.8421052631579,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 85.34755,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 30.04493575807428,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.08891367157894736,
+        "output_cost_usd": 0.010827631578947368,
+        "output_tokens": 721.8421052631579,
+        "run_duration_s": 85.34755,
+        "inference_duration_s": 30.04493575807428,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "provider": "cohere",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 330.8333333333333,
+      "daily_percentile": 65.0,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 330.8333333333333,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 65.0,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 21863.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 196.38836666666666,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 139.62336624281792,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0,
+        "output_cost_usd": 0.0,
+        "output_tokens": 21863.0,
+        "run_duration_s": 196.38836666666666,
+        "inference_duration_s": 139.62336624281792,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "name": "Anthropic: Claude Opus 4.8",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 434.5,
+      "daily_percentile": 92.35,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 434.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.35,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.2093738625,
+          "n": 12,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.02701875,
+          "n": 12,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1080.75,
+          "n": 12,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 98.4302,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 40.32270746503491,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.2093738625,
+        "output_cost_usd": 0.02701875,
+        "output_tokens": 1080.75,
+        "run_duration_s": 98.4302,
+        "inference_duration_s": 40.32270746503491,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.6-terra",
+      "name": "OpenAI: GPT-5.6 Terra",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 514.5,
+      "daily_percentile": 98.786,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 514.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.786,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.050263587,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0153978,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1283.15,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 92.596075,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 40.26266114130849,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.050263587,
+        "output_cost_usd": 0.0153978,
+        "output_tokens": 1283.15,
+        "run_duration_s": 92.596075,
+        "inference_duration_s": 40.26266114130849,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.8-max-0902",
+      "name": "Qwen: Qwen3.8 Max (0902)",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 405.5,
+      "daily_percentile": 84.35,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 405.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 84.35,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0472032,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.019848,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3308.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 203.449535,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 151.1821914538741,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0472032,
+        "output_cost_usd": 0.019848,
+        "output_tokens": 3308.0,
+        "run_duration_s": 203.449535,
+        "inference_duration_s": 151.1821914538741,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "name": "OpenAI: gpt-oss-20b",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 366.0,
+      "daily_percentile": 74.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 366.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 74.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.002049624225,
+          "n": 8,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0012785575,
+          "n": 8,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 7110.625,
+          "n": 8,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 122.701625,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 67.05538623316679,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.002049624225,
+        "output_cost_usd": 0.0012785575,
+        "output_tokens": 7110.625,
+        "run_duration_s": 122.701625,
+        "inference_duration_s": 67.05538623316679,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.5",
+      "name": "Anthropic: Claude Sonnet 4.5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 382.25,
+      "daily_percentile": 80.9,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 382.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 80.9,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0824953452631579,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.01062078947368421,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 708.0526315789474,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 82.56902,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 29.65933927691076,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0824953452631579,
+        "output_cost_usd": 0.01062078947368421,
+        "output_tokens": 708.0526315789474,
+        "run_duration_s": 82.56902,
+        "inference_duration_s": 29.65933927691076,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "name": "Anthropic: Claude Haiku 4.5",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 316.75,
+      "daily_percentile": 63.55,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 316.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 63.55,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.03633667714285714,
+          "n": 14,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0049525,
+          "n": 14,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 990.5,
+          "n": 14,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 96.80203,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 42.06693269831594,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.03633667714285714,
+        "output_cost_usd": 0.0049525,
+        "output_tokens": 990.5,
+        "run_duration_s": 96.80203,
+        "inference_duration_s": 42.06693269831594,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "name": "Mistral: Mistral Large 4",
+      "provider": "mistralai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 346.0,
+      "daily_percentile": 68.181,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 346.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 68.181,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 199.35337,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 144.65949188256636,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 199.35337,
+        "inference_duration_s": 144.65949188256636,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "provider": "nvidia",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 320.8333333333333,
+      "daily_percentile": 60.5,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 320.8333333333333,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 60.5,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 191.38305,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 138.54407069428513,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 191.38305,
+        "inference_duration_s": 138.54407069428513,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "moonshotai/kimi-k2.6",
+      "name": "MoonshotAI: Kimi K2.6",
+      "provider": "moonshotai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 233.75,
+      "daily_percentile": 36.2,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 233.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 36.2,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 236.69781,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 177.90479762116448,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 236.69781,
+        "inference_duration_s": 177.90479762116448,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "particle-ai/particle-1",
+      "name": "Particle AI: Particle-1",
+      "provider": "particle-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 533.75,
+      "daily_percentile": 98.9775,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 533.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.9775,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00222477534,
+          "n": 11,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0016141363636363636,
+          "n": 11,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3228.2727272727275,
+          "n": 11,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 97.25938,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 41.11216702118982,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00222477534,
+        "output_cost_usd": 0.0016141363636363636,
+        "output_tokens": 3228.2727272727275,
+        "run_duration_s": 97.25938,
+        "inference_duration_s": 41.11216702118982,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.5-9b",
+      "name": "Qwen: Qwen3.5-9B",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 210.75,
+      "daily_percentile": 28.0,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 210.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 28.0,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00099949212,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.000488932,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 2585.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 243.307985,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 186.24601157970028,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00099949212,
+        "output_cost_usd": 0.000488932,
+        "output_tokens": 2585.0,
+        "run_duration_s": 243.307985,
+        "inference_duration_s": 186.24601157970028,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "meta/muse-spark-open",
+      "name": "Meta: Muse Spark Open",
+      "provider": "meta",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 503.75,
+      "daily_percentile": 97.98349999999999,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 503.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.98349999999999,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0526299869117647,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.04487825,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 10559.588235294117,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 99.402475,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 44.538975033233875,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0526299869117647,
+        "output_cost_usd": 0.04487825,
+        "output_tokens": 10559.588235294117,
+        "run_duration_s": 99.402475,
+        "inference_duration_s": 44.538975033233875,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "inclusionai/ling-3.0-flash",
+      "name": "inclusionAI: Ling 3.0 Flash",
+      "provider": "inclusionai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 333.5,
+      "daily_percentile": 66.15,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 333.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 66.15,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00180830628,
+          "n": 3,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0012117,
+          "n": 3,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 6731.666666666667,
+          "n": 3,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 187.859085,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 134.34776956650893,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00180830628,
+        "output_cost_usd": 0.0012117,
+        "output_tokens": 6731.666666666667,
+        "run_duration_s": 187.859085,
+        "inference_duration_s": 134.34776956650893,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "meta/muse-spark-1.3",
+      "name": "Meta: Muse Spark 1.3",
+      "provider": "meta",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 495.75,
+      "daily_percentile": 97.6785,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 495.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.6785,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0547569,
+          "n": 8,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.03747915625,
+          "n": 8,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 8818.625,
+          "n": 8,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 149.533425,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 99.63705004182411,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0547569,
+        "output_cost_usd": 0.03747915625,
+        "output_tokens": 8818.625,
+        "run_duration_s": 149.533425,
+        "inference_duration_s": 99.63705004182411,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "z-ai/glm-5.3-flashx",
+      "name": "Z.ai: GLM 5.3 FlashX",
+      "provider": "z-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 497.75,
+      "daily_percentile": 96.756,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 497.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 96.756,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00772553925,
+          "n": 14,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.004921339285714286,
+          "n": 14,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3937.0714285714284,
+          "n": 14,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 113.703925,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 63.759193660807796,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00772553925,
+        "output_cost_usd": 0.004921339285714286,
+        "output_tokens": 3937.0714285714284,
+        "run_duration_s": 113.703925,
+        "inference_duration_s": 63.759193660807796,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "xingchen-agi/xing4.0-29b-a4b:free",
+      "name": "XingChen: Xing4.0 29B A4B (free)",
+      "provider": "xingchen-agi",
+      "complete": false,
+      "status": "pending",
+      "score": null,
+      "daily_percentile": null,
+      "games": 0,
+      "aggregate_stats": {
+        "score": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": null,
+        "inference_duration_s": null,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "meta/muse-wonder",
+      "name": "Meta: Muse Wonder",
+      "provider": "meta",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 491.5,
+      "daily_percentile": 97.4825,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 491.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.4825,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.12028408294736842,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.07678631578947369,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 3839.315789473684,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 111.190245,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 58.79216744374717,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.12028408294736842,
+        "output_cost_usd": 0.07678631578947369,
+        "output_tokens": 3839.315789473684,
+        "run_duration_s": 111.190245,
+        "inference_duration_s": 58.79216744374717,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.6-flash",
+      "name": "Google: Gemini 3.6 Flash",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 528.25,
+      "daily_percentile": 99.087,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 528.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 99.087,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.039405960000000004,
+          "n": 18,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.02091875,
+          "n": 18,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5578.333333333333,
+          "n": 18,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 114.065035,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 63.11223913382273,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.039405960000000004,
+        "output_cost_usd": 0.02091875,
+        "output_tokens": 5578.333333333333,
+        "run_duration_s": 114.065035,
+        "inference_duration_s": 63.11223913382273,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite-preview",
+      "name": "Google: Gemini 3.1 Flash Lite Preview",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 432.5,
+      "daily_percentile": 92.2,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 432.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 92.2,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.00706941675,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00212625,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1417.5,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 73.258905,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 16.139335206348914,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.00706941675,
+        "output_cost_usd": 0.00212625,
+        "output_tokens": 1417.5,
+        "run_duration_s": 73.258905,
+        "inference_duration_s": 16.139335206348914,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "anthropic/claude-opus-4.6",
+      "name": "Anthropic: Claude Opus 4.6",
+      "provider": "anthropic",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 487.75,
+      "daily_percentile": 95.21,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 487.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 95.21,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.01620921052631579,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 648.3684210526316,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 94.688515,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 37.91430318362545,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0,
+        "output_cost_usd": 0.01620921052631579,
+        "output_tokens": 648.3684210526316,
+        "run_duration_s": 94.688515,
+        "inference_duration_s": 37.91430318362545,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "reflection/beam-1.0-501b-a23b",
+      "name": "Reflection: Beam 1.0 501B A23B",
+      "provider": "reflection",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 412.25,
+      "daily_percentile": 82.3285,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 412.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 82.3285,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.018026198614285713,
+          "n": 7,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.015766914285714285,
+          "n": 7,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 14561.42857142857,
+          "n": 7,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 133.247705,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 80.11176939556609,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.018026198614285713,
+        "output_cost_usd": 0.015766914285714285,
+        "output_tokens": 14561.42857142857,
+        "run_duration_s": 133.247705,
+        "inference_duration_s": 80.11176939556609,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "google/gemini-3.1-pro-preview",
+      "name": "Google: Gemini 3.1 Pro Preview",
+      "provider": "google",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 448.75,
+      "daily_percentile": 94.325,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 448.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 94.325,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.10237788,
+          "n": 7,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.06521485714285714,
+          "n": 7,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5434.571428571428,
+          "n": 7,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 173.083195,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 122.37186535652727,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.10237788,
+        "output_cost_usd": 0.06521485714285714,
+        "output_tokens": 5434.571428571428,
+        "run_duration_s": 173.083195,
+        "inference_duration_s": 122.37186535652727,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5-mini",
+      "name": "OpenAI: GPT-5 Mini",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 459.5,
+      "daily_percentile": 95.4,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 459.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 95.4,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.02137916,
+          "n": 9,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.014275111111111112,
+          "n": 9,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 7137.555555555556,
+          "n": 9,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 198.537015,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 148.1211454618955,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.02137916,
+        "output_cost_usd": 0.014275111111111112,
+        "output_tokens": 7137.555555555556,
+        "run_duration_s": 198.537015,
+        "inference_duration_s": 148.1211454618955,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "name": "OpenAI: GPT-4.1 Mini",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 334.75,
+      "daily_percentile": 68.7,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 334.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 68.7,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.012857141647058824,
+          "n": 17,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0014495058823529412,
+          "n": 17,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 905.9411764705883,
+          "n": 17,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 93.35503,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 34.10709915413754,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.012857141647058824,
+        "output_cost_usd": 0.0014495058823529412,
+        "output_tokens": 905.9411764705883,
+        "run_duration_s": 93.35503,
+        "inference_duration_s": 34.10709915413754,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.4-nano",
+      "name": "OpenAI: GPT-5.4 Nano",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 326.5,
+      "daily_percentile": 68.1,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 326.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 68.1,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.007422907973684211,
+          "n": 19,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.002567171052631579,
+          "n": 19,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 2053.7368421052633,
+          "n": 19,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 94.15941,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 42.99668066817103,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.007422907973684211,
+        "output_cost_usd": 0.002567171052631579,
+        "output_tokens": 2053.7368421052633,
+        "run_duration_s": 94.15941,
+        "inference_duration_s": 42.99668066817103,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.6-luna-pro",
+      "name": "OpenAI: GPT-5.6 Luna Pro",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 505.5,
+      "daily_percentile": 98.1305,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 505.5,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 98.1305,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0199457346,
+          "n": 9,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.006620933333333333,
+          "n": 9,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5517.444444444444,
+          "n": 9,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 167.29183,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 117.81520485228393,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0199457346,
+        "output_cost_usd": 0.006620933333333333,
+        "output_tokens": 5517.444444444444,
+        "run_duration_s": 167.29183,
+        "inference_duration_s": 117.81520485228393,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.4-mini",
+      "name": "OpenAI: GPT-5.4 Mini",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 445.75,
+      "daily_percentile": 93.088,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 445.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 93.088,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0218079675,
+          "n": 20,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.00793305,
+          "n": 20,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1762.9,
+          "n": 20,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 90.818125,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 39.439396516548,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0218079675,
+        "output_cost_usd": 0.00793305,
+        "output_tokens": 1762.9,
+        "run_duration_s": 90.818125,
+        "inference_duration_s": 39.439396516548,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": true,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "recursive/flint-v1.0:free",
+      "name": "Recursive: Flint (free)",
+      "provider": "recursive",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 391.6666666666667,
+      "daily_percentile": 77.16666666666667,
+      "games": 6,
+      "aggregate_stats": {
+        "score": {
+          "mean": 391.6666666666667,
+          "n": 6,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 77.16666666666667,
+          "n": 6,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 202.7922,
+          "n": 6,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 143.76844732001578,
+          "n": 6,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 202.7922,
+        "inference_duration_s": 143.76844732001578,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "x-ai/grok-4.5",
+      "name": "SpaceXAI: Grok 4.5",
+      "provider": "x-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 454.25,
+      "daily_percentile": 94.43,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 454.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 94.43,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.066724218,
+          "n": 2,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.033506999999999995,
+          "n": 2,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 5584.5,
+          "n": 2,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 171.717055,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 121.33724677573191,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.066724218,
+        "output_cost_usd": 0.033506999999999995,
+        "output_tokens": 5584.5,
+        "run_duration_s": 171.717055,
+        "inference_duration_s": 121.33724677573191,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "inception/mercury-3",
+      "name": "Inception: Mercury 3",
+      "provider": "inception",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 497.5,
+      "daily_percentile": 97.8925,
+      "games": 4,
+      "aggregate_stats": {
+        "score": {
+          "mean": 497.5,
+          "n": 4,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.8925,
+          "n": 4,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0086327604,
+          "n": 1,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0071806000000000005,
+          "n": 1,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 20516.0,
+          "n": 1,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 121.16945,
+          "n": 4,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 68.7234393011895,
+          "n": 4,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0086327604,
+        "output_cost_usd": 0.0071806000000000005,
+        "output_tokens": 20516.0,
+        "run_duration_s": 121.16945,
+        "inference_duration_s": 68.7234393011895,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3.7-plus",
+      "name": "Qwen: Qwen3.7 Plus",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 289.0,
+      "daily_percentile": 53.95,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 289.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 53.95,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 228.5164,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 170.64610224374337,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 228.5164,
+        "inference_duration_s": 170.64610224374337,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "openai/gpt-5.4",
+      "name": "OpenAI: GPT-5.4",
+      "provider": "openai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 486.0,
+      "daily_percentile": 97.328,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 486.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 97.328,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0727577125,
+          "n": 18,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.024499166666666666,
+          "n": 18,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 1633.2777777777778,
+          "n": 18,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 107.273615,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 56.76343008310069,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0727577125,
+        "output_cost_usd": 0.024499166666666666,
+        "output_tokens": 1633.2777777777778,
+        "run_duration_s": 107.273615,
+        "inference_duration_s": 56.76343008310069,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
+      "provider": "deepseek",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 387.0,
+      "daily_percentile": 80.05,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 387.0,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 80.05,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 166.773555,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 115.35439024132211,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 166.773555,
+        "inference_duration_s": 115.35439024132211,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "qwen/qwen3-235b-a22b-2507",
+      "name": "Qwen: Qwen3 235B A22B Instruct 2507",
+      "provider": "qwen",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 321.75,
+      "daily_percentile": 64.75,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 321.75,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 64.75,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": 0.0025297635,
+          "n": 15,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": 0.0006784233333333333,
+          "n": 15,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": 885.5333333333333,
+          "n": 15,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 99.64786,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 43.00943133865949,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": 0.0025297635,
+        "output_cost_usd": 0.0006784233333333333,
+        "output_tokens": 885.5333333333333,
+        "run_duration_s": 99.64786,
+        "inference_duration_s": 43.00943133865949,
+        "cost_basis": "reported",
+        "output_cost_basis": "provider_reported",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "inclusionai/ling-3.1-flash",
+      "name": "inclusionAI: Ling 3.1 Flash",
+      "provider": "inclusionai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 375.25,
+      "daily_percentile": 77.425,
+      "games": 20,
+      "aggregate_stats": {
+        "score": {
+          "mean": 375.25,
+          "n": 20,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 77.425,
+          "n": 20,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 163.349725,
+          "n": 20,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 112.31243710408452,
+          "n": 20,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 163.349725,
+        "inference_duration_s": 112.31243710408452,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    },
+    {
+      "model": "x-ai/grok-4.6",
+      "name": "SpaceXAI: Grok 4.6",
+      "provider": "x-ai",
+      "complete": true,
+      "status": "provisional_average",
+      "score": 174.21052631578948,
+      "daily_percentile": 21.210526315789473,
+      "games": 19,
+      "aggregate_stats": {
+        "score": {
+          "mean": 174.21052631578948,
+          "n": 19,
+          "ci95": null
+        },
+        "daily_percentile": {
+          "mean": 21.210526315789473,
+          "n": 19,
+          "ci95": null
+        },
+        "run_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_cost_usd": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "n": 0,
+          "ci95": null
+        },
+        "run_duration_s": {
+          "mean": 251.77931052631578,
+          "n": 19,
+          "ci95": null
+        },
+        "inference_duration_s": {
+          "mean": 191.66826545205703,
+          "n": 19,
+          "ci95": null
+        }
+      },
+      "metrics": {
+        "run_cost_usd": null,
+        "output_cost_usd": null,
+        "output_tokens": null,
+        "run_duration_s": 251.77931052631578,
+        "inference_duration_s": 191.66826545205703,
+        "cost_basis": "unavailable",
+        "output_cost_basis": "unavailable",
+        "usage_complete": false,
+        "usage_calls": null,
+        "model_calls": null
+      },
+      "rounds": []
+    }
+  ],
+  "protocol_amendments": [
+    "Five-word instruction amendment; all 44 earlier verified games retained.",
+    "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included."
+  ],
+  "note": "Provisional means across available clean verified games. Models have unequal date coverage; this is not the final balanced 75-day comparison. Missing or partial metric records are excluded from that metric, never treated as zero."
+}
