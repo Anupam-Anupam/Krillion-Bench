@@ -5,7 +5,7 @@ const palette = {openai:'#4de3ff',anthropic:'#ffb787',google:'#b6e897',moonshota
 const color = provider => palette[provider] || '#96a19a';
 const providerName = p => ({openai:'OpenAI',anthropic:'Anthropic',google:'Google',moonshotai:'Moonshot','x-ai':'xAI','z-ai':'Z.ai',deepseek:'DeepSeek',meta:'Meta',qwen:'Qwen'}[p] || p);
 const axes = {run_cost_usd:'LLM cost / run · USD', output_cost_usd:'Output cost / run · USD',output_tokens:'Output tokens / run',run_duration_s:'Elapsed time / run · seconds',daily_percentile:'Better than today’s players · %'};
-const state = {data:null, query:'', weights:'all', view:'average', days:[], weightMetadata:{}, provider:'all', sort:'score', direction:-1, axis:'run_cost_usd', expanded:false};
+const state = {data:null, query:'', weights:'all', view:'average', days:[], weightMetadata:{}, provider:'all', sort:'score', direction:-1, axis:'run_cost_usd', rowLimit:5};
 const numeric = v => typeof v === 'number' && Number.isFinite(v) && v >= 0;
 const count = v => v == null ? '—' : new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(v);
 const money = v => v == null ? '—' : v === 0 ? '$0.0000' : v < .0001 ? '$'+v.toFixed(6) : '$'+v.toFixed(4);
@@ -51,7 +51,7 @@ function scoreMarkup(row) {
 }
 function render() {
   const matches=orderedRows(visibleRows());
-  const rows=state.expanded?matches:matches.slice(0,5);
+  const rows=matches.slice(0,state.rowLimit);
   $('#results').innerHTML=rows.map(r=>{
     const m=r.metrics;
     const badge=badgeForPosition(state.placements.get(r.model));
@@ -63,8 +63,8 @@ function render() {
   $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'}${state.view==='average'?' · average metrics only':state.data.numeric_only?' · click a model for its daily report':' · click a model to inspect its dive'}`;
   const expand=$('#expand-results');
   expand.hidden=matches.length<=5;
-  expand.setAttribute('aria-expanded',String(state.expanded));
-  expand.textContent=state.expanded?'Show fewer models ↑':'Show more';
+  expand.setAttribute('aria-expanded',String(state.rowLimit>5));
+  expand.textContent=rows.length===matches.length?'Show fewer models ↑':'Show more';
   document.querySelectorAll('th[data-sort]').forEach(th=>{
     const selected=th.dataset.sort===state.sort;
     th.setAttribute('aria-sort',selected?(state.direction===-1?'descending':'ascending'):'none');
@@ -187,7 +187,7 @@ function validate(data) {
 function displaySnapshot(data) {
   state.data=data;
   state.placements=new Map(data.runs.filter(r=>r.complete).sort((a,b)=>b.score-a.score||a.model.localeCompare(b.model)).map((r,i)=>[r.model,i+1]));
-  state.expanded=false;
+  state.rowLimit=5;
   $('#provider-filter').innerHTML='<option value="all">All providers</option>'+[...new Set(data.runs.map(r=>r.provider))].sort().map(p=>`<option value="${escapeHTML(p)}">${escapeHTML(providerName(p))}</option>`).join('');
   $('#provider-filter').value=state.provider;
   document.querySelectorAll('#view-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
@@ -252,12 +252,20 @@ function install(data) {
 }
 $('#expand-results').addEventListener('click',()=>{
   const scrollX=window.scrollX, scrollY=window.scrollY;
-  state.expanded=!state.expanded;
+  const matches=orderedRows(visibleRows());
+  const expanding=state.rowLimit<matches.length;
+  if(expanding){
+    // Complete the next hidden badge tier, including all earlier rows.
+    const tier=badgeForPosition(state.placements.get(matches[state.rowLimit].model))?.key;
+    state.rowLimit=matches.reduce((limit,row,index)=>
+      badgeForPosition(state.placements.get(row.model))?.key===tier?index+1:limit,state.rowLimit);
+  }else{
+    state.rowLimit=5;
+  }
   render();
-  if(state.expanded){
+  if(expanding){
     requestAnimationFrame(()=>window.scrollTo({left:scrollX,top:scrollY,behavior:'instant'}));
   }else{
-    // Keep the collapse control reachable when removing rows shortens the page.
     const button=$('#expand-results'), bounds=button.getBoundingClientRect();
     if(bounds.top<0||bounds.bottom>window.innerHeight)button.scrollIntoView({block:'center',behavior:'instant'});
   }
