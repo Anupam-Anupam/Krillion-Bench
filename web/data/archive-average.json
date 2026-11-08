@@ -5321,11 +5321,11 @@
       "rounds": []
     },
     {
-      "model": "xingchen-agi/xing4.0-29b-a4b:free",
-      "name": "XingChen: Xing4.0 29B A4B (free)",
-      "provider": "xingchen-agi",
+      "model": "qwen/qwen3.8-max-prime",
+      "name": "Qwen: Qwen3.8 Max Prime",
+      "provider": "qwen",
       "complete": false,
-      "status": "pending",
+      "status": "awaiting_first_run",
       "score": null,
       "score_ci95": null,
       "daily_percentile": null,
@@ -5379,7 +5379,8 @@
         "usage_calls": null,
         "model_calls": null
       },
-      "rounds": []
+      "rounds": [],
+      "replacement_for": "xingchen-agi/xing4.0-29b-a4b:free"
     },
     {
       "model": "meta/muse-wonder",
@@ -6724,7 +6725,8 @@
   ],
   "protocol_amendments": [
     "Five-word instruction amendment; all 44 earlier verified games retained.",
-    "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included."
+    "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included.",
+    "After historical collection stopped, the user replaced unscored Xing4.0 29B A4B (free) with Qwen3.8 Max Prime. The new model has no score until a clean run verifies; historical snapshots retain their original model identities."
   ],
   "uncertainty": {
     "method": "95% percentile bootstrap over available clean tested dates",

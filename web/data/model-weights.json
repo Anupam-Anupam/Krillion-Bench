@@ -401,6 +401,10 @@
     "x-ai/grok-4.6": {
       "weight_access": "closed",
       "weights_url": null
+    },
+    "qwen/qwen3.8-max-prime": {
+      "weight_access": "closed",
+      "weights_url": null
     }
   },
   "classification_note": "Open-Source filter means publicly downloadable weights, indicated by a Hugging Face model ID in the OpenRouter catalog. Closed Weight means no public weight repository listed. This is weight availability, not a certification of an OSI-approved license."
