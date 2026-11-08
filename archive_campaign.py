@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import signal
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlsplit
@@ -58,6 +59,22 @@ def report_path(manifest, model, day):
     return f"{manifest['campaign']}/runs/{day}/{model_id}.json.gz"
 
 
+def execution_revision(original, current, reason):
+    """Permit audited scheduler changes, never changes to gameplay or measurement."""
+    stable = lambda m: {k: v for k, v in m.items() if k not in ('concurrency', 'source_sha256')}
+    if stable(original) != stable(current):
+        raise ValueError('Campaign gameplay settings, dates, roster or prices changed')
+    changed = {name for name in original['source_sha256'].keys() | current['source_sha256'].keys()
+               if original['source_sha256'].get(name) != current['source_sha256'].get(name)}
+    if changed - {'archive_campaign.py'}:
+        raise ValueError('Only scheduler source may change within an existing campaign')
+    if not reason or not reason.strip():
+        raise ValueError('Scheduler revision requires an explicit audit reason')
+    return dict(reason=reason.strip(), original_concurrency=original['concurrency'],
+                concurrency=current['concurrency'], source_sha256=current['source_sha256'],
+                original_source_sha256=original['source_sha256'])
+
+
 async def verify_archive_page(page, game):
     # Evidence supplied from actual calendar navigation, never inferred from a URL pattern.
     if page.url != game['url']:
@@ -90,6 +107,24 @@ async def capture_archive_percentile(page, record, timeout=10000):
         record.event('archive_percentile_unavailable')
 
 
+async def run_pending(pending, concurrency, one, stop, stop_file):
+    # Refill after durable upload; keep only a bounded number of reports in memory.
+    work, failures = iter(pending), []
+    async def worker():
+        while not stop.is_set() and not stop_file.exists():
+            item = next(work, None)
+            if item is None:
+                return
+            try:
+                await one(*item)
+            except Exception as exc:
+                failures.append(exc)
+                stop.set()
+    await asyncio.gather(*(worker() for _ in range(min(concurrency, len(pending)))))
+    if failures:
+        raise failures[0]
+
+
 async def campaign(args):
     for env in args.env_file:
         load_config(env)
@@ -120,8 +155,16 @@ async def campaign(args):
                 response.raise_for_status()
                 catalog = response.json()
         manifest = plan(roster, games, catalog, root, args.concurrency, campaign_id)
+        execution_id = hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()
         if existing is not None and existing != manifest:
-            raise ValueError('Campaign manifest differs; do not mix harness versions or rosters')
+            revision_path = campaign_id + '/execution-revisions/' + execution_id + '.json.gz'
+            prior_revision = await store.read(revision_path)
+            reason = (prior_revision or {}).get('reason') or getattr(args, 'execution_revision_reason', None)
+            revision = execution_revision(existing, manifest, reason)
+            if prior_revision is not None and prior_revision != revision:
+                raise ValueError('Execution revision differs from its immutable checkpoint')
+            if prior_revision is None:
+                await store.put(revision_path, revision)
         if existing is None:
             await store.put(manifest_path, manifest)
         pending = []
@@ -150,6 +193,10 @@ async def campaign(args):
         if args.limit:
             pending = pending[:args.limit]
         stop = asyncio.Event()
+        stop_file = getattr(args, 'stop_file', Path('.campaign-stop'))
+        loop = asyncio.get_running_loop()
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            loop.add_signal_handler(sig, stop.set)
         semaphore = asyncio.Semaphore(args.concurrency)
         async def one(game, model, path):
             async with semaphore:
@@ -170,7 +217,7 @@ async def campaign(args):
                 report = await execute_report(run_args, record, pricing=model['pricing'])
                 prompt_fingerprint = hashlib.sha256(json.dumps(
                     [r['prompt'] for r in report['rounds']], ensure_ascii=False).encode()).hexdigest()
-                saved = dict(model=model['id'], game_date=game['date'],
+                saved = dict(model=model['id'], game_date=game['date'], execution_id=execution_id,
                              captured_at=datetime.now(timezone.utc).isoformat(), report=report,
                              prompt_fingerprint=prompt_fingerprint, events=record.events)
                 # No new game starts in this slot until its report is remotely acknowledged.
@@ -189,13 +236,13 @@ async def campaign(args):
                 completed.append(public_inputs(saved))
                 print(json.dumps(dict(model=model['id'], game_date=game['date'],
                                       verified=len(completed), planned=7500)), flush=True)
-        # Bounded task creation also bounds in-memory pending reports.
-        for offset in range(0, len(pending), args.concurrency):
-            outcomes = await asyncio.gather(*(one(*p) for p in pending[offset:offset+args.concurrency]),
-                                            return_exceptions=True)
-            failure = next((x for x in outcomes if isinstance(x, BaseException)), None)
-            if failure:
-                raise failure
+        try:
+            await run_pending(pending, args.concurrency, one, stop, stop_file)
+        finally:
+            for sig in (signal.SIGTERM, signal.SIGINT):
+                loop.remove_signal_handler(sig)
+        if stop.is_set() or stop_file.exists():
+            print(json.dumps(dict(status='drained', verified=len(completed), planned=7500)), flush=True)
         if len(completed) == 7500:
             result = export_archive(manifest, completed)
             # This is the only local output: numeric aggregates, never trajectories.
@@ -223,6 +270,8 @@ if __name__ == '__main__':
     parser.add_argument('--env-file', type=Path, action='append', default=[])
     parser.add_argument('--concurrency', type=int, default=4)
     parser.add_argument('--campaign-id', default='archive-75-20261106-v2')
+    parser.add_argument('--execution-revision-reason')
+    parser.add_argument('--stop-file', type=Path, default=Path('.campaign-stop'))
     parser.add_argument('--limit', type=int, help='Pilot: only this many pending games')
     parser.add_argument('--public-output', type=Path, default=Path('archive-leaderboard.json'))
     args = parser.parse_args()

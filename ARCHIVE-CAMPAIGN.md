@@ -40,9 +40,9 @@ as zero or silently retried until it wins.
    play, matching prompts, full scorecards, timing, and percentile availability.
 
 ```sh
-python archive_campaign.py --games archive-games.json --limit 2
+python archive_campaign.py --games archive-games.json --concurrency 10 --limit 2
 # Once the pilot is verified, resume the exact frozen configuration:
-python archive_campaign.py --games archive-games.json
+python archive_campaign.py --games archive-games.json --concurrency 10
 ```
 
 The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
@@ -50,6 +50,11 @@ The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
 because they preceded archive replay and historical-percentile capture fixes.
 They remain immutable in private storage; no best-of selection is performed.
 Use the same `--concurrency` and `--campaign-id` when resuming a frozen campaign.
+Scheduling-only revisions can change concurrency and `archive_campaign.py` with
+an explicit `--execution-revision-reason`. An immutable execution revision records
+the old/new source hashes and concurrency; subsequent reports identify that
+revision. Changes to model settings, roster, dates, prices, player, runner,
+reporting, or other measurement code still block reuse of the existing panel.
 
 The observed calendar manifest is checked in as `archive-games.json` and contains
 dates, public archive URLs, and visible labels only. Each run uses Krillion's own
@@ -72,6 +77,12 @@ Default concurrency is four; raise it only after measuring the pilot and checkin
 browser/provider capacity. The game deadline and all existing same-model retry and
 final-score recovery rules remain unchanged. Completed remote checkpoints are
 resumed without replay. The orchestrator emits progress counts, never answer logs.
+The rolling worker pool refills a slot immediately after its report is durably
+uploaded; a slow model does not hold up unrelated runs. The live capacity probe
+on this account reached ten total concurrent browsers. SIGTERM, SIGINT, or the
+local `.campaign-stop` sentinel drain in-flight runs before exiting. Remove the
+sentinel before resuming. Do not kill the process forcibly: unuploaded RAM-only
+reports cannot be recovered after process loss.
 
 ## Aggregation and public presentation
 

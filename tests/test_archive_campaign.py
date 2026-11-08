@@ -1,11 +1,13 @@
 from pathlib import Path
+import asyncio
+from copy import deepcopy
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock
 
 import pytest
 
 from archive_aggregate import game_dates
-from archive_campaign import plan, report_path, verify_archive_page
+from archive_campaign import execution_revision, plan, report_path, run_pending, verify_archive_page
 from campaign import SOURCES
 
 
@@ -54,3 +56,53 @@ async def test_archive_redirect_cannot_be_mistaken_for_requested_game():
     with pytest.raises(RuntimeError, match='URL changed'):
         await verify_archive_page(page, {'url': 'https://krillion.io/test-only/date', 'visible_label': 'Archive date'})
     page.get_by_text.assert_not_called()
+
+
+def test_scheduler_revision_preserves_gameplay_and_requires_audit_reason(tmp_path):
+    original = plan(*inputs(tmp_path), tmp_path, 8)
+    current = deepcopy(original)
+    current['concurrency'] = 10
+    current['source_sha256']['archive_campaign.py'] = 'new scheduler'
+    assert execution_revision(original, current, 'User requested maximum parallelism')['concurrency'] == 10
+    with pytest.raises(ValueError, match='audit reason'):
+        execution_revision(original, current, None)
+    current['source_sha256']['player.py'] = 'different agent'
+    with pytest.raises(ValueError, match='Only scheduler'):
+        execution_revision(original, current, 'reason')
+    current = deepcopy(original)
+    current['settings']['margin'] = 1
+    with pytest.raises(ValueError, match='gameplay settings'):
+        execution_revision(original, current, 'reason')
+
+
+async def test_rolling_pool_refills_before_slowest_run_finishes(tmp_path):
+    release, third_started = asyncio.Event(), asyncio.Event()
+    completed = []
+    async def one(n):
+        if n == 0:
+            await release.wait()
+        if n == 2:
+            third_started.set()
+        completed.append(n)
+    task = asyncio.create_task(run_pending([(n,) for n in range(3)], 2, one,
+                                          asyncio.Event(), tmp_path/'stop'))
+    await asyncio.wait_for(third_started.wait(), 1)
+    assert 0 not in completed
+    release.set()
+    await task
+    assert sorted(completed) == [0, 1, 2]
+
+
+async def test_stop_request_drains_inflight_without_starting_more(tmp_path):
+    stop, second_started = asyncio.Event(), asyncio.Event()
+    completed = []
+    async def one(n):
+        if n == 0:
+            await second_started.wait()
+            stop.set()
+        else:
+            second_started.set()
+            await stop.wait()
+        completed.append(n)
+    await run_pending([(n,) for n in range(5)], 2, one, stop, tmp_path/'stop')
+    assert sorted(completed) == [0, 1]
