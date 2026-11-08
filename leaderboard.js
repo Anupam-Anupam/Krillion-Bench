@@ -69,7 +69,6 @@ function render() {
 function renderChart(rows) {
   const key=state.axis;
   const eligible=rows.filter(r=>r.complete && numeric(metric(r,key)) && (!key.includes('cost') || !r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'].startsWith('partial_')) && (key!=='output_tokens'||r.metrics.usage_complete));
-  $('#chart-count').textContent=`${eligible.length} complete runs plotted`;
   $('#plot-direction').textContent=key==='daily_percentile'?'Higher score, higher placement ↗':'Higher score, lower '+({run_cost_usd:'cost',output_cost_usd:'output cost',output_tokens:'token use',run_duration_s:'time'}[key])+' ↖';
   $('#axis-label').textContent=axes[key];
   $('#chart-tooltip').hidden=true;
@@ -133,8 +132,7 @@ function install(data) {
   state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;state.expanded=false;
   $('#search').value='';$('#provider-filter').innerHTML='<option value="all">All providers</option>'+[...new Set(data.runs.map(r=>r.provider))].sort().map(p=>`<option value="${escapeHTML(p)}">${escapeHTML(providerName(p))}</option>`).join('');
   document.querySelectorAll('#status-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.status==='all')));
-  $('#snapshot').textContent=`${data.date} · ${data.label}`;
-  $('#completed-count').textContent=data.runs.filter(r=>r.complete).length;$('#incomplete-count').textContent=data.runs.filter(r=>!r.complete).length;
+  $('#snapshot').textContent=data.date;
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
   $('#configuration').textContent=old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;

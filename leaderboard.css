@@ -58,3 +58,8 @@ tr[data-tier=krillion]:hover{background:#ffd16618}
 body.calm tr[data-tier=krillion]{box-shadow:none}
 body.calm tr[data-tier=krillion] .model-name,body.calm tr[data-tier=krillion] td.rank{text-shadow:none}
 body.calm .rank-badge.krillion{filter:none}
+
+/* Quiet chart chrome, using the same pixel typography as the leaderboard. */
+#legend{font:15px/1.4 var(--pixel);gap:8px 13px}
+.metric-help{display:flex;justify-content:flex-end;padding:10px 0 14px}
+.metric-help button{font:14px var(--pixel);color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
