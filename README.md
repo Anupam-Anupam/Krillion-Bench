@@ -25,9 +25,9 @@ and how to publish without disturbing the source-pinned campaign already running
 
 ## Archived multi-game evaluation
 
-The 75-game campaign uses a separate [private-report pipeline](docs/ARCHIVE-CAMPAIGN.md). It streams new compressed run reports directly to a personal private GCS bucket, retains historical checkpoints in private GitHub, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Archive replay uses the restored Unlimited profile.
+The 75-game campaign uses a separate [private-report pipeline](docs/ARCHIVE-CAMPAIGN.md). It streams new compressed run reports directly to a personal private GCS bucket, holds accepted historical checkpoints in the same bucket with originals retained in private GitHub, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Archive replay uses the restored Unlimited profile.
 
-See [storage layout and cutover status](docs/GCS-STORAGE.md). Reports are organized by campaign, puzzle date, exact provider/model, and immutable attempt. The GCS continuation preserves all 228 games verified before the storage switch; it does not rerun them.
+See [storage layout and cutover status](docs/GCS-STORAGE.md). Reports are organized by campaign, puzzle date, exact provider/model, and immutable attempt. All 228 accepted games from before the storage switch have also been copied and verified in GCS; none were rerun. The GitHub originals remain intact.
 
 ## Leaderboard UI
 

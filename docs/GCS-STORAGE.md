@@ -22,8 +22,9 @@ Startup verified all 228 historical games and resumed the remaining 7,272 with
 ten rolling workers. Five new game reports were observed in GCS during activation;
 three independent readbacks verified checksums, exact model/date identity, all seven
 rounds, and final scorecards. Replacement browser sessions started immediately
-after completed uploads. All new reports go to GCS; historical reports remain
-in private GitHub.
+after completed uploads. All new reports go to GCS. The subsequent historical
+backfill copied and verified all 228 accepted earlier reports into the same bucket;
+the original reports remain in private GitHub.
 
 ## Readable report layout
 
@@ -140,8 +141,8 @@ existing campaign command in the isolated continuation checkout:
 
 Keep the original campaign ID, calendar, roster, profile, pricing and deadline
 settings. Supply a clear `--execution-revision-reason` documenting this storage-only
-cutover. The historical private repository remains the source for older reports;
-only newly executed reports go into GCS. Neither the catalog nor the cutover record
+cutover. The historical private repository retains the originals of older reports; those
+accepted reports are now also copied into GCS. Newly executed reports go only to GCS. Neither the catalog nor the cutover record
 belongs on the public website.
 
 ## Runtime parity for this continuation
@@ -154,3 +155,51 @@ continuation environment explicitly retains the observed 13.0 versions. All
 existing installed distribution versions match the active runtime; the only
 additions are the four GCS packages. Do not run a generic sync on this frozen
 continuation without repeating this parity check.
+
+## Historical report backfill
+
+Completed November 7, 2026 (Toronto): **228 accepted reports** copied with full
+content/checksum readback verification. The operation covered 234 objects: the
+already-present original manifest, three execution revisions, protocol lineage,
+228 reports, and the completion audit. Earlier discarded campaigns and health
+diagnostic reports were not imported. The ten-worker campaign remained running.
+
+`harness/backfill_gcs.py` copies the accepted campaign's historical reports into
+exactly the same date/provider/model/attempt folders used by new workers. It does
+not start games or change the coordinator. Run from the organized repository with
+the GCS-enabled environment:
+
+```sh
+/private/tmp/Krillion-Bench-gcs/.venv/bin/python harness/backfill_gcs.py \
+  --bucket krillion-runs-20261107-83e52a \
+  --project krillion-bench-20261107 --project-number 819743372056 \
+  --credentials "$HOME/.config/krillion-bench/runner.json" \
+  --expected-count 228 --apply
+```
+
+Omit `--apply` for read-only validation. The tool checks the cutover's frozen source
+inventory and destination, identical original manifests, accepted attempt history,
+seven-round verified scorecards, score bounds, and per-date prompt fingerprints.
+It preserves valid zero scores, question timeouts, and pre-amendment reports
+exactly. Earlier discarded campaigns and diagnostic runs are excluded. If the
+historical inventory contains rejected predecessors or unmatched attempts, it
+stops for an explicit provenance-copy policy instead of creating incomplete chains.
+
+All source validation and destination conflict checks happen before writing. Each
+immutable upload is read back and compared to the source; identical existing
+objects are reused. Reads and transfers stay in memory. GitHub originals are
+retained unchanged. Shared logical checkpoint paths are deduplicated by the live
+reader, so copying a report never changes its score or counts it twice.
+
+The original execution revisions and protocol lineage accompany the reports.
+After all objects verify, the tool writes the private completion audit:
+
+```text
+campaigns/archive-75-20261106-v3/migrations/github-backfill-v1.json.gz
+```
+
+This immutable audit records the source repository, cutover digest, report count,
+and each logical path, readable object name, and SHA-256. The original catalog and
+cutover record remain unchanged as historical evidence. The running continuation
+still reads/checks both stores; retain GitHub access and its frozen inventory even
+after the copies are complete.

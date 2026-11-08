@@ -28,16 +28,19 @@ The site URL, section anchors, styling, and leaderboard values are unchanged.
 All existing files were retained. Historical commands and source hashes describe
 the layouts and versions in use when those runs happened. Relative documentation
 links have been updated; historical JSON, artwork, and font contents are unchanged.
-New archive trajectories still go directly from RAM to the private reports repo;
-this organization does not add a local or public report sink.
+New archive trajectories go directly from RAM to the private GCS bucket;
+this organization does not add a local or public report sink. See
+[GCS storage](GCS-STORAGE.md) for historical-report backfill and provenance.
 
 ## Active campaign: keep its frozen checkout
 
-The ongoing `archive-75-20261106-v3` campaign runs from the separate checkout
-`/private/tmp/Krillion-Bench-9pnucipl` at `583a4b6`. Leave that checkout, its paths,
-and its ten-worker coordinator untouched. Do not pull this reorganization into
-it, restart it from the organized checkout, or relax its source-hash checks.
-Use that original source/layout for any necessary continuation or final export.
+The ongoing `archive-75-20261106-v3` campaign runs from the isolated continuation
+`/private/tmp/Krillion-Bench-gcs`, with its own runtime and ten rolling workers.
+It preserves the gameplay sources from `583a4b6` and adds the audited GCS adapter.
+The original `/private/tmp/Krillion-Bench-9pnucipl` coordinator drained at 228
+verified games and is retired; leave its stop sentinel in place. Do not start it
+again, pull reorganized main into the continuation, or relax source-hash checks.
+Use the isolated continuation for necessary restarts or the final export.
 The five-word system prompt and automatic correction acceptance remain unchanged.
 
 Progress is independent of the main branch layout: the active coordinator writes
