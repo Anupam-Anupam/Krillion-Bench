@@ -93,6 +93,41 @@ async def test_archive_waits_for_delayed_percentile_but_preserves_missing(page):
     assert record.events[-1]['event'] == 'archive_percentile_unavailable'
 
 
+async def test_archive_recovers_interrupted_game_without_answering_or_starting_new_game(page):
+    from archive_campaign import verify_archive_page
+    from private_storage import MemoryRecorder
+    await page.set_content('''<main id="game"></main><script>(() => {
+      window.healthCounters={submissions:0, starts:0}; let round=5;
+      const root=document.getElementById('game');
+      window.healthQuestion = () => {
+        root.innerHTML=`<div class="ds-prompt-count">PROMPT ${round} OF 7</div>
+          <div>SCORE</div><div>100</div><input aria-label="Your answer">
+          <button onclick="healthCounters.submissions++">DIVE</button>`;
+        setTimeout(() => {root.innerHTML=`<div>SCORE</div><div>100</div>`+
+          (round<7 ? '<button onclick="healthNext()">DESCEND ▼</button>' :
+          '<button onclick="healthFinish()">SURFACE ▲</button>');}, 50);
+      };
+      window.healthNext = () => {round++; healthQuestion();};
+      window.healthFinish = () => {root.innerHTML='<button onclick="healthReplay()">PLAY THIS ONE AGAIN ↻</button>';};
+      window.healthReplay = () => {root.innerHTML='<div>resurfaced day #114</div><div>SCORE</div><div>0</div>'+
+        '<button onclick="healthCounters.starts++">▼ BEGIN DESCENT ▼</button>';};
+      healthQuestion();
+    })();</script>''')
+    record=MemoryRecorder('test-recovery')
+    assert await verify_archive_page(page, dict(url=page.url, date='2026-11-06', visible_label='RESURFACED DAY #114'), record) is True
+    assert await page.evaluate('healthCounters') == dict(submissions=0, starts=0)
+    assert [e['event'] for e in record.events].count('archive_reset_finished') == 1
+    assert [e['target'] for e in record.events if e['event']=='archive_reset_navigation'] == ['DESCEND ▼','DESCEND ▼','SURFACE ▲']
+
+
+async def test_archive_recovery_stall_is_bounded_and_does_not_submit(page):
+    from archive_campaign import verify_archive_page
+    await page.set_content('<div class="ds-prompt-count">PROMPT 2 OF 7</div><input aria-label="Your answer"><button>DIVE</button>')
+    with pytest.raises(TimeoutError):
+        await verify_archive_page(page, dict(url=page.url, visible_label='Archive'), recovery_timeout=0.1)
+    assert await page.get_by_role('textbox').input_value() == ''
+
+
 async def test_rejection_can_recover_within_same_round(page, tmp_path):
     obs = Observer(page, Recorder(tmp_path/'run'))
     before = await obs.read()

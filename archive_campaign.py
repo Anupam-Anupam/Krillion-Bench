@@ -7,6 +7,7 @@ import json
 import os
 import re
 import signal
+import time
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlsplit
@@ -60,7 +61,7 @@ def report_path(manifest, model, day):
 
 
 def execution_revision(original, current, reason):
-    """Permit audited scheduler changes, never changes to gameplay or measurement."""
+    """Permit audited orchestration changes, never changes to the player or controls."""
     stable = lambda m: {k: v for k, v in m.items() if k not in ('concurrency', 'source_sha256')}
     if stable(original) != stable(current):
         raise ValueError('Campaign gameplay settings, dates, roster or prices changed')
@@ -75,13 +76,78 @@ def execution_revision(original, current, reason):
                 original_source_sha256=original['source_sha256'])
 
 
-async def verify_archive_page(page, game):
+def retryable_startup_failure(saved):
+    """Only a proven pre-game archive failure can be retried automatically."""
+    report, events = saved['report'], saved.get('events', [])
+    failures = report.get('agent_failures', [])
+    forbidden = {'archive_prepared', 'browser_ready', 'model_input', 'model_call',
+                 'model_output', 'model_usage', 'round_open', 'action', 'submission'}
+    return (not report.get('scorecard_verified') and report.get('rounds') == []
+            and report.get('metrics', {}).get('model_calls') == 0
+            and report.get('metrics', {}).get('usage_calls') == 0
+            and not any(e['event'] in forbidden for e in events)
+            and any(e['event'] == 'cloud_session' for e in events)
+            and len(failures) == 1 and failures[0].get('error_type') == 'TimeoutError'
+            and any(f.get('function') == 'verify_archive_page'
+                    for f in failures[0].get('frames', [])))
+
+
+async def load_checkpoint(store, known_paths, manifest, model, day):
+    """Preserve every attempt; a verified score is terminal, including zero."""
+    original = report_path(manifest, model, day)
+    retry_root = original.replace('/runs/', '/startup-retries/').removesuffix('.json.gz')
+    paths = [original] + [f'{retry_root}/attempt-{n}.json.gz' for n in range(1, 4)]
+    for i, path in enumerate(paths):
+        if path not in known_paths:
+            if any(p in known_paths for p in paths[i+1:]):
+                raise ValueError('Checkpoint attempt history has a gap')
+            return None, path, paths[i-1] if i else None
+        saved = await store.read(path)
+        if not saved or saved.get('model') != model or saved.get('game_date') != day:
+            raise ValueError('Checkpoint identity mismatch')
+        if saved['report'].get('scorecard_verified'):
+            if any(p in known_paths for p in paths[i+1:]):
+                raise ValueError('A verified score must not have subsequent attempts')
+            return saved, path, None
+        if not retryable_startup_failure(saved):
+            raise ValueError('An unverified saved run needs diagnosis before resuming')
+    raise ValueError('Archive startup retry limit reached; manual diagnosis required')
+
+
+async def verify_archive_page(page, game, record=None, recovery_timeout=240):
     # Evidence supplied from actual calendar navigation, never inferred from a URL pattern.
     if page.url != game['url']:
         raise RuntimeError('Archive URL changed; refusing to benchmark a different puzzle')
     begin = page.get_by_role('button', name='▼ BEGIN DESCENT ▼', exact=True)
     replay = page.get_by_role('button', name='PLAY THIS ONE AGAIN ↻', exact=True)
-    await begin.or_(replay).wait_for(timeout=20000)
+    started, recovering, clicks = time.monotonic(), False, 0
+    # A saved profile can contain a half-finished game after a coordinator crash.
+    # Finish only that old game, without answers, then use its official replay.
+    async with asyncio.timeout(recovery_timeout):
+        while True:
+            if page.url != game['url']:
+                raise RuntimeError('Archive URL changed during preparation')
+            if await begin.is_visible() or await replay.is_visible():
+                break
+            state = await page.evaluate(READ_STATE)
+            if (re.fullmatch(r'PROMPT [1-7] OF 7', state['round_label'])
+                    or (str(state['score']).isdigit()
+                        and any(b in state['buttons'] for b in ('DESCEND ▼', 'SURFACE ▲')))):
+                if not recovering and record:
+                    record.event('archive_reset_started', game_date=game['date'])
+                recovering = True
+            if recovering and not state['answering']:
+                targets = [b for b in state['buttons'] if b in ('DESCEND ▼', 'SURFACE ▲')]
+                if len(targets) == 1:
+                    clicks += 1
+                    if clicks > 14:
+                        raise RuntimeError('Archive recovery navigation stalled')
+                    await page.get_by_role('button', name=targets[0], exact=True).press('Enter')
+                    if record:
+                        record.event('archive_reset_navigation', target=targets[0])
+            if not recovering and time.monotonic() - started > 20:
+                raise TimeoutError('Archive did not expose a recognized game state')
+            await asyncio.sleep(0.25)
     replayed = await replay.is_visible()
     if replayed:
         # Use the game's own replay control; retain login and purchase entitlement.
@@ -95,6 +161,9 @@ async def verify_archive_page(page, game):
     state = await page.evaluate(READ_STATE)
     if state['score'] != '0' or state['answering'] or state['results'] or not await begin.is_enabled():
         raise RuntimeError('Archive did not reset to a clean initial game')
+    if recovering and record:
+        record.event('archive_reset_finished', game_date=game['date'],
+                     duration_s=round(time.monotonic() - started, 4))
     return replayed
 
 
@@ -172,14 +241,10 @@ async def campaign(args):
         known_paths = await store.paths()
         for game in games:
             for model in manifest['models']:
-                path = report_path(manifest, model['id'], game['date'])
-                saved = await store.read(path) if path in known_paths else None
+                saved, path, retry_of = await load_checkpoint(
+                    store, known_paths, manifest, model['id'], game['date'])
                 if saved is None:
-                    pending.append((game, model, path))
-                elif saved.get('model') != model['id'] or saved.get('game_date') != game['date']:
-                    raise ValueError('Checkpoint identity mismatch')
-                elif not saved['report'].get('scorecard_verified'):
-                    raise ValueError('An unverified saved run needs diagnosis before resuming')
+                    pending.append((game, model, path, retry_of))
                 else:
                     # Keep only aggregate fields in campaign memory after reading the report.
                     completed.append(public_inputs(saved))
@@ -198,13 +263,13 @@ async def campaign(args):
         for sig in (signal.SIGTERM, signal.SIGINT):
             loop.add_signal_handler(sig, stop.set)
         semaphore = asyncio.Semaphore(args.concurrency)
-        async def one(game, model, path):
+        async def one(game, model, path, retry_of):
             async with semaphore:
                 if stop.is_set():
                     return
                 record = MemoryRecorder(hashlib.sha256(path.encode()).hexdigest()[:24])
                 async def prepare(page):
-                    replayed = await verify_archive_page(page, game)
+                    replayed = await verify_archive_page(page, game, record)
                     record.event('archive_prepared', game_date=game['date'], replayed=replayed)
                 async def finalize(page):
                     await capture_archive_percentile(page, record)
@@ -218,6 +283,7 @@ async def campaign(args):
                 prompt_fingerprint = hashlib.sha256(json.dumps(
                     [r['prompt'] for r in report['rounds']], ensure_ascii=False).encode()).hexdigest()
                 saved = dict(model=model['id'], game_date=game['date'], execution_id=execution_id,
+                             retry_of=retry_of,
                              captured_at=datetime.now(timezone.utc).isoformat(), report=report,
                              prompt_fingerprint=prompt_fingerprint, events=record.events)
                 # No new game starts in this slot until its report is remotely acknowledged.

@@ -40,9 +40,9 @@ as zero or silently retried until it wins.
    play, matching prompts, full scorecards, timing, and percentile availability.
 
 ```sh
-python archive_campaign.py --games archive-games.json --concurrency 10 --limit 2
+python archive_campaign.py --games archive-games.json --concurrency 1 --limit 1
 # Once the pilot is verified, resume the exact frozen configuration:
-python archive_campaign.py --games archive-games.json --concurrency 10
+python archive_campaign.py --games archive-games.json --concurrency 1
 ```
 
 The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
@@ -50,7 +50,7 @@ The default checkpoint namespace is `archive-75-20261106-v2`. The two initial
 because they preceded archive replay and historical-percentile capture fixes.
 They remain immutable in private storage; no best-of selection is performed.
 Use the same `--concurrency` and `--campaign-id` when resuming a frozen campaign.
-Scheduling-only revisions can change concurrency and `archive_campaign.py` with
+Orchestration revisions can change concurrency and `archive_campaign.py` with
 an explicit `--execution-revision-reason`. An immutable execution revision records
 the old/new source hashes and concurrency; subsequent reports identify that
 revision. Changes to model settings, roster, dates, prices, player, runner,
@@ -61,6 +61,21 @@ dates, public archive URLs, and visible labels only. Each run uses Krillion's ow
 `PLAY THIS ONE AGAIN` control if a prior completion is present, then verifies a
 zero score, no saved results, and an enabled start button before exposing the page
 to the model. Login and Unlimited entitlement remain in the cloud profile.
+If the profile contains an interrupted game, preparation allows its real timers
+to expire and presses only the official DESCEND/SURFACE controls, then replays.
+It never fills an answer, presses DIVE, or starts the fresh game. Recovery is
+bounded to four minutes and fourteen navigation presses; URL changes fail closed.
+Preparation events remain in the private audit; elapsed run time includes browser
+preparation, as before. No model calls or token costs occur during preparation.
+
+Failed initial reports remain immutable under `runs/`. On resume, a failure may
+receive at most three separate `startup-retries/<date>/<model-hash>/attempt-N`
+reports, each linking its predecessor with `retry_of`. Eligibility requires a
+timeout in archive preparation, zero model/usage calls, no rounds, and no events
+showing gameplay began. Failures after gameplay starts still require diagnosis.
+A verified score, including zero, is terminal and is never retried. Count resolved
+model/date checkpoints with `load_checkpoint`, not the number of files under
+`runs/`; the final exporter receives exactly one verified result per pair.
 After a completed game, the harness waits up to ten seconds for the historical
 percentile to render; it recognizes the game's original-players wording and
 records missing data when that statistic remains unavailable.
