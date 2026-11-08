@@ -160,6 +160,7 @@ function displaySnapshot(data) {
   document.querySelectorAll('#view-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
   $('#daily-controls').hidden=state.view!=='daily'||!state.days.length;
   $('#calendar-date').textContent=$('#day-filter').value;
+  $('#view-note').hidden=state.view==='average';
   if(state.view!=='daily')closeCalendar(false);
   $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards.':'Krillion daily benchmark results. Select a model for run details.';
