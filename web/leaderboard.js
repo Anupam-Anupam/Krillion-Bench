@@ -58,7 +58,7 @@ function render() {
     const display=r.model.split('/').slice(1).join('/');
     const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
     const tokens=m.output_tokens == null ? '—' : `${r.games||m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
-    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':state.data.numeric_only?'View '+escapeHTML(r.model)+' daily report':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?'Awaiting clean data':'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
+    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':state.data.numeric_only?'View '+escapeHTML(r.model)+' daily report':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?(r.model==='xingchen-agi/xing4.0-29b-a4b:free'?'Provider quota blocked':'No clean score'):'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
   $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'}${state.view==='average'?' · average metrics only':state.data.numeric_only?' · click a model for its daily report':' · click a model to inspect its dive'}`;
   const expand=$('#expand-results');
@@ -323,42 +323,3 @@ $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if
 fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-score-ci').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-daily-reports').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
-
-
-// This endpoint contains aggregate counts only; private reports never reach the site.
-let campaignProgress = null;
-function renderCampaignProgress() {
-  if (!campaignProgress) return;
-  const p = campaignProgress;
-  const age = Date.now() - Date.parse(p.updated_at);
-  const stale = age > 600000 && ['running', 'draining'].includes(p.status);
-  $('#campaign-progress').dataset.stale = String(stale);
-  $('#campaign-progress-count').textContent = `${count(p.verified)} / ${count(p.total)} · ${(100*p.verified/p.total).toFixed(2)}%`;
-  $('#campaign-progress-bar').value = p.verified;
-  const status = {running:`${p.workers} workers · ${p.active} active at last update`,draining:`Finishing ${p.active} games before pausing`,paused:'Paused',needs_attention:'Paused for a health check',complete:'All games verified'}[p.status];
-  $('#campaign-progress-state').textContent = stale ? 'Update delayed · showing last verified count' : status;
-  $('#campaign-progress-time').textContent = `Updated ${new Date(p.updated_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} · may lag up to 5 min`;
-}
-async function refreshCampaignProgress() {
-  try {
-    const url = 'https://raw.githubusercontent.com/Anupam-Anupam/Krillion-Bench/refs/heads/campaign-status/campaign-progress.json';
-    const response = await fetch(url, {cache:'no-store', signal:AbortSignal.timeout(12000)});
-    if (!response.ok) throw new Error('Progress unavailable');
-    const p = await response.json();
-    if (p.campaign !== 'archive-75-20261106-v3' || p.total !== 7500 ||
-        ![p.verified,p.active,p.workers].every(Number.isInteger) || p.verified < 0 || p.verified > p.total ||
-        p.active < 0 || p.active > p.workers || p.workers < 1 || p.workers > 20 ||
-        !['running','draining','paused','needs_attention','complete'].includes(p.status) ||
-        !Number.isFinite(Date.parse(p.updated_at))) throw new Error('Invalid progress');
-    // A cache must never move an already displayed counter backward.
-    if (!campaignProgress || Date.parse(p.updated_at) >= Date.parse(campaignProgress.updated_at)) campaignProgress = p;
-    renderCampaignProgress();
-  } catch {
-    if (campaignProgress) renderCampaignProgress();
-    else $('#campaign-progress-state').textContent = 'Progress temporarily unavailable';
-  }
-}
-refreshCampaignProgress();
-// The raw CDN caches for five minutes; label snapshot age explicitly.
-setInterval(()=>{if(!document.hidden)refreshCampaignProgress();}, 60000);
-setInterval(renderCampaignProgress, 15000);

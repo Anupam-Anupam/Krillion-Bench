@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Krillion Bench measures language models on seven timed questions. Compare verified scores, inference costs, token usage, time, and daily placement.">
 <title>Krillion Bench — The leaderboard</title>
-<link rel="stylesheet" href="web/leaderboard.css?v=20261108-readable-reports"><script src="web/leaderboard.js?v=20261108-readable-reports" defer></script>
+<link rel="stylesheet" href="web/leaderboard.css?v=20261108-finished-collection"><script src="web/leaderboard.js?v=20261108-finished-collection" defer></script>
 </head>
 <body id="top">
 <div class="ocean-viewport" aria-hidden="true"><div id="ocean-world"><div class="ocean-sky"></div><div class="ocean-shallows"></div><div class="ocean-midnight"></div><div class="ocean-trench"></div><div class="ocean-life"><i class="fish fish-one"></i><i class="fish fish-two"></i><i class="fish fish-three"></i><span class="ocean-caption" style="top:1300px">── LIGHT BEGINS TO FADE</span><span class="ocean-caption right" style="top:2400px">THE MIDNIGHT ZONE ──</span><span class="ocean-caption" style="top:3650px">── THE ABYSSAL ZONE</span></div></div><div class="ocean-shade"></div></div>
@@ -14,11 +14,7 @@
 <main>
 <section class="hero"><p class="eyebrow">THE DAILY DIVE / LANGUAGE MODEL EVALUATION</p><h1>KRILLION<span>BENCH</span></h1><p class="hero-tagline">RARE ANSWERS. REAL TIME.</p><p class="hero-description">How deep can a language model dive?</p><div class="hero-actions"><a class="primary" href="#leaderboard">EXPLORE THE DEPTHS ↓</a><a href="https://krillion.io/" target="_blank" rel="noreferrer" class="secondary">PLAY KRILLION ↗</a></div><p class="scroll-cue">SCROLL TO DESCEND <span>↓</span></p></section>
 <section id="leaderboard" aria-labelledby="board-title"><div class="section-heading"><h2 id="board-title">Leaderboard</h2><span class="live-label"><i></i> <span id="snapshot">Loading snapshot</span></span></div>
-<div id="campaign-progress" class="campaign-progress" aria-labelledby="campaign-progress-title">
-<div class="campaign-progress-heading"><span id="campaign-progress-title">ARCHIVE EXPEDITION</span><strong id="campaign-progress-count">Checking progress…</strong></div>
-<progress id="campaign-progress-bar" max="7500" value="0" aria-label="Verified archived games"></progress>
-<div class="campaign-progress-footer"><span id="campaign-progress-state" role="status">Connecting to live progress</span><span id="campaign-progress-time"></span></div>
-</div>
+
 <div class="chart-toolbar"><div class="segmented" id="chart-metrics" aria-label="Chart horizontal axis"><button data-metric="run_cost_usd" aria-pressed="true">LLM cost</button><button data-metric="output_cost_usd" aria-pressed="false">Output cost</button><button data-metric="output_tokens" aria-pressed="false">Output tokens</button><button data-metric="run_duration_s" aria-pressed="false">Time</button><button data-metric="daily_percentile" aria-pressed="false">Daily placement</button></div></div>
 <div class="plot-card"><div class="plot-heading"><strong>Average Krillion score <span>/ 700</span></strong><span id="plot-direction">Higher score, lower cost ↖</span></div><div id="chart" aria-label="Average metric comparison chart"></div><div class="plot-foot"><div id="legend"></div><span id="axis-label"></span></div><div id="chart-tooltip" role="status" hidden></div></div>
 <div class="metric-help"><button id="metric-info">About these metrics ↗</button></div>
