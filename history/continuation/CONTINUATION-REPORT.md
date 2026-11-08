@@ -12,7 +12,7 @@ Question timeouts continue to later rounds. After terminal model/provider failur
 
 The prior pilot launched 12 models: 8 verified games and 4 startup screenshot failures. That pilot was stopped, the optional screenshot was made nonfatal, and this entire campaign was started separately. Pilot results are excluded from this leaderboard. Historical TOP100 files remain unchanged.
 
-[Frozen roster, settings and source hashes](CONTINUATION-MANIFEST.json) · [Public data, metrics and all answers](leaderboard-data.json) · [Historical report](TOP100-REPORT.md).
+[Frozen roster, settings and source hashes](CONTINUATION-MANIFEST.json) · [Public data, metrics and all answers](../../web/data/leaderboard-data.json) · [Historical report](../top100/TOP100-REPORT.md).
 
 Original usage-ranking capture: 2026-11-07T20:28:00.407Z; [OpenRouter source](https://openrouter.ai/models?fmt=cards&output_modalities=text&order=top-weekly). Ranking attribution: OpenRouter, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The roster includes free and paid endpoints separately and is a usage selection, not a quality ranking.
 

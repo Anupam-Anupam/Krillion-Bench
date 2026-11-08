@@ -7,7 +7,7 @@ The prior single-day results remain public until the complete panel is available
 ## Storage
 
 Private destination: `Anupam-Anupam/Krillion-Bench-Private-Runs` on GitHub.
-`private_storage.py` checks that this personal repository is private and writable.
+`harness/private_storage.py` checks that this personal repository is private and writable.
 Reports and event logs are compressed in memory and uploaded through the GitHub
 Contents API. The uploader checks Git blob checksums and refuses overwrites.
 It serializes writes and honors service rate limits. No Git checkout of reports is
@@ -40,9 +40,9 @@ as zero or silently retried until it wins.
    play, matching prompts, full scorecards, timing, and percentile availability.
 
 ```sh
-python archive_campaign.py --games archive-games.json --concurrency 1 --limit 1
+python harness/archive_campaign.py --games data/archive-games.json --concurrency 1 --limit 1
 # Once the pilot is verified, resume the exact frozen configuration:
-python archive_campaign.py --games archive-games.json --concurrency 1
+python harness/archive_campaign.py --games data/archive-games.json --concurrency 1
 ```
 
 The default checkpoint namespace is `archive-75-20261106-v3`. Version 3 uses
@@ -61,13 +61,13 @@ roster, dates, and frozen prices. The two initial
 because they preceded archive replay and historical-percentile capture fixes.
 They remain immutable in private storage; no best-of selection is performed.
 Use the same `--concurrency` and `--campaign-id` when resuming a frozen campaign.
-Orchestration revisions can change concurrency and `archive_campaign.py` with
+Orchestration revisions can change concurrency and `harness/archive_campaign.py` with
 an explicit `--execution-revision-reason`. An immutable execution revision records
 the old/new source hashes and concurrency; subsequent reports identify that
 revision. Changes to model settings, roster, dates, prices, player, runner,
 reporting, or other measurement code still block reuse of the existing panel.
 
-The observed calendar manifest is checked in as `archive-games.json` and contains
+The observed calendar manifest is checked in as `data/archive-games.json` and contains
 dates, public archive URLs, and visible labels only. Each run uses Krillion's own
 `PLAY THIS ONE AGAIN` control if a prior completion is present, then verifies a
 zero score, no saved results, and an enabled start button before exposing the page
@@ -91,7 +91,7 @@ After a completed game, the harness waits up to ten seconds for the historical
 percentile to render; it recognizes the game's original-players wording and
 records missing data when that statistic remains unavailable.
 
-The roster comes from `leaderboard-data.json`; original model IDs, including free
+The roster comes from `web/data/leaderboard-data.json`; original model IDs, including free
 variants, are preserved. The initial OpenRouter catalog freezes prices. Missing
 model IDs stop preparation. A private manifest freezes source hashes, settings,
 dates, and concurrency. Changing those requires a separate campaign, never mixing
@@ -182,7 +182,7 @@ This is a prompt instruction; Krillion's automatic correction flow and the exist
 deadlines remain unchanged.
 
 For this specific transition, `--accept-five-word-prompt` permits the exact pinned
-before/after `player.py` hashes and the new `answer_word_limit_instruction=5`
+before/after `harness/player.py` hashes and the new `answer_word_limit_instruction=5`
 setting. It does not authorize any other player, runner, pricing, or timing change.
 An immutable execution revision records the amendment and preserves earlier
 checkpoints. New private checkpoints carry the instruction value and execution ID;

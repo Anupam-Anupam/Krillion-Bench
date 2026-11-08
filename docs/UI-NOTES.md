@@ -34,17 +34,17 @@ Ocean artwork and rarity sprites originate from [Krillion](https://krillion.io/)
 
 | Local file | Original source |
 | --- | --- |
-| `krillion-bg-sky.webp` | https://krillion.io/gen/optimized/v1/bg-sky.webp |
-| `krillion-bg-top.webp` | https://krillion.io/gen/optimized/v1/bg-top.webp |
-| `krillion-bg-mid.webp` | https://krillion.io/gen/optimized/v1/bg-mid.webp |
-| `krillion-bg-trench.webp` | https://krillion.io/gen/optimized/v1/bg-trench.webp |
-| `krillion-krillion.png` | https://krillion.io/tiers/krillion.png |
-| `krillion-deepcut.png` | https://krillion.io/tiers/deepcut.png |
-| `krillion-rare.png` | https://krillion.io/tiers/rare.png |
-| `krillion-schooler.png` | https://krillion.io/tiers/schooler.png |
-| `krillion-plankton.png` | https://krillion.io/tiers/plankton.png |
+| `web/assets/images/krillion-bg-sky.webp` | https://krillion.io/gen/optimized/v1/bg-sky.webp |
+| `web/assets/images/krillion-bg-top.webp` | https://krillion.io/gen/optimized/v1/bg-top.webp |
+| `web/assets/images/krillion-bg-mid.webp` | https://krillion.io/gen/optimized/v1/bg-mid.webp |
+| `web/assets/images/krillion-bg-trench.webp` | https://krillion.io/gen/optimized/v1/bg-trench.webp |
+| `web/assets/images/krillion-krillion.png` | https://krillion.io/tiers/krillion.png |
+| `web/assets/images/krillion-deepcut.png` | https://krillion.io/tiers/deepcut.png |
+| `web/assets/images/krillion-rare.png` | https://krillion.io/tiers/rare.png |
+| `web/assets/images/krillion-schooler.png` | https://krillion.io/tiers/schooler.png |
+| `web/assets/images/krillion-plankton.png` | https://krillion.io/tiers/plankton.png |
 
-`krillion-vt323.woff2` is the VT323 font served by Krillion, copyright Peter Hull, licensed under SIL OFL 1.1. See `KRILLION-FONT-LICENSE.txt` and the [Google Fonts source](https://github.com/google/fonts/tree/main/ofl/vt323).
+`web/assets/fonts/krillion-vt323.woff2` is the VT323 font served by Krillion, copyright Peter Hull, licensed under SIL OFL 1.1. See `web/assets/fonts/KRILLION-FONT-LICENSE.txt` and the [Google Fonts source](https://github.com/google/fonts/tree/main/ofl/vt323).
 
 ## Validation — November 7, 2026
 

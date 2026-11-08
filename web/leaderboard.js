@@ -41,7 +41,7 @@ function badgeForPosition(position) {
 }
 function badgeMarkup(row) {
   const position=state.placements.get(row.model), badge=badgeForPosition(position);
-  return badge ? `<img class="rank-badge ${badge.key}" src="krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
+  return badge ? `<img class="rank-badge ${badge.key}" src="web/assets/images/krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
 }
 const scoreText = value => new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(value);
 function scoreMarkup(row) {
@@ -220,7 +220,7 @@ scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('leaderboard-data.json').then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+fetch('web/data/leaderboard-data.json').then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart(visibleRows());});
 

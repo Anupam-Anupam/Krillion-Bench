@@ -58,7 +58,11 @@ def select_models(ranking, catalog, count, paid_only=False):
 
 
 def source_hashes(root):
-    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in SOURCES}
+    # Preserve logical manifest keys while the dependency lock stays at repo root.
+    paths = {name: root / name for name in SOURCES}
+    if not paths['uv.lock'].is_file():
+        paths['uv.lock'] = root.parent / 'uv.lock'
+    return {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in paths.items()}
 
 
 def summarize(row, report, events):

@@ -5,9 +5,27 @@ A small browser-action harness for an LLM to play the complete Daily Dive from
 the model's actions. Browser Use's model adapters support provider APIs and compatible
 endpoints. It runs as a standalone Python project with no database or job queue.
 
+## Repository layout
+
+Run the commands below from the repository root.
+
+| Location | Contents |
+|---|---|
+| [`harness/`](harness/) | Browser runner, model policy, campaigns, reports, and aggregate exporters |
+| [`web/`](web/) | Leaderboard JavaScript/CSS, public data, images, and fonts |
+| [`docs/`](docs/) | Campaign operations, UI notes, validation, and repository layout |
+| [`data/`](data/) | Observed archive-game calendar |
+| [`history/`](history/) | Preserved original campaign reports, manifests, rankings, and results |
+| [`tests/`](tests/) | Automated checks and synthetic/game-specific control fixtures |
+| `index.html` | GitHub Pages entry point; the public URL stays unchanged |
+| `pyproject.toml`, `uv.lock` | Shared Python dependencies and test configuration |
+
+See [the layout and migration guide](docs/REPOSITORY-LAYOUT.md) for file locations
+and how to publish without disturbing the source-pinned campaign already running.
+
 ## Archived multi-game evaluation
 
-The 75-game campaign uses a separate [private-report pipeline](ARCHIVE-CAMPAIGN.md). It streams compressed run reports directly to a personal private GitHub repository, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Live archive replay still requires the restored Unlimited profile and a validated pilot.
+The 75-game campaign uses a separate [private-report pipeline](docs/ARCHIVE-CAMPAIGN.md). It streams compressed run reports directly to a personal private GitHub repository, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Live archive replay still requires the restored Unlimited profile and a validated pilot.
 
 ## Leaderboard UI
 
@@ -22,8 +40,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
 No frontend build, framework, database, or API key is needed. The four public UI files
-are `index.html`, `leaderboard.css`, `leaderboard.js`, and `leaderboard-data.json`.
-Serve them alongside the bundled `krillion-*` artwork/font files at any static host, including a GitHub Pages project path. Placement badges are Krillion (1), Deep Cut (2–10), Rare (11–25), Schooler (26–50), and Plankton (51–100), fixed to global score order with model ID as the tie break. See [UI-NOTES.md](UI-NOTES.md) for behavior, accessibility, and asset credits.
+are `index.html`, `web/leaderboard.css`, `web/leaderboard.js`, and `web/data/leaderboard-data.json`.
+Serve the repository root, preserving the bundled `web/assets/` artwork/font paths at any static host, including a GitHub Pages project path. Placement badges are Krillion (1), Deep Cut (2–10), Rare (11–25), Schooler (26–50), and Plankton (51–100), fixed to global score order with model ID as the tie break. See [UI-NOTES.md](docs/UI-NOTES.md) for behavior, accessibility, and asset credits.
 
 **Metrics:** LLM run cost (USD), output-token cost (USD), output token count, total
 elapsed time, and the game's final daily percentage. Tied scores share a rank;
@@ -31,7 +49,7 @@ question timeouts count as zero-point misses and still receive the game’s fina
 include completed games with usable metrics only. Cost ranks are not score ranks.
 
 The current snapshot is the November 7 final-score continuation campaign, documented
-in [CONTINUATION-REPORT.md](CONTINUATION-REPORT.md). Each model has a verified final
+in [CONTINUATION-REPORT.md](history/continuation/CONTINUATION-REPORT.md). Each model has a verified final
 score; missed questions count as zero. A daily percentage is unavailable when the
 game did not display it. The original TOP100 reports remain unchanged as history.
 
@@ -44,7 +62,7 @@ never zero. Historical TOP100 costs were estimates based on saved token usage.
 No reasoning tokens are added twice. Browser hosting and credit-purchase fees are
 excluded. See [OpenRouter usage accounting](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
 
-Optionally pass `runner.py --pricing-file catalog.json` to estimate fields that the
+Optionally pass `harness/runner.py --pricing-file catalog.json` to estimate fields that the
 API did not return. Campaigns freeze each selected model's catalog prices and pass
 the frozen manifest to the runner automatically. Run reports now contain `metrics`;
 campaigns also write a public `leaderboard.json`. **Load campaign** in the UI replaces
@@ -53,17 +71,17 @@ the displayed dataset rather than mixing harness versions or daily puzzles.
 To publish a new campaign snapshot:
 
 ```sh
-uv run python leaderboard.py artifacts/MY_CAMPAIGN --output leaderboard-data.json
+uv run python harness/leaderboard.py artifacts/MY_CAMPAIGN --output web/data/leaderboard-data.json
 ```
 
 To rebuild the historical snapshot where private raw events and the discovery catalog
 are available locally (these files are deliberately not published):
 
 ```sh
-uv run python leaderboard.py artifacts/openrouter-top100-20261107 \
-  --summary TOP100-SUMMARY.json --answers TOP100-ANSWERS.json \
+uv run python harness/leaderboard.py artifacts/openrouter-top100-20261107 \
+  --summary history/top100/TOP100-SUMMARY.json --answers history/top100/TOP100-ANSWERS.json \
   --catalog artifacts/openrouter-top100-discovery/catalog.json \
-  --output leaderboard-data.json
+  --output web/data/leaderboard-data.json
 ```
 
 The exporter allowlists run/answer fields and omits raw observations, network traces,
@@ -108,27 +126,27 @@ Set `OPENAI_BASE_URL` only when using a compatible endpoint. Credentials are loa
 only from explicitly named files; environment variables take precedence. `.env` and
 run artifacts are ignored by Git.
 
-See [VALIDATION.md](VALIDATION.md) for measured live results and known limitations.
-[RECOVERY-REPORT.md](RECOVERY-REPORT.md) documents the timeout/provider fixes and
+See [VALIDATION.md](docs/VALIDATION.md) for measured live results and known limitations.
+[RECOVERY-REPORT.md](history/recovery/RECOVERY-REPORT.md) documents the timeout/provider fixes and
 every answer in the targeted follow-up checks.
 
-The 100-model OpenRouter campaign uses `campaign.py`. It freezes an observed ranking,
+The 100-model OpenRouter campaign uses `harness/campaign.py`. It freezes an observed ranking,
 API catalog, source hashes, and settings before launching one fresh browser per model.
-See [TOP100-REPORT.md](TOP100-REPORT.md) for the original historical campaign results, failure breakdown,
+See [TOP100-REPORT.md](history/top100/TOP100-REPORT.md) for the original historical campaign results, failure breakdown,
 and every submitted answer. Machine-readable results are in
-[TOP100-SUMMARY.json](TOP100-SUMMARY.json) and [TOP100-ANSWERS.json](TOP100-ANSWERS.json).
+[history/top100/TOP100-SUMMARY.json](history/top100/TOP100-SUMMARY.json) and [history/top100/TOP100-ANSWERS.json](history/top100/TOP100-ANSWERS.json).
 
 ```sh
-uv run runner.py smoke --env-file .env
-uv run runner.py play --env-file .env
+uv run harness/runner.py smoke --env-file .env
+uv run harness/runner.py play --env-file .env
 ```
 
 Change models without changing the agent:
 
 ```sh
-uv run runner.py play --env-file .env --provider openai --model YOUR_MODEL
-uv run runner.py play --env-file .env --provider anthropic --model YOUR_MODEL --max-output-tokens 16000
-uv run runner.py play --env-file .env --provider google --model YOUR_MODEL
+uv run harness/runner.py play --env-file .env --provider openai --model YOUR_MODEL
+uv run harness/runner.py play --env-file .env --provider anthropic --model YOUR_MODEL --max-output-tokens 16000
+uv run harness/runner.py play --env-file .env --provider google --model YOUR_MODEL
 ```
 
 Anthropic uses `ANTHROPIC_API_KEY`; Google uses `GOOGLE_API_KEY`. Only the configured
@@ -144,7 +162,7 @@ Keep the Browser Use key in an explicit `.env` file. The ranking input has `sour
 `GET /api/v1/models`. Preserve both inputs with the campaign.
 
 ```sh
-uv run campaign.py --ranking ranking.json --catalog catalog.json \
+uv run harness/campaign.py --ranking ranking.json --catalog catalog.json \
   --env-file .env --output artifacts/my-campaign --count 100 --concurrency 4
 ```
 
@@ -173,11 +191,11 @@ One daily puzzle per model is an exploratory comparison, not a statistically sta
 
 ## Output limits, API failures, and rate limits
 
-`runner.py make_model()` uses `max_completion_tokens=None` by default for OpenRouter /
+`harness/runner.py make_model()` uses `max_completion_tokens=None` by default for OpenRouter /
 OpenAI-compatible APIs, so the parameter is absent on the wire. To set a cap deliberately:
 
 ```sh
-uv run runner.py play --env-file .env --model MODEL_ID --max-output-tokens 16000
+uv run harness/runner.py play --env-file .env --model MODEL_ID --max-output-tokens 16000
 ```
 
 Omit that flag to remove the harness cap again. Google also omits its output cap by default.
@@ -199,7 +217,7 @@ cross-model fallback. `--model-retries 0` disables retries and compatibility rea
 
 The harness has no requests-per-minute quota to disable. OpenRouter and upstream providers
 can impose their own limits, including on paid accounts. Prefer explicitly selected paid
-endpoints (`campaign.py --paid-only`) over shared free pools for reliability. This reduces
+endpoints (`harness/campaign.py --paid-only`) over shared free pools for reliability. This reduces
 exposure to free-tier restrictions but does not guarantee that 429s disappear. See
 [OpenRouter limits](https://openrouter.ai/docs/api_reference/limits) and
 [error handling](https://openrouter.ai/docs/api_reference/errors-and-debugging).
@@ -306,22 +324,22 @@ if that action fails, the attempt remains visible without claiming game acceptan
 Backfill saved runs without overwriting their original `report.json`:
 
 ```sh
-uv run python reporting.py artifacts/RUN_DIRECTORY
+uv run python harness/reporting.py artifacts/RUN_DIRECTORY
 ```
 
 This creates `report.enriched.json` and `report.enriched.md` using the saved result
-text, final text, and event observations. See [OPENROUTER-REPORT.md](OPENROUTER-REPORT.md)
+text, final text, and event observations. See [OPENROUTER-REPORT.md](history/openrouter/OPENROUTER-REPORT.md)
 for all six original runs and the separately labeled Scout regression run.
 
 ## Reliability checks
 
 Run in this order:
 
-1. **Startup:** `uv run runner.py smoke --env-file .env` checks cloud connection and
+1. **Startup:** `uv run harness/runner.py smoke --env-file .env` checks cloud connection and
    the actual initial BEGIN DESCENT control.
 2. **Submission without an LLM:** supply a JSON mapping of exact visible prompts to
    known accepted answers. These controls are never loaded by `play`.
-3. **Full model game:** `uv run runner.py play --env-file .env` measures actual
+3. **Full model game:** `uv run harness/runner.py play --env-file .env` measures actual
    inference plus observation and browser-action latency.
 4. **Repeat:** use fresh sessions and inspect all failures, not just successful games.
 
@@ -329,7 +347,7 @@ The included control file is specific to the November 7, 2026 Daily Dive and wil
 closed when a different prompt appears:
 
 ```sh
-uv run runner.py baseline --env-file .env \
+uv run harness/runner.py baseline --env-file .env \
   --answers-file tests/control-answers-2026-11-07.json
 ```
 
@@ -351,7 +369,7 @@ KRILLION_TEST_CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 Local browser mode uses the same player and deadline logic:
 
 ```sh
-uv run runner.py play --browser local --env-file .env --headed \
+uv run harness/runner.py play --browser local --env-file .env --headed \
   --executable '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 ```
 
@@ -372,7 +390,7 @@ benchmark; a plausible rejected answer is recorded as a rejection, not independe
 
 ## Data storage
 
-The site is static: GitHub Pages serves `leaderboard-data.json` from this repository.
+The site is static: GitHub Pages serves `web/data/leaderboard-data.json` from this repository.
 There is no application database. Published campaign manifests, sanitized reports,
 and answer logs are versioned in Git alongside the code. The leaderboard download
 exports the currently loaded public dataset; loading a file is local to the page.

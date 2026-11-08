@@ -236,5 +236,5 @@ def test_five_word_amendment_matches_the_actual_player_source():
     import hashlib
     from archive_campaign import FIVE_WORD_PLAYER_HASHES
     from player import SYSTEM
-    assert hashlib.sha256((Path(__file__).resolve().parents[1]/'player.py').read_bytes()).hexdigest() == FIVE_WORD_PLAYER_HASHES[1]
+    assert hashlib.sha256((Path(__file__).resolve().parents[1]/'harness'/'player.py').read_bytes()).hexdigest() == FIVE_WORD_PLAYER_HASHES[1]
     assert "Each answer you enter in the 'Your answer' textbox MUST contain at most 5 words." in SYSTEM

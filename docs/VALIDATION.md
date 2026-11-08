@@ -103,7 +103,7 @@ All six original models played the actual game through Browser Use Cloud and the
 published OpenAI-compatible adapter: GPT 6.1 Terra, Claude Haiku 5.5, Gemini 4 Argon,
 DeepSeek V4.1 Flash, Llama 4 Maverick, and Llama 4 Scout. Five completed; Scout
 stalled between rounds 2 and 3. No source changes were made during that campaign.
-[OPENROUTER-REPORT.md](OPENROUTER-REPORT.md) contains every submitted answer, its
+[OPENROUTER-REPORT.md](../history/openrouter/OPENROUTER-REPORT.md) contains every submitted answer, its
 outcome and rarity, verified final totals, daily percentages, and separate follow-up
 runs. Historic reports are derived from retained UI evidence; their original raw
 reports and timing data are preserved.
@@ -142,7 +142,7 @@ fresh Browser Use Cloud sessions. All 100 selected model variants were attempted
 exactly once: **45 verified complete games and 55 incomplete runs**. Browser readiness
 was observed for all 100. There was no daily-prompt mismatch or scheduling stop.
 The frozen roster, settings, source hashes, and ranking provenance are in
-[TOP100-MANIFEST.json](TOP100-MANIFEST.json) and [TOP100-RANKING.json](TOP100-RANKING.json).
+[TOP100-MANIFEST.json](../history/top100/TOP100-MANIFEST.json) and [TOP100-RANKING.json](../history/top100/TOP100-RANKING.json).
 
 Final audit matched all **642 submission events** to report entries: 453 accepted,
 136 rejected, 50 requiring correction confirmation, and 3 unconfirmed. All completed
@@ -166,10 +166,10 @@ They cover roster exclusions, catalog validation, incomplete-score handling,
 bounded concurrency, and resume without retrying completed failures. Gameplay code
 and settings were unchanged during the campaign.
 
-[TOP100-REPORT.md](TOP100-REPORT.md) contains every answer, rarity, final daily
+[TOP100-REPORT.md](../history/top100/TOP100-REPORT.md) contains every answer, rarity, final daily
 percentage, failure breakdown, and the completed-game results. Structured exports
-are [TOP100-SUMMARY.json](TOP100-SUMMARY.json) and
-[TOP100-ANSWERS.json](TOP100-ANSWERS.json). These are exploratory results on one
+are [TOP100-SUMMARY.json](../history/top100/TOP100-SUMMARY.json) and
+[TOP100-ANSWERS.json](../history/top100/TOP100-ANSWERS.json). These are exploratory results on one
 daily puzzle under this configuration; they are not a general model-quality ranking.
 The live game's daily percentages can drift during the campaign. Raw traces and
 credentials remain excluded from publication.
@@ -188,7 +188,7 @@ Cohere North Mini, GPT-OSS20B, an intermediate Ling run, and a final-version Lin
 Final Ling recovered from Novita's HTTP 400 structured-output rejection, missed one
 question, and reached **250 points / better than 38%** with seven verified rounds.
 
-[RECOVERY-REPORT.md](RECOVERY-REPORT.md) records the version boundaries, source hashes,
+[RECOVERY-REPORT.md](../history/recovery/RECOVERY-REPORT.md) records the version boundaries, source hashes,
 provider diagnosis limitations, all answers/rarities, and final daily percentages.
 All scorecards, point totals, submission counts, and zero-point rarity handling were
 audited; live-regression gameplay source hashes matched the pre-run snapshot. The newer
@@ -253,5 +253,5 @@ Manual UI checks verified real timeout runs retain their score, rank and daily
 placement, including Tencent HY4's 0/700 and seven missed questions. Diagnostic
 lists, complete/error filters, answer logs and partial billing labels were checked.
 The final 100-model UI showed 100 scored rows and zero run errors; the error filter returned no models. The missing daily percentage displayed as unavailable while retaining its score and rank. No browser console errors were reported. The public JSON export allowlists fields and excludes private traces and credentials.
-See [CONTINUATION-REPORT.md](CONTINUATION-REPORT.md) and
-[CONTINUATION-MANIFEST.json](CONTINUATION-MANIFEST.json) for the final campaign.
+See [CONTINUATION-REPORT.md](../history/continuation/CONTINUATION-REPORT.md) and
+[CONTINUATION-MANIFEST.json](../history/continuation/CONTINUATION-MANIFEST.json) for the final campaign.

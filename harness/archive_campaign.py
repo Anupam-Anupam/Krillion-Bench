@@ -447,7 +447,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', default='Anupam-Anupam/Krillion-Bench-Private-Runs')
     parser.add_argument('--games', type=Path, required=True, help='Observed archive URL/date/label manifest')
-    parser.add_argument('--roster', type=Path, default=Path('leaderboard-data.json'))
+    parser.add_argument('--roster', type=Path, default=Path(__file__).resolve().parents[1] / 'web/data/leaderboard-data.json')
     parser.add_argument('--env-file', type=Path, action='append', default=[])
     parser.add_argument('--concurrency', type=int, default=2)
     parser.add_argument('--campaign-id', default='archive-75-20261106-v3')

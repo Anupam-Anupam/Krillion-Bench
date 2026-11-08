@@ -37,7 +37,7 @@ Validated November 7, 2026. These are targeted follow-up checks, **not a rerun o
 
 Outside questions, inference has a configurable `--navigation-timeout 60`. Bounded
 navigation recovery remains logged and never fills answers or resets the game clock.
-See [README.md](README.md) for commands and the complete timing contract.
+See [README.md](../../README.md) for commands and the complete timing contract.
 
 ## Provider diagnoses
 

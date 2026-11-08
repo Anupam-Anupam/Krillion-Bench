@@ -60,7 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('--summary', type=Path)
     parser.add_argument('--answers', type=Path)
     parser.add_argument('--catalog', type=Path)
-    parser.add_argument('--output', type=Path, default=Path('leaderboard-data.json'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).resolve().parents[1] / 'web/data/leaderboard-data.json')
     args = parser.parse_args()
     data = load_campaign(args.campaign, args.summary, args.answers, args.catalog)
     args.output.write_text(json.dumps(data, indent=2, allow_nan=False) + '\n')
