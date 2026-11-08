@@ -231,18 +231,18 @@ function renderCampaignProgress() {
   if (!campaignProgress) return;
   const p = campaignProgress;
   const age = Date.now() - Date.parse(p.updated_at);
-  const stale = age > 180000 && ['running', 'draining'].includes(p.status);
+  const stale = age > 600000 && ['running', 'draining'].includes(p.status);
   $('#campaign-progress').dataset.stale = String(stale);
   $('#campaign-progress-count').textContent = `${count(p.verified)} / ${count(p.total)} · ${(100*p.verified/p.total).toFixed(2)}%`;
   $('#campaign-progress-bar').value = p.verified;
-  const status = {running:`${p.active} games running · ${p.workers} workers`,draining:`Finishing ${p.active} games before pausing`,paused:'Paused',needs_attention:'Paused for a health check',complete:'All games verified'}[p.status];
+  const status = {running:`${p.workers} workers · ${p.active} active at last update`,draining:`Finishing ${p.active} games before pausing`,paused:'Paused',needs_attention:'Paused for a health check',complete:'All games verified'}[p.status];
   $('#campaign-progress-state').textContent = stale ? 'Update delayed · showing last verified count' : status;
-  $('#campaign-progress-time').textContent = `Updated ${new Date(p.updated_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+  $('#campaign-progress-time').textContent = `Updated ${new Date(p.updated_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} · may lag up to 5 min`;
 }
 async function refreshCampaignProgress() {
   try {
-    const url = 'https://raw.githubusercontent.com/Anupam-Anupam/Krillion-Bench/campaign-status/campaign-progress.json';
-    const response = await fetch(`${url}?minute=${Math.floor(Date.now()/60000)}`, {cache:'no-store', signal:AbortSignal.timeout(12000)});
+    const url = 'https://raw.githubusercontent.com/Anupam-Anupam/Krillion-Bench/refs/heads/campaign-status/campaign-progress.json';
+    const response = await fetch(url, {cache:'no-store', signal:AbortSignal.timeout(12000)});
     if (!response.ok) throw new Error('Progress unavailable');
     const p = await response.json();
     if (p.campaign !== 'archive-75-20261106-v3' || p.total !== 7500 ||
@@ -259,5 +259,6 @@ async function refreshCampaignProgress() {
   }
 }
 refreshCampaignProgress();
-setInterval(refreshCampaignProgress, 60000);
+// The raw CDN caches for five minutes; label snapshot age explicitly.
+setInterval(()=>{if(!document.hidden)refreshCampaignProgress();}, 60000);
 setInterval(renderCampaignProgress, 15000);

@@ -163,8 +163,11 @@ The same aggregate snapshot is written to ignored
 run. Session IDs/model names and inference-interruption reasons appear in console
 status messages so a live browser can be identified without revealing answers.
 
-The leaderboard polls the status branch every minute, separate from the published
-score dataset. It marks running/draining snapshots older than three minutes as
+The visible leaderboard polls the public raw-file feed every minute. GitHub's
+CDN may cache it for five minutes; the UI explicitly labels the snapshot time and
+possible delay rather than presenting the cached active count as current. No
+credentials or rate-limited public API are required. Background tabs do not poll.
+It marks running/draining snapshots older than ten minutes as
 stale rather than implying the workers are still healthy. Public progress outages
 are logged and retried on the next minute; they never abort private games. After
 all 7,500 games are verified, publishing aggregate scores is still a separate,

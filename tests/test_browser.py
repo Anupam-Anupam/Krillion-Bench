@@ -532,9 +532,9 @@ async def test_live_progress_shows_verified_counts_and_marks_stale_updates(page)
     await page.route('https://raw.githubusercontent.com/**',lambda route: route.fulfill(json=snapshot))
     await page.goto('https://bench.test/')
     await page.wait_for_function("document.querySelector('#campaign-progress-count').textContent.includes('4 / 7,500')")
-    assert await page.locator('#campaign-progress-state').inner_text() == '8 games running · 8 workers'
+    assert await page.locator('#campaign-progress-state').inner_text() == '8 workers · 8 active at last update'
     assert await page.locator('#campaign-progress-bar').get_attribute('max') == '7500'
-    await page.evaluate("campaignProgress.updated_at = new Date(Date.now()-240000).toISOString(); renderCampaignProgress()")
+    await page.evaluate("campaignProgress.updated_at = new Date(Date.now()-660000).toISOString(); renderCampaignProgress()")
     assert 'Update delayed' in await page.locator('#campaign-progress-state').inner_text()
     assert await page.locator('#campaign-progress-bar').evaluate('el => el.value') == 4
     snapshot.update(verified=5,status='paused',active=0,updated_at=datetime.now(timezone.utc).isoformat())
