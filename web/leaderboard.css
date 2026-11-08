@@ -120,3 +120,5 @@ body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
 #calendar-days button:not(:disabled):hover,#calendar-days button[aria-current]{background:#4de3ff35;border-color:#4de3ff;box-shadow:0 0 8px #4de3ff35}
 #date-calendar button:focus-visible,#calendar-toggle:focus-visible{outline:2px solid #ffd166;outline-offset:2px}.calendar-note{font-size:15px;white-space:normal;color:#a4b8d1;margin:12px 0 0}
 @media(max-width:400px){#date-calendar{width:270px}}
+
+.private-report-link{display:inline-block;font-size:21px;color:#4de3ff;border:1px solid #4de3ff70;background:#4de3ff12;padding:12px 16px;text-shadow:0 0 8px #4de3ff60;margin:12px 0}
