@@ -64,14 +64,7 @@ body.calm .rank-badge.krillion{filter:none}
 .metric-help{display:flex;justify-content:flex-end;padding:10px 0 14px}
 .metric-help button{font:14px var(--pixel);color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
 
-/* Confidence whiskers appear only for measured multi-game averages. */
-.score-bar.with-interval{margin-bottom:12px}
-.score-interval{position:absolute;bottom:-7px;height:1px;background:var(--tier-color);box-shadow:0 0 5px color-mix(in srgb,var(--tier-color) 40%,transparent)}
-.score-interval::before,.score-interval::after{content:"";position:absolute;top:-3px;width:1px;height:7px;background:var(--tier-color)}
-.score-interval::before{left:0}.score-interval::after{right:0}
-.score-ci-label{display:block;font:13px/1.2 var(--pixel);color:var(--tier-color);white-space:normal}
 #aggregate-note{font:16px/1.4 var(--pixel);color:var(--muted);margin:0 0 15px}
-body.calm .score-interval{box-shadow:none}
 
 /* Live counts use the same pixel type and ocean glow as the scores. */
 .campaign-progress{margin:22px 0 28px;padding:17px 19px;border:1px solid #4de3ff40;background:#071525a8;font:17px/1.4 var(--pixel)}
@@ -97,20 +90,16 @@ html,body,*,*::before,*::after,input::placeholder{font-family:var(--pixel)!impor
 
 .model-button[aria-disabled="true"]{cursor:default}.plot-point{cursor:default}
 
-/* Readable pixel text for dense numeric columns and model annotations. */
-#results td{font-size:20px;line-height:1.3;padding:17px 10px;color:#edf4ff}
-#results .variant{font-size:17px;line-height:1.4;color:#bdd0e8}
-#results .model-name{font-size:22px;line-height:1.2}
-#results .score-value{font-size:28px;line-height:28px}#results .score-value small{font-size:18px;line-height:28px}
-#results .score-ci-label{font-size:16px;line-height:1.3;color:#cbdcf1;margin-top:7px}
-th{font-size:18px}.score-bar{height:34px;min-width:155px}.score-error-bar{stroke-width:1.5;opacity:.65}
-@media(max-width:760px){#results td{font-size:20px}#results .variant{font-size:17px}#results .model-name{font-size:22px}}
-
-#results .score-interval{height:2px;box-shadow:0 0 6px var(--tier-color),0 0 14px color-mix(in srgb,var(--tier-color) 60%,transparent)}
-#results .score-interval::before,#results .score-interval::after{width:2px;box-shadow:0 0 6px var(--tier-color)}
-#results .score-ci-label{color:var(--tier-color);text-shadow:0 0 7px color-mix(in srgb,var(--tier-color) 55%,transparent)}
-body.calm #results .score-interval,body.calm #results .score-interval::before,body.calm #results .score-interval::after{box-shadow:none}
-body.calm #results .score-ci-label{text-shadow:none}
+/* Compact, readable table text in the Krillion typeface. */
+#results td{font-size:16px;line-height:1.3;padding:14px 8px;color:#edf4ff}
+#results .variant{font-size:14px;line-height:1.4;color:#bdd0e8}
+#results .model-name{font-size:18px;line-height:1.2}
+#results .score-value{font-size:23px;line-height:23px}
+#results .score-value small{font-size:14px;line-height:23px}
+#results td.daily{font-size:18px;color:var(--tier-color);text-shadow:0 0 9px var(--tier-color)}
+body.calm #results td.daily{text-shadow:none}
+th{font-size:16px}
+.score-bar{height:29px;min-width:140px}
 
 /* First-place light blooms from the lettering and badge, without a row rectangle. */
 tr[data-tier=krillion],tr[data-tier=krillion]:hover{background:transparent;box-shadow:none}

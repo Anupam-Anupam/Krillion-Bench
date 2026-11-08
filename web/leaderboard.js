@@ -47,9 +47,7 @@ function badgeMarkup(row) {
 }
 const scoreText = value => new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(value);
 function scoreMarkup(row) {
-  const interval=row.score_ci95;
-  const label=interval?`95% CI ${scoreText(interval[0])}–${scoreText(interval[1])}`:'';
-  return `<div class="score-bar${interval?' with-interval':''}"><div class="score-fill" style="width:${row.score/700*100}%"></div><span class="score-value">${scoreText(row.score)}<small>/ 700</small></span>${interval?`<span class="score-interval" aria-hidden="true" style="left:${interval[0]/700*100}%;width:${(interval[1]-interval[0])/700*100}%"></span>`:''}</div>${interval?`<span class="score-ci-label">${label}</span>`:''}`;
+  return `<div class="score-bar"><div class="score-fill" style="width:${row.score/700*100}%"></div><span class="score-value">${scoreText(row.score)}<small>/ 700</small></span></div>`;
 }
 function render() {
   const matches=orderedRows(visibleRows());
@@ -74,10 +72,7 @@ function render() {
   });
   renderChart();
 }
-function scoreTierColor(row) {
-  const position=1+[...averageSnapshot().runs].filter(r=>r.complete&&(r.score>row.score||(r.score===row.score&&r.model.localeCompare(row.model)<0))).length;
-  return ({krillion:'#ffd166',deepcut:'#9d7bff',rare:'#ff5252',schooler:'#4de3ff',plankton:'#8fa3c4'})[badgeForPosition(position)?.key]||'#4de3ff';
-}
+
 function renderChart() {
   const rows=filteredRows(averageSnapshot());
   const key=state.axis;
@@ -102,7 +97,6 @@ function renderChart() {
   for(const r of [...eligible].sort((a,b)=>a.score-b.score)){
     const cx=x(metric(r,key)),cy=y(r.score);
     const formatted=key.includes('cost')?costPrefix(r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'])+money(metric(r,key)):key==='run_duration_s'?duration(metric(r,key)):count(metric(r,key))+(key==='daily_percentile'?'%':'');
-    if(r.score_ci95){const low=y(r.score_ci95[0]),high=y(r.score_ci95[1]);svg+=`<path class="score-error-bar" d="M ${cx} ${low} V ${high} M ${cx-3} ${low} H ${cx+3} M ${cx-3} ${high} H ${cx+3}" stroke="${scoreTierColor(r)}" style="filter:drop-shadow(0 0 4px ${scoreTierColor(r)})" fill="none" pointer-events="none"/>`;}
     svg+=`<circle class="plot-point" cx="${cx}" cy="${cy}" r="4.5" fill="${color(r.provider)}" data-model="${escapeHTML(r.model)}" aria-label="${escapeHTML(r.model)}, score ${scoreText(r.score)}, ${escapeHTML(formatted)}"><title>${escapeHTML(r.model)} · ${scoreText(r.score)} / 700 · ${escapeHTML(formatted)}</title></circle>`;
     if(top.includes(r)){
       let ly=cy-12;
@@ -165,13 +159,13 @@ function displaySnapshot(data) {
   $('#provider-filter').value=state.provider;
   document.querySelectorAll('#view-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
   $('#daily-controls').hidden=state.view!=='daily'||!state.days.length;
-  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Error bars: 95% bootstrap confidence intervals. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
+  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
   $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
   $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': 'Open any model to inspect its answers, rejections, rarity, and points.';
-  $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games · score whiskers show 95% confidence intervals`:'';
+  $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
   $('#configuration').textContent=data.aggregation==='archive_partial_mean'?data.protocol_amendments.join(' '):old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
