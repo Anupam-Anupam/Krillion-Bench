@@ -45,7 +45,7 @@ function badgeMarkup(row) {
   const position=state.placements.get(row.model), badge=badgeForPosition(position);
   return badge ? `<img class="rank-badge ${badge.key}" src="web/assets/images/krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
 }
-const scoreText = value => new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(value);
+const scoreText = value => new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(value);
 function scoreMarkup(row) {
   const interval=row.score_ci95;
   const label=interval?`95% CI ${scoreText(interval[0])}–${scoreText(interval[1])}`:'';
@@ -60,7 +60,7 @@ function render() {
     const display=r.model.split('/').slice(1).join('/');
     const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
     const tokens=m.output_tokens == null ? '—' : `${r.games||m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
-    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}${state.view==='average'?' · '+r.games+' tested days':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?'Awaiting clean data':'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
+    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?'Awaiting clean data':'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
   $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'}${state.view==='average'?' · average metrics only':' · click a model to inspect its dive'}`;
   const expand=$('#expand-results');
@@ -73,6 +73,10 @@ function render() {
     th.querySelector('span').textContent=selected?(state.direction===-1?'↓':'↑'):'';
   });
   renderChart();
+}
+function scoreTierColor(row) {
+  const position=1+[...averageSnapshot().runs].filter(r=>r.complete&&(r.score>row.score||(r.score===row.score&&r.model.localeCompare(row.model)<0))).length;
+  return ({krillion:'#ffd166',deepcut:'#9d7bff',rare:'#ff5252',schooler:'#4de3ff',plankton:'#8fa3c4'})[badgeForPosition(position)?.key]||'#4de3ff';
 }
 function renderChart() {
   const rows=filteredRows(averageSnapshot());
@@ -98,6 +102,7 @@ function renderChart() {
   for(const r of [...eligible].sort((a,b)=>a.score-b.score)){
     const cx=x(metric(r,key)),cy=y(r.score);
     const formatted=key.includes('cost')?costPrefix(r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'])+money(metric(r,key)):key==='run_duration_s'?duration(metric(r,key)):count(metric(r,key))+(key==='daily_percentile'?'%':'');
+    if(r.score_ci95){const low=y(r.score_ci95[0]),high=y(r.score_ci95[1]);svg+=`<path class="score-error-bar" d="M ${cx} ${low} V ${high} M ${cx-3} ${low} H ${cx+3} M ${cx-3} ${high} H ${cx+3}" stroke="${scoreTierColor(r)}" style="filter:drop-shadow(0 0 4px ${scoreTierColor(r)})" fill="none" pointer-events="none"/>`;}
     svg+=`<circle class="plot-point" cx="${cx}" cy="${cy}" r="4.5" fill="${color(r.provider)}" data-model="${escapeHTML(r.model)}" aria-label="${escapeHTML(r.model)}, score ${scoreText(r.score)}, ${escapeHTML(formatted)}"><title>${escapeHTML(r.model)} · ${scoreText(r.score)} / 700 · ${escapeHTML(formatted)}</title></circle>`;
     if(top.includes(r)){
       let ly=cy-12;
@@ -160,7 +165,7 @@ function displaySnapshot(data) {
   $('#provider-filter').value=state.provider;
   document.querySelectorAll('#view-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
   $('#daily-controls').hidden=state.view!=='daily'||!state.days.length;
-  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
+  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Error bars: 95% bootstrap confidence intervals. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';

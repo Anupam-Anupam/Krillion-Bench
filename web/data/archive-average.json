@@ -6,8 +6,8 @@
   "date": "2026-11-06",
   "date_start": "2026-08-24",
   "date_end": "2026-11-06",
-  "updated_at": "2026-11-08T19:28:56.260753+00:00",
-  "verified_games": 1871,
+  "updated_at": "2026-11-08T19:37:37.512955+00:00",
+  "verified_games": 1887,
   "target_games": 7500,
   "games_per_model": 75,
   "coverage": {
@@ -34,13 +34,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 532.3809523809524,
+      "score_ci95": [
+        509.2857142857143,
+        554.7619047619048
+      ],
       "daily_percentile": 98.77190476190476,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 532.3809523809524,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            509.2857142857143,
+            554.7619047619048
+          ]
         },
         "daily_percentile": {
           "mean": 98.77190476190476,
@@ -94,13 +101,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 520.2380952380952,
+      "score_ci95": [
+        488.57142857142856,
+        548.5714285714286
+      ],
       "daily_percentile": 97.63904761904762,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 520.2380952380952,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            488.57142857142856,
+            548.5714285714286
+          ]
         },
         "daily_percentile": {
           "mean": 97.63904761904762,
@@ -154,13 +168,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 443.3333333333333,
+      "score_ci95": [
+        416.1904761904762,
+        469.04761904761904
+      ],
       "daily_percentile": 92.19047619047619,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 443.3333333333333,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            416.1904761904762,
+            469.04761904761904
+          ]
         },
         "daily_percentile": {
           "mean": 92.19047619047619,
@@ -213,18 +234,25 @@
       "provider": "tencent",
       "complete": true,
       "status": "provisional_average",
-      "score": 7.25,
-      "daily_percentile": 0.05,
-      "games": 20,
+      "score": 11.666666666666666,
+      "score_ci95": [
+        0.0,
+        25.952380952380953
+      ],
+      "daily_percentile": 0.23809523809523808,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 7.25,
-          "n": 20,
-          "ci95": null
+          "mean": 11.666666666666666,
+          "n": 21,
+          "ci95": [
+            0.0,
+            25.952380952380953
+          ]
         },
         "daily_percentile": {
-          "mean": 0.05,
-          "n": 20,
+          "mean": 0.23809523809523808,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -243,13 +271,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 327.777415,
-          "n": 20,
+          "mean": 326.7028761904762,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 264.6328046769369,
-          "n": 20,
+          "mean": 263.5956046646461,
+          "n": 21,
           "ci95": null
         }
       },
@@ -257,8 +285,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 327.777415,
-        "inference_duration_s": 264.6328046769369,
+        "run_duration_s": 326.7028761904762,
+        "inference_duration_s": 263.5956046646461,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -274,13 +302,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 512.8571428571429,
+      "score_ci95": [
+        493.8095238095238,
+        532.1428571428571
+      ],
       "daily_percentile": 98.69809523809523,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 512.8571428571429,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            493.8095238095238,
+            532.1428571428571
+          ]
         },
         "daily_percentile": {
           "mean": 98.69809523809523,
@@ -333,18 +368,25 @@
       "provider": "stepfun",
       "complete": true,
       "status": "provisional_average",
-      "score": 309.5,
-      "daily_percentile": 55.6,
-      "games": 20,
+      "score": 315.7142857142857,
+      "score_ci95": [
+        268.32738095238096,
+        363.0952380952381
+      ],
+      "daily_percentile": 57.523809523809526,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 309.5,
-          "n": 20,
-          "ci95": null
+          "mean": 315.7142857142857,
+          "n": 21,
+          "ci95": [
+            268.32738095238096,
+            363.0952380952381
+          ]
         },
         "daily_percentile": {
-          "mean": 55.6,
-          "n": 20,
+          "mean": 57.523809523809526,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -363,13 +405,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 176.830355,
-          "n": 20,
+          "mean": 175.97028571428572,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 123.15173676246778,
-          "n": 20,
+          "mean": 122.56253199203915,
+          "n": 21,
           "ci95": null
         }
       },
@@ -377,8 +419,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 176.830355,
-        "inference_duration_s": 123.15173676246778,
+        "run_duration_s": 175.97028571428572,
+        "inference_duration_s": 122.56253199203915,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -394,13 +436,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 486.42857142857144,
+      "score_ci95": [
+        466.1904761904762,
+        505.0
+      ],
       "daily_percentile": 97.03238095238095,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 486.42857142857144,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            466.1904761904762,
+            505.0
+          ]
         },
         "daily_percentile": {
           "mean": 97.03238095238095,
@@ -453,18 +502,25 @@
       "provider": "minimax",
       "complete": true,
       "status": "provisional_average",
-      "score": 348.0,
-      "daily_percentile": 73.75,
-      "games": 20,
+      "score": 355.4761904761905,
+      "score_ci95": [
+        324.76190476190476,
+        385.95238095238096
+      ],
+      "daily_percentile": 74.9047619047619,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 348.0,
-          "n": 20,
-          "ci95": null
+          "mean": 355.4761904761905,
+          "n": 21,
+          "ci95": [
+            324.76190476190476,
+            385.95238095238096
+          ]
         },
         "daily_percentile": {
-          "mean": 73.75,
-          "n": 20,
+          "mean": 74.9047619047619,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -483,13 +539,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 87.91155499999999,
-          "n": 20,
+          "mean": 88.90989047619047,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 33.812696987309025,
-          "n": 20,
+          "mean": 34.76153327352811,
+          "n": 21,
           "ci95": null
         }
       },
@@ -497,8 +553,8 @@
         "run_cost_usd": 0.00333018972,
         "output_cost_usd": 0.00194792,
         "output_tokens": 3246.5333333333333,
-        "run_duration_s": 87.91155499999999,
-        "inference_duration_s": 33.812696987309025,
+        "run_duration_s": 88.90989047619047,
+        "inference_duration_s": 34.76153327352811,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -513,18 +569,25 @@
       "provider": "tencent",
       "complete": true,
       "status": "provisional_average",
-      "score": 28.0,
-      "daily_percentile": 0.25,
-      "games": 20,
+      "score": 36.19047619047619,
+      "score_ci95": [
+        15.714285714285714,
+        60.244047619047535
+      ],
+      "daily_percentile": 1.7142857142857142,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 28.0,
-          "n": 20,
-          "ci95": null
+          "mean": 36.19047619047619,
+          "n": 21,
+          "ci95": [
+            15.714285714285714,
+            60.244047619047535
+          ]
         },
         "daily_percentile": {
-          "mean": 0.25,
-          "n": 20,
+          "mean": 1.7142857142857142,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -543,13 +606,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 395.70829,
-          "n": 20,
+          "mean": 398.04352857142857,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 333.7452230792493,
-          "n": 20,
+          "mean": 335.8636667144795,
+          "n": 21,
           "ci95": null
         }
       },
@@ -557,8 +620,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 395.70829,
-        "inference_duration_s": 333.7452230792493,
+        "run_duration_s": 398.04352857142857,
+        "inference_duration_s": 335.8636667144795,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -573,52 +636,59 @@
       "provider": "openai",
       "complete": true,
       "status": "provisional_average",
-      "score": 487.0,
-      "daily_percentile": 97.3615,
-      "games": 20,
+      "score": 494.2857142857143,
+      "score_ci95": [
+        468.8095238095238,
+        521.4285714285714
+      ],
+      "daily_percentile": 97.48428571428572,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 487.0,
-          "n": 20,
-          "ci95": null
+          "mean": 494.2857142857143,
+          "n": 21,
+          "ci95": [
+            468.8095238095238,
+            521.4285714285714
+          ]
         },
         "daily_percentile": {
-          "mean": 97.3615,
-          "n": 20,
+          "mean": 97.48428571428572,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.052041132000000004,
-          "n": 5,
+          "mean": 0.052355490000000005,
+          "n": 6,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.009982,
-          "n": 5,
+          "mean": 0.009931666666666667,
+          "n": 6,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 998.2,
-          "n": 5,
+          "mean": 993.1666666666666,
+          "n": 6,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 130.87144,
-          "n": 20,
+          "mean": 129.65592857142857,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 77.165680964489,
-          "n": 20,
+          "mean": 75.87566113284612,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.052041132000000004,
-        "output_cost_usd": 0.009982,
-        "output_tokens": 998.2,
-        "run_duration_s": 130.87144,
-        "inference_duration_s": 77.165680964489,
+        "run_cost_usd": 0.052355490000000005,
+        "output_cost_usd": 0.009931666666666667,
+        "output_tokens": 993.1666666666666,
+        "run_duration_s": 129.65592857142857,
+        "inference_duration_s": 75.87566113284612,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -634,13 +704,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 470.23809523809524,
+      "score_ci95": [
+        442.3809523809524,
+        496.42857142857144
+      ],
       "daily_percentile": 95.61904761904762,
       "games": 21,
       "aggregate_stats": {
         "score": {
           "mean": 470.23809523809524,
           "n": 21,
-          "ci95": null
+          "ci95": [
+            442.3809523809524,
+            496.42857142857144
+          ]
         },
         "daily_percentile": {
           "mean": 95.61904761904762,
@@ -693,18 +770,25 @@
       "provider": "moonshotai",
       "complete": true,
       "status": "provisional_average",
-      "score": 511.0,
-      "daily_percentile": 98.106,
-      "games": 20,
+      "score": 516.4285714285714,
+      "score_ci95": [
+        490.7142857142857,
+        542.3809523809524
+      ],
+      "daily_percentile": 98.19142857142857,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 511.0,
-          "n": 20,
-          "ci95": null
+          "mean": 516.4285714285714,
+          "n": 21,
+          "ci95": [
+            490.7142857142857,
+            542.3809523809524
+          ]
         },
         "daily_percentile": {
-          "mean": 98.106,
-          "n": 20,
+          "mean": 98.19142857142857,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -723,13 +807,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 123.820545,
-          "n": 20,
+          "mean": 124.20282857142857,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 71.9474906668067,
-          "n": 20,
+          "mean": 72.86215484548094,
+          "n": 21,
           "ci95": null
         }
       },
@@ -737,8 +821,8 @@
         "run_cost_usd": 0.09130659197,
         "output_cost_usd": 0.05420911111111111,
         "output_tokens": 5436.777777777777,
-        "run_duration_s": 123.820545,
-        "inference_duration_s": 71.9474906668067,
+        "run_duration_s": 124.20282857142857,
+        "inference_duration_s": 72.86215484548094,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -753,18 +837,25 @@
       "provider": "z-ai",
       "complete": true,
       "status": "provisional_average",
-      "score": 490.0,
-      "daily_percentile": 97.18,
-      "games": 20,
+      "score": 492.14285714285717,
+      "score_ci95": [
+        470.0,
+        512.8571428571429
+      ],
+      "daily_percentile": 97.26666666666667,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 490.0,
-          "n": 20,
-          "ci95": null
+          "mean": 492.14285714285717,
+          "n": 21,
+          "ci95": [
+            470.0,
+            512.8571428571429
+          ]
         },
         "daily_percentile": {
-          "mean": 97.18,
-          "n": 20,
+          "mean": 97.26666666666667,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -783,13 +874,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 110.696255,
-          "n": 20,
+          "mean": 111.45575238095238,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 59.1047435502871,
-          "n": 20,
+          "mean": 60.027494400983585,
+          "n": 21,
           "ci95": null
         }
       },
@@ -797,8 +888,8 @@
         "run_cost_usd": 0.018990948174,
         "output_cost_usd": 0.013550058888888888,
         "output_tokens": 4658.666666666667,
-        "run_duration_s": 110.696255,
-        "inference_duration_s": 59.1047435502871,
+        "run_duration_s": 111.45575238095238,
+        "inference_duration_s": 60.027494400983585,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -813,18 +904,25 @@
       "provider": "deepseek",
       "complete": true,
       "status": "provisional_average",
-      "score": 475.75,
-      "daily_percentile": 96.02,
-      "games": 20,
+      "score": 478.8095238095238,
+      "score_ci95": [
+        449.2857142857143,
+        507.14285714285717
+      ],
+      "daily_percentile": 96.16190476190476,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 475.75,
-          "n": 20,
-          "ci95": null
+          "mean": 478.8095238095238,
+          "n": 21,
+          "ci95": [
+            449.2857142857143,
+            507.14285714285717
+          ]
         },
         "daily_percentile": {
-          "mean": 96.02,
-          "n": 20,
+          "mean": 96.16190476190476,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -843,13 +941,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 146.140025,
-          "n": 20,
+          "mean": 145.18224285714285,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 95.49186455643503,
-          "n": 20,
+          "mean": 94.65081347445292,
+          "n": 21,
           "ci95": null
         }
       },
@@ -857,8 +955,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 146.140025,
-        "inference_duration_s": 95.49186455643503,
+        "run_duration_s": 145.18224285714285,
+        "inference_duration_s": 94.65081347445292,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -874,13 +972,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 293.3333333333333,
+      "score_ci95": [
+        229.16666666666666,
+        355.04166666666606
+      ],
       "daily_percentile": 51.666666666666664,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 293.3333333333333,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            229.16666666666666,
+            355.04166666666606
+          ]
         },
         "daily_percentile": {
           "mean": 51.666666666666664,
@@ -934,13 +1039,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 456.25,
+      "score_ci95": [
+        421.0,
+        488.0
+      ],
       "daily_percentile": 92.4255,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 456.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            421.0,
+            488.0
+          ]
         },
         "daily_percentile": {
           "mean": 92.4255,
@@ -994,13 +1106,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 457.5,
+      "score_ci95": [
+        430.8333333333333,
+        483.3333333333333
+      ],
       "daily_percentile": 94.66666666666667,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 457.5,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            430.8333333333333,
+            483.3333333333333
+          ]
         },
         "daily_percentile": {
           "mean": 94.66666666666667,
@@ -1053,18 +1172,25 @@
       "provider": "tencent",
       "complete": true,
       "status": "provisional_average",
-      "score": 367.25,
-      "daily_percentile": 73.893,
-      "games": 20,
+      "score": 373.57142857142856,
+      "score_ci95": [
+        332.14285714285717,
+        414.5238095238095
+      ],
+      "daily_percentile": 75.04095238095238,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 367.25,
-          "n": 20,
-          "ci95": null
+          "mean": 373.57142857142856,
+          "n": 21,
+          "ci95": [
+            332.14285714285717,
+            414.5238095238095
+          ]
         },
         "daily_percentile": {
-          "mean": 73.893,
-          "n": 20,
+          "mean": 75.04095238095238,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -1083,13 +1209,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 213.644835,
-          "n": 20,
+          "mean": 212.50508095238095,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 157.62208073170623,
-          "n": 20,
+          "mean": 156.374927089727,
+          "n": 21,
           "ci95": null
         }
       },
@@ -1097,8 +1223,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 213.644835,
-        "inference_duration_s": 157.62208073170623,
+        "run_duration_s": 212.50508095238095,
+        "inference_duration_s": 156.374927089727,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -1113,52 +1239,59 @@
       "provider": "meta",
       "complete": true,
       "status": "provisional_average",
-      "score": 493.5,
-      "daily_percentile": 97.4285,
-      "games": 20,
+      "score": 500.4761904761905,
+      "score_ci95": [
+        476.42857142857144,
+        525.7142857142857
+      ],
+      "daily_percentile": 97.54809523809524,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 493.5,
-          "n": 20,
-          "ci95": null
+          "mean": 500.4761904761905,
+          "n": 21,
+          "ci95": [
+            476.42857142857144,
+            525.7142857142857
+          ]
         },
         "daily_percentile": {
-          "mean": 97.4285,
-          "n": 20,
+          "mean": 97.54809523809524,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.0032542915679999998,
-          "n": 10,
+          "mean": 0.0032178239999999998,
+          "n": 11,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.00186018,
-          "n": 10,
+          "mean": 0.0018295818181818181,
+          "n": 11,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 9300.9,
-          "n": 10,
+          "mean": 9147.90909090909,
+          "n": 11,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 148.784195,
-          "n": 20,
+          "mean": 147.64541904761904,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 102.93719024575549,
-          "n": 20,
+          "mean": 101.4759597220968,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.0032542915679999998,
-        "output_cost_usd": 0.00186018,
-        "output_tokens": 9300.9,
-        "run_duration_s": 148.784195,
-        "inference_duration_s": 102.93719024575549,
+        "run_cost_usd": 0.0032178239999999998,
+        "output_cost_usd": 0.0018295818181818181,
+        "output_tokens": 9147.90909090909,
+        "run_duration_s": 147.64541904761904,
+        "inference_duration_s": 101.4759597220968,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1173,18 +1306,25 @@
       "provider": "anthropic",
       "complete": true,
       "status": "provisional_average",
-      "score": 488.25,
-      "daily_percentile": 96.0685,
-      "games": 20,
+      "score": 487.6190476190476,
+      "score_ci95": [
+        456.9047619047619,
+        517.3809523809524
+      ],
+      "daily_percentile": 96.16047619047619,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 488.25,
-          "n": 20,
-          "ci95": null
+          "mean": 487.6190476190476,
+          "n": 21,
+          "ci95": [
+            456.9047619047619,
+            517.3809523809524
+          ]
         },
         "daily_percentile": {
-          "mean": 96.0685,
-          "n": 20,
+          "mean": 96.16047619047619,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
@@ -1203,13 +1343,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 95.91330500000001,
-          "n": 20,
+          "mean": 96.24461904761905,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 41.669509429018945,
-          "n": 20,
+          "mean": 41.72266634713326,
+          "n": 21,
           "ci95": null
         }
       },
@@ -1217,8 +1357,8 @@
         "run_cost_usd": 0.0058103038125,
         "output_cost_usd": 0.00225628125,
         "output_tokens": 4512.5625,
-        "run_duration_s": 95.91330500000001,
-        "inference_duration_s": 41.669509429018945,
+        "run_duration_s": 96.24461904761905,
+        "inference_duration_s": 41.72266634713326,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1233,52 +1373,59 @@
       "provider": "xiaomi",
       "complete": true,
       "status": "provisional_average",
-      "score": 436.75,
-      "daily_percentile": 92.25,
-      "games": 20,
+      "score": 442.6190476190476,
+      "score_ci95": [
+        414.2857142857143,
+        469.5297619047618
+      ],
+      "daily_percentile": 92.57142857142857,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 436.75,
-          "n": 20,
-          "ci95": null
+          "mean": 442.6190476190476,
+          "n": 21,
+          "ci95": [
+            414.2857142857143,
+            469.5297619047618
+          ]
         },
         "daily_percentile": {
-          "mean": 92.25,
-          "n": 20,
+          "mean": 92.57142857142857,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.0024740486496,
-          "n": 15,
+          "mean": 0.0024382746135,
+          "n": 16,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.0004827148,
-          "n": 15,
+          "mean": 0.000472932625,
+          "n": 16,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 1725.0666666666666,
-          "n": 15,
+          "mean": 1690.0625,
+          "n": 16,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 103.91024,
-          "n": 20,
+          "mean": 102.81814285714286,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 49.71671635273378,
-          "n": 20,
+          "mean": 48.479953371697945,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.0024740486496,
-        "output_cost_usd": 0.0004827148,
-        "output_tokens": 1725.0666666666666,
-        "run_duration_s": 103.91024,
-        "inference_duration_s": 49.71671635273378,
+        "run_cost_usd": 0.0024382746135,
+        "output_cost_usd": 0.000472932625,
+        "output_tokens": 1690.0625,
+        "run_duration_s": 102.81814285714286,
+        "inference_duration_s": 48.479953371697945,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1293,52 +1440,59 @@
       "provider": "deepseek",
       "complete": true,
       "status": "provisional_average",
-      "score": 386.0,
-      "daily_percentile": 83.9,
-      "games": 20,
+      "score": 383.3333333333333,
+      "score_ci95": [
+        359.2857142857143,
+        407.6190476190476
+      ],
+      "daily_percentile": 83.66666666666667,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 386.0,
-          "n": 20,
-          "ci95": null
+          "mean": 383.3333333333333,
+          "n": 21,
+          "ci95": [
+            359.2857142857143,
+            407.6190476190476
+          ]
         },
         "daily_percentile": {
-          "mean": 83.9,
-          "n": 20,
+          "mean": 83.66666666666667,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.0014382430318079999,
-          "n": 5,
+          "mean": 0.00146735913984,
+          "n": 6,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.000671069312,
-          "n": 5,
+          "mean": 0.0005866860933333334,
+          "n": 6,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 5414.8,
-          "n": 5,
+          "mean": 4644.833333333333,
+          "n": 6,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 141.95284,
-          "n": 20,
+          "mean": 138.7451523809524,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 91.21819419756066,
-          "n": 20,
+          "mean": 87.96956443622531,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.0014382430318079999,
-        "output_cost_usd": 0.000671069312,
-        "output_tokens": 5414.8,
-        "run_duration_s": 141.95284,
-        "inference_duration_s": 91.21819419756066,
+        "run_cost_usd": 0.00146735913984,
+        "output_cost_usd": 0.0005866860933333334,
+        "output_tokens": 4644.833333333333,
+        "run_duration_s": 138.7451523809524,
+        "inference_duration_s": 87.96956443622531,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1353,52 +1507,59 @@
       "provider": "anthropic",
       "complete": true,
       "status": "provisional_average",
-      "score": 487.0,
-      "daily_percentile": 97.5595,
-      "games": 20,
+      "score": 492.3809523809524,
+      "score_ci95": [
+        472.14285714285717,
+        512.1428571428571
+      ],
+      "daily_percentile": 97.66428571428571,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 487.0,
-          "n": 20,
-          "ci95": null
+          "mean": 492.3809523809524,
+          "n": 21,
+          "ci95": [
+            472.14285714285717,
+            512.1428571428571
+          ]
         },
         "daily_percentile": {
-          "mean": 97.5595,
-          "n": 20,
+          "mean": 97.66428571428571,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.08183747647058824,
-          "n": 17,
+          "mean": 0.08095175,
+          "n": 18,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.018181764705882352,
-          "n": 17,
+          "mean": 0.017942777777777776,
+          "n": 18,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 1818.1764705882354,
-          "n": 17,
+          "mean": 1794.2777777777778,
+          "n": 18,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 93.72223,
-          "n": 20,
+          "mean": 93.3761,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 43.11395975244231,
-          "n": 20,
+          "mean": 42.46912956579278,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.08183747647058824,
-        "output_cost_usd": 0.018181764705882352,
-        "output_tokens": 1818.1764705882354,
-        "run_duration_s": 93.72223,
-        "inference_duration_s": 43.11395975244231,
+        "run_cost_usd": 0.08095175,
+        "output_cost_usd": 0.017942777777777776,
+        "output_tokens": 1794.2777777777778,
+        "run_duration_s": 93.3761,
+        "inference_duration_s": 42.46912956579278,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1413,52 +1574,59 @@
       "provider": "moonshotai",
       "complete": true,
       "status": "provisional_average",
-      "score": 496.75,
-      "daily_percentile": 96.1095,
-      "games": 20,
+      "score": 503.57142857142856,
+      "score_ci95": [
+        470.7142857142857,
+        534.047619047619
+      ],
+      "daily_percentile": 96.29190476190476,
+      "games": 21,
       "aggregate_stats": {
         "score": {
-          "mean": 496.75,
-          "n": 20,
-          "ci95": null
+          "mean": 503.57142857142856,
+          "n": 21,
+          "ci95": [
+            470.7142857142857,
+            534.047619047619
+          ]
         },
         "daily_percentile": {
-          "mean": 96.1095,
-          "n": 20,
+          "mean": 96.29190476190476,
+          "n": 21,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": 0.05727121092,
-          "n": 16,
+          "mean": 0.05666735075294118,
+          "n": 17,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": 0.036533227125,
-          "n": 16,
+          "mean": 0.03633059317647059,
+          "n": 17,
           "ci95": null
         },
         "output_tokens": {
-          "mean": 2971.6875,
-          "n": 16,
+          "mean": 2976.0,
+          "n": 17,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 101.795075,
-          "n": 20,
+          "mean": 101.42720952380952,
+          "n": 21,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 47.453726938914045,
-          "n": 20,
+          "mean": 46.83384863055488,
+          "n": 21,
           "ci95": null
         }
       },
       "metrics": {
-        "run_cost_usd": 0.05727121092,
-        "output_cost_usd": 0.036533227125,
-        "output_tokens": 2971.6875,
-        "run_duration_s": 101.795075,
-        "inference_duration_s": 47.453726938914045,
+        "run_cost_usd": 0.05666735075294118,
+        "output_cost_usd": 0.03633059317647059,
+        "output_tokens": 2976.0,
+        "run_duration_s": 101.42720952380952,
+        "inference_duration_s": 46.83384863055488,
         "cost_basis": "reported",
         "output_cost_basis": "provider_reported",
         "usage_complete": false,
@@ -1474,13 +1642,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 489.25,
+      "score_ci95": [
+        469.25,
+        508.5
+      ],
       "daily_percentile": 97.367,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 489.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            469.25,
+            508.5
+          ]
         },
         "daily_percentile": {
           "mean": 97.367,
@@ -1534,13 +1709,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 187.5,
+      "score_ci95": [
+        165.5,
+        211.0
+      ],
       "daily_percentile": 18.15,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 187.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            165.5,
+            211.0
+          ]
         },
         "daily_percentile": {
           "mean": 18.15,
@@ -1594,13 +1776,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 459.5,
+      "score_ci95": [
+        440.0,
+        480.0
+      ],
       "daily_percentile": 96.08,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 459.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            440.0,
+            480.0
+          ]
         },
         "daily_percentile": {
           "mean": 96.08,
@@ -1654,13 +1843,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 380.0,
+      "score_ci95": [
+        323.3333333333333,
+        436.6666666666667
+      ],
       "daily_percentile": 76.83333333333333,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 380.0,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            323.3333333333333,
+            436.6666666666667
+          ]
         },
         "daily_percentile": {
           "mean": 76.83333333333333,
@@ -1714,13 +1910,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 495.0,
+      "score_ci95": [
+        464.5,
+        521.7562499999999
+      ],
       "daily_percentile": 95.8985,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 495.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            464.5,
+            521.7562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 95.8985,
@@ -1774,13 +1977,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 487.5,
+      "score_ci95": [
+        457.0,
+        515.75
+      ],
       "daily_percentile": 96.341,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 487.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            457.0,
+            515.75
+          ]
         },
         "daily_percentile": {
           "mean": 96.341,
@@ -1834,13 +2044,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 506.25,
+      "score_ci95": [
+        485.0,
+        525.75
+      ],
       "daily_percentile": 98.127,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 506.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            485.0,
+            525.75
+          ]
         },
         "daily_percentile": {
           "mean": 98.127,
@@ -1894,13 +2111,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 406.75,
+      "score_ci95": [
+        375.5,
+        440.0
+      ],
       "daily_percentile": 86.23,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 406.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            375.5,
+            440.0
+          ]
         },
         "daily_percentile": {
           "mean": 86.23,
@@ -1954,13 +2178,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 478.0,
+      "score_ci95": [
+        449.25,
+        506.25
+      ],
       "daily_percentile": 96.2025,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 478.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            449.25,
+            506.25
+          ]
         },
         "daily_percentile": {
           "mean": 96.2025,
@@ -2014,13 +2245,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 415.0,
+      "score_ci95": [
+        385.25,
+        447.75
+      ],
       "daily_percentile": 88.388,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 415.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            385.25,
+            447.75
+          ]
         },
         "daily_percentile": {
           "mean": 88.388,
@@ -2074,13 +2312,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 265.0,
+      "score_ci95": [
+        205.0,
+        317.5
+      ],
       "daily_percentile": 41.333333333333336,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 265.0,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            205.0,
+            317.5
+          ]
         },
         "daily_percentile": {
           "mean": 41.333333333333336,
@@ -2134,13 +2379,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 420.5,
+      "score_ci95": [
+        386.0,
+        455.5
+      ],
       "daily_percentile": 87.517,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 420.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            386.0,
+            455.5
+          ]
         },
         "daily_percentile": {
           "mean": 87.517,
@@ -2194,13 +2446,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 377.5,
+      "score_ci95": [
+        347.0,
+        407.75
+      ],
       "daily_percentile": 81.45,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 377.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            347.0,
+            407.75
+          ]
         },
         "daily_percentile": {
           "mean": 81.45,
@@ -2254,13 +2513,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 505.5,
+      "score_ci95": [
+        483.0,
+        526.75
+      ],
       "daily_percentile": 98.061,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 505.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            483.0,
+            526.75
+          ]
         },
         "daily_percentile": {
           "mean": 98.061,
@@ -2314,13 +2580,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 523.25,
+      "score_ci95": [
+        503.5,
+        541.75
+      ],
       "daily_percentile": 98.742,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 523.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            503.5,
+            541.75
+          ]
         },
         "daily_percentile": {
           "mean": 98.742,
@@ -2374,13 +2647,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 387.5,
+      "score_ci95": [
+        349.25,
+        421.25
+      ],
       "daily_percentile": 82.3,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 387.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            349.25,
+            421.25
+          ]
         },
         "daily_percentile": {
           "mean": 82.3,
@@ -2434,13 +2714,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 442.25,
+      "score_ci95": [
+        414.75,
+        467.75
+      ],
       "daily_percentile": 92.081,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 442.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            414.75,
+            467.75
+          ]
         },
         "daily_percentile": {
           "mean": 92.081,
@@ -2494,13 +2781,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 408.5,
+      "score_ci95": [
+        383.75,
+        435.0
+      ],
       "daily_percentile": 88.6285,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 408.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            383.75,
+            435.0
+          ]
         },
         "daily_percentile": {
           "mean": 88.6285,
@@ -2554,13 +2848,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 370.0,
+      "score_ci95": [
+        348.75,
+        391.75
+      ],
       "daily_percentile": 80.15,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 370.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            348.75,
+            391.75
+          ]
         },
         "daily_percentile": {
           "mean": 80.15,
@@ -2614,13 +2915,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 110.25,
+      "score_ci95": [
+        79.25,
+        142.75
+      ],
       "daily_percentile": 7.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 110.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            79.25,
+            142.75
+          ]
         },
         "daily_percentile": {
           "mean": 7.7,
@@ -2674,13 +2982,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 294.0,
+      "score_ci95": [
+        268.0,
+        318.7562499999999
+      ],
       "daily_percentile": 56.85,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 294.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            268.0,
+            318.7562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 56.85,
@@ -2734,13 +3049,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 328.25,
+      "score_ci95": [
+        300.5,
+        356.5
+      ],
       "daily_percentile": 67.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 328.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            300.5,
+            356.5
+          ]
         },
         "daily_percentile": {
           "mean": 67.7,
@@ -2794,13 +3116,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 502.75,
+      "score_ci95": [
+        480.74375,
+        524.25
+      ],
       "daily_percentile": 97.984,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 502.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            480.74375,
+            524.25
+          ]
         },
         "daily_percentile": {
           "mean": 97.984,
@@ -2854,13 +3183,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 541.0,
+      "score_ci95": [
+        523.75,
+        557.5
+      ],
       "daily_percentile": 99.203,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 541.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            523.75,
+            557.5
+          ]
         },
         "daily_percentile": {
           "mean": 99.203,
@@ -2914,13 +3250,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 430.25,
+      "score_ci95": [
+        393.25,
+        465.7562499999999
+      ],
       "daily_percentile": 88.28,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 430.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            393.25,
+            465.7562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 88.28,
@@ -2974,13 +3317,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 352.5,
+      "score_ci95": [
+        314.25,
+        391.0062499999999
+      ],
       "daily_percentile": 69.75,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 352.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            314.25,
+            391.0062499999999
+          ]
         },
         "daily_percentile": {
           "mean": 69.75,
@@ -3034,13 +3384,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 545.5,
+      "score_ci95": [
+        526.5,
+        563.5
+      ],
       "daily_percentile": 99.237,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 545.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            526.5,
+            563.5
+          ]
         },
         "daily_percentile": {
           "mean": 99.237,
@@ -3094,13 +3451,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 276.0,
+      "score_ci95": [
+        245.5,
+        305.5
+      ],
       "daily_percentile": 49.6,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 276.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            245.5,
+            305.5
+          ]
         },
         "daily_percentile": {
           "mean": 49.6,
@@ -3154,13 +3518,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 233.5,
+      "score_ci95": [
+        212.0,
+        255.5
+      ],
       "daily_percentile": 32.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 233.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            212.0,
+            255.5
+          ]
         },
         "daily_percentile": {
           "mean": 32.7,
@@ -3214,13 +3585,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 384.5,
+      "score_ci95": [
+        357.5,
+        411.75
+      ],
       "daily_percentile": 83.75,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 384.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            357.5,
+            411.75
+          ]
         },
         "daily_percentile": {
           "mean": 83.75,
@@ -3274,13 +3652,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 460.25,
+      "score_ci95": [
+        434.0,
+        487.5
+      ],
       "daily_percentile": 94.6445,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 460.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            434.0,
+            487.5
+          ]
         },
         "daily_percentile": {
           "mean": 94.6445,
@@ -3334,13 +3719,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 230.75,
+      "score_ci95": [
+        193.5,
+        265.75
+      ],
       "daily_percentile": 34.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 230.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            193.5,
+            265.75
+          ]
         },
         "daily_percentile": {
           "mean": 34.7,
@@ -3394,13 +3786,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 363.0,
+      "score_ci95": [
+        334.0,
+        388.75
+      ],
       "daily_percentile": 78.2,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 363.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            334.0,
+            388.75
+          ]
         },
         "daily_percentile": {
           "mean": 78.2,
@@ -3454,13 +3853,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 450.5,
+      "score_ci95": [
+        429.5,
+        471.5
+      ],
       "daily_percentile": 94.9,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 450.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            429.5,
+            471.5
+          ]
         },
         "daily_percentile": {
           "mean": 94.9,
@@ -3514,13 +3920,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 560.0,
+      "score_ci95": [
+        548.25,
+        571.25
+      ],
       "daily_percentile": 99.5645,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 560.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            548.25,
+            571.25
+          ]
         },
         "daily_percentile": {
           "mean": 99.5645,
@@ -3574,13 +3987,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 339.0,
+      "score_ci95": [
+        292.75,
+        386.5
+      ],
       "daily_percentile": 66.538,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 339.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            292.75,
+            386.5
+          ]
         },
         "daily_percentile": {
           "mean": 66.538,
@@ -3634,13 +4054,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 506.0,
+      "score_ci95": [
+        480.24375,
+        528.75
+      ],
       "daily_percentile": 97.154,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 506.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            480.24375,
+            528.75
+          ]
         },
         "daily_percentile": {
           "mean": 97.154,
@@ -3694,13 +4121,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 317.5,
+      "score_ci95": [
+        284.99375,
+        349.5
+      ],
       "daily_percentile": 62.6,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 317.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            284.99375,
+            349.5
+          ]
         },
         "daily_percentile": {
           "mean": 62.6,
@@ -3754,13 +4188,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 416.5,
+      "score_ci95": [
+        393.0,
+        439.75
+      ],
       "daily_percentile": 90.15,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 416.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            393.0,
+            439.75
+          ]
         },
         "daily_percentile": {
           "mean": 90.15,
@@ -3814,13 +4255,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 330.8333333333333,
+      "score_ci95": [
+        238.33333333333334,
+        407.5
+      ],
       "daily_percentile": 65.0,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 330.8333333333333,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            238.33333333333334,
+            407.5
+          ]
         },
         "daily_percentile": {
           "mean": 65.0,
@@ -3874,13 +4322,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 434.5,
+      "score_ci95": [
+        410.5,
+        457.25
+      ],
       "daily_percentile": 92.35,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 434.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            410.5,
+            457.25
+          ]
         },
         "daily_percentile": {
           "mean": 92.35,
@@ -3934,13 +4389,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 514.5,
+      "score_ci95": [
+        496.0,
+        532.75
+      ],
       "daily_percentile": 98.786,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 514.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            496.0,
+            532.75
+          ]
         },
         "daily_percentile": {
           "mean": 98.786,
@@ -3994,13 +4456,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 405.5,
+      "score_ci95": [
+        365.75,
+        440.75
+      ],
       "daily_percentile": 84.35,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 405.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            365.75,
+            440.75
+          ]
         },
         "daily_percentile": {
           "mean": 84.35,
@@ -4054,13 +4523,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 366.0,
+      "score_ci95": [
+        329.0,
+        401.75
+      ],
       "daily_percentile": 74.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 366.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            329.0,
+            401.75
+          ]
         },
         "daily_percentile": {
           "mean": 74.7,
@@ -4114,13 +4590,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 382.25,
+      "score_ci95": [
+        347.75,
+        414.75
+      ],
       "daily_percentile": 80.9,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 382.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            347.75,
+            414.75
+          ]
         },
         "daily_percentile": {
           "mean": 80.9,
@@ -4174,13 +4657,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 316.75,
+      "score_ci95": [
+        289.0,
+        345.25
+      ],
       "daily_percentile": 63.55,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 316.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            289.0,
+            345.25
+          ]
         },
         "daily_percentile": {
           "mean": 63.55,
@@ -4234,13 +4724,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 346.0,
+      "score_ci95": [
+        286.5,
+        401.5
+      ],
       "daily_percentile": 68.181,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 346.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            286.5,
+            401.5
+          ]
         },
         "daily_percentile": {
           "mean": 68.181,
@@ -4294,13 +4791,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 320.8333333333333,
+      "score_ci95": [
+        267.5,
+        368.3333333333333
+      ],
       "daily_percentile": 60.5,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 320.8333333333333,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            267.5,
+            368.3333333333333
+          ]
         },
         "daily_percentile": {
           "mean": 60.5,
@@ -4354,13 +4858,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 233.75,
+      "score_ci95": [
+        192.24375,
+        277.25
+      ],
       "daily_percentile": 36.2,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 233.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            192.24375,
+            277.25
+          ]
         },
         "daily_percentile": {
           "mean": 36.2,
@@ -4414,13 +4925,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 533.75,
+      "score_ci95": [
+        514.25,
+        551.5
+      ],
       "daily_percentile": 98.9775,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 533.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            514.25,
+            551.5
+          ]
         },
         "daily_percentile": {
           "mean": 98.9775,
@@ -4474,13 +4992,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 210.75,
+      "score_ci95": [
+        174.75,
+        243.25
+      ],
       "daily_percentile": 28.0,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 210.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            174.75,
+            243.25
+          ]
         },
         "daily_percentile": {
           "mean": 28.0,
@@ -4534,13 +5059,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 503.75,
+      "score_ci95": [
+        479.75,
+        527.25
+      ],
       "daily_percentile": 97.98349999999999,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 503.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            479.75,
+            527.25
+          ]
         },
         "daily_percentile": {
           "mean": 97.98349999999999,
@@ -4594,13 +5126,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 333.5,
+      "score_ci95": [
+        287.75,
+        377.25
+      ],
       "daily_percentile": 66.15,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 333.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            287.75,
+            377.25
+          ]
         },
         "daily_percentile": {
           "mean": 66.15,
@@ -4654,13 +5193,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 495.75,
+      "score_ci95": [
+        476.24375,
+        514.0
+      ],
       "daily_percentile": 97.6785,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 495.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            476.24375,
+            514.0
+          ]
         },
         "daily_percentile": {
           "mean": 97.6785,
@@ -4714,13 +5260,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 497.75,
+      "score_ci95": [
+        472.5,
+        520.2562499999999
+      ],
       "daily_percentile": 96.756,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 497.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            472.5,
+            520.2562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 96.756,
@@ -4774,6 +5327,7 @@
       "complete": false,
       "status": "pending",
       "score": null,
+      "score_ci95": null,
       "daily_percentile": null,
       "games": 0,
       "aggregate_stats": {
@@ -4834,13 +5388,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 491.5,
+      "score_ci95": [
+        468.75,
+        513.75
+      ],
       "daily_percentile": 97.4825,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 491.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            468.75,
+            513.75
+          ]
         },
         "daily_percentile": {
           "mean": 97.4825,
@@ -4894,13 +5455,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 528.25,
+      "score_ci95": [
+        511.0,
+        545.0
+      ],
       "daily_percentile": 99.087,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 528.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            511.0,
+            545.0
+          ]
         },
         "daily_percentile": {
           "mean": 99.087,
@@ -4954,13 +5522,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 432.5,
+      "score_ci95": [
+        408.74375,
+        456.0
+      ],
       "daily_percentile": 92.2,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 432.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            408.74375,
+            456.0
+          ]
         },
         "daily_percentile": {
           "mean": 92.2,
@@ -5014,13 +5589,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 487.75,
+      "score_ci95": [
+        455.75,
+        518.0062499999999
+      ],
       "daily_percentile": 95.21,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 487.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            455.75,
+            518.0062499999999
+          ]
         },
         "daily_percentile": {
           "mean": 95.21,
@@ -5074,13 +5656,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 412.25,
+      "score_ci95": [
+        369.0,
+        453.0
+      ],
       "daily_percentile": 82.3285,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 412.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            369.0,
+            453.0
+          ]
         },
         "daily_percentile": {
           "mean": 82.3285,
@@ -5134,13 +5723,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 448.75,
+      "score_ci95": [
+        425.5,
+        472.25
+      ],
       "daily_percentile": 94.325,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 448.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            425.5,
+            472.25
+          ]
         },
         "daily_percentile": {
           "mean": 94.325,
@@ -5194,13 +5790,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 459.5,
+      "score_ci95": [
+        437.75,
+        479.25
+      ],
       "daily_percentile": 95.4,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 459.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            437.75,
+            479.25
+          ]
         },
         "daily_percentile": {
           "mean": 95.4,
@@ -5254,13 +5857,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 334.75,
+      "score_ci95": [
+        307.24375,
+        363.5
+      ],
       "daily_percentile": 68.7,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 334.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            307.24375,
+            363.5
+          ]
         },
         "daily_percentile": {
           "mean": 68.7,
@@ -5314,13 +5924,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 326.5,
+      "score_ci95": [
+        305.25,
+        350.25
+      ],
       "daily_percentile": 68.1,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 326.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            305.25,
+            350.25
+          ]
         },
         "daily_percentile": {
           "mean": 68.1,
@@ -5374,13 +5991,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 505.5,
+      "score_ci95": [
+        481.0,
+        530.5
+      ],
       "daily_percentile": 98.1305,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 505.5,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            481.0,
+            530.5
+          ]
         },
         "daily_percentile": {
           "mean": 98.1305,
@@ -5434,13 +6058,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 445.75,
+      "score_ci95": [
+        417.5,
+        473.2562499999999
+      ],
       "daily_percentile": 93.088,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 445.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            417.5,
+            473.2562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 93.088,
@@ -5494,13 +6125,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 391.6666666666667,
+      "score_ci95": [
+        325.8333333333333,
+        458.3333333333333
+      ],
       "daily_percentile": 77.16666666666667,
       "games": 6,
       "aggregate_stats": {
         "score": {
           "mean": 391.6666666666667,
           "n": 6,
-          "ci95": null
+          "ci95": [
+            325.8333333333333,
+            458.3333333333333
+          ]
         },
         "daily_percentile": {
           "mean": 77.16666666666667,
@@ -5554,13 +6192,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 454.25,
+      "score_ci95": [
+        428.25,
+        480.25
+      ],
       "daily_percentile": 94.43,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 454.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            428.25,
+            480.25
+          ]
         },
         "daily_percentile": {
           "mean": 94.43,
@@ -5614,13 +6259,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 497.5,
+      "score_ci95": [
+        467.5,
+        527.5
+      ],
       "daily_percentile": 97.8925,
       "games": 4,
       "aggregate_stats": {
         "score": {
           "mean": 497.5,
           "n": 4,
-          "ci95": null
+          "ci95": [
+            467.5,
+            527.5
+          ]
         },
         "daily_percentile": {
           "mean": 97.8925,
@@ -5674,13 +6326,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 289.0,
+      "score_ci95": [
+        251.99375,
+        326.25
+      ],
       "daily_percentile": 53.95,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 289.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            251.99375,
+            326.25
+          ]
         },
         "daily_percentile": {
           "mean": 53.95,
@@ -5734,13 +6393,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 486.0,
+      "score_ci95": [
+        467.0,
+        503.5
+      ],
       "daily_percentile": 97.328,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 486.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            467.0,
+            503.5
+          ]
         },
         "daily_percentile": {
           "mean": 97.328,
@@ -5794,13 +6460,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 387.0,
+      "score_ci95": [
+        348.75,
+        426.25
+      ],
       "daily_percentile": 80.05,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 387.0,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            348.75,
+            426.25
+          ]
         },
         "daily_percentile": {
           "mean": 80.05,
@@ -5854,13 +6527,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 321.75,
+      "score_ci95": [
+        284.25,
+        357.0
+      ],
       "daily_percentile": 64.75,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 321.75,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            284.25,
+            357.0
+          ]
         },
         "daily_percentile": {
           "mean": 64.75,
@@ -5914,13 +6594,20 @@
       "complete": true,
       "status": "provisional_average",
       "score": 375.25,
+      "score_ci95": [
+        335.0,
+        414.2562499999999
+      ],
       "daily_percentile": 77.425,
       "games": 20,
       "aggregate_stats": {
         "score": {
           "mean": 375.25,
           "n": 20,
-          "ci95": null
+          "ci95": [
+            335.0,
+            414.2562499999999
+          ]
         },
         "daily_percentile": {
           "mean": 77.425,
@@ -5973,18 +6660,25 @@
       "provider": "x-ai",
       "complete": true,
       "status": "provisional_average",
-      "score": 174.21052631578948,
-      "daily_percentile": 21.210526315789473,
-      "games": 19,
+      "score": 178.5,
+      "score_ci95": [
+        140.5,
+        215.25
+      ],
+      "daily_percentile": 21.7,
+      "games": 20,
       "aggregate_stats": {
         "score": {
-          "mean": 174.21052631578948,
-          "n": 19,
-          "ci95": null
+          "mean": 178.5,
+          "n": 20,
+          "ci95": [
+            140.5,
+            215.25
+          ]
         },
         "daily_percentile": {
-          "mean": 21.210526315789473,
-          "n": 19,
+          "mean": 21.7,
+          "n": 20,
           "ci95": null
         },
         "run_cost_usd": {
@@ -6003,13 +6697,13 @@
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 251.77931052631578,
-          "n": 19,
+          "mean": 251.9974,
+          "n": 20,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 191.66826545205703,
-          "n": 19,
+          "mean": 191.8824173752917,
+          "n": 20,
           "ci95": null
         }
       },
@@ -6017,8 +6711,8 @@
         "run_cost_usd": null,
         "output_cost_usd": null,
         "output_tokens": null,
-        "run_duration_s": 251.77931052631578,
-        "inference_duration_s": 191.66826545205703,
+        "run_duration_s": 251.9974,
+        "inference_duration_s": 191.8824173752917,
         "cost_basis": "unavailable",
         "output_cost_basis": "unavailable",
         "usage_complete": false,
@@ -6032,5 +6726,11 @@
     "Five-word instruction amendment; all 44 earlier verified games retained.",
     "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included."
   ],
+  "uncertainty": {
+    "method": "95% percentile bootstrap over available clean tested dates",
+    "resamples": 10000,
+    "seed": 20261107,
+    "interpretation": "Variation over currently available dates; unequal coverage is provisional."
+  },
   "note": "Provisional means across available clean verified games. Models have unequal date coverage; this is not the final balanced 75-day comparison. Missing or partial metric records are excluded from that metric, never treated as zero."
 }

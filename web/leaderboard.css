@@ -96,3 +96,18 @@ html,body,*,*::before,*::after,input::placeholder{font-family:var(--pixel)!impor
 @media(max-width:760px){.view-controls{gap:14px}.view-controls button{font-size:17px;padding:8px 9px}.filters{margin-left:0;width:100%}.daily-controls select{max-width:none}}
 
 .model-button[aria-disabled="true"]{cursor:default}.plot-point{cursor:default}
+
+/* Readable pixel text for dense numeric columns and model annotations. */
+#results td{font-size:20px;line-height:1.3;padding:17px 10px;color:#edf4ff}
+#results .variant{font-size:17px;line-height:1.4;color:#bdd0e8}
+#results .model-name{font-size:22px;line-height:1.2}
+#results .score-value{font-size:28px;line-height:28px}#results .score-value small{font-size:18px;line-height:28px}
+#results .score-ci-label{font-size:16px;line-height:1.3;color:#cbdcf1;margin-top:7px}
+th{font-size:18px}.score-bar{height:34px;min-width:155px}.score-error-bar{stroke-width:1.5;opacity:.65}
+@media(max-width:760px){#results td{font-size:20px}#results .variant{font-size:17px}#results .model-name{font-size:22px}}
+
+#results .score-interval{height:2px;box-shadow:0 0 6px var(--tier-color),0 0 14px color-mix(in srgb,var(--tier-color) 60%,transparent)}
+#results .score-interval::before,#results .score-interval::after{width:2px;box-shadow:0 0 6px var(--tier-color)}
+#results .score-ci-label{color:var(--tier-color);text-shadow:0 0 7px color-mix(in srgb,var(--tier-color) 55%,transparent)}
+body.calm #results .score-interval,body.calm #results .score-interval::before,body.calm #results .score-interval::after{box-shadow:none}
+body.calm #results .score-ci-label{text-shadow:none}
