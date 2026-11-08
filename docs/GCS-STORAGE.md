@@ -8,12 +8,22 @@
 - Region: `us-east1`; Standard storage, uniform bucket access, public access
   prevention enforced, Google-managed encryption, seven-day soft delete.
 
-Status: the bucket and dedicated `krillion-runner` service account exist. The
-three bucket-only roles below are saved. Credential creation was approved and
-Google reported its JSON download; the local download has not yet been confirmed,
-so the credential smoke test and live cutover remain pending.
-The current ten-worker campaign still writes to its private GitHub repository.
-The new backend is wired into the campaign CLI but is opt-in.
+Status: the bucket and dedicated `krillion-runner` service account are configured
+with the three bucket-only roles below. The approved JSON credential is stored
+outside Git with owner-only permissions. The live synthetic test passed private
+bucket verification, create/read/list, checksum validation, identical-write
+reconciliation, conflict refusal, and absence of overwrite/delete/IAM permissions.
+
+The original coordinator drained cleanly at **228 verified games** on
+2026-11-08 UTC (November 7 in Toronto), exited with code 0, and remains retired.
+The isolated continuation has started with GCS enabled and has uploaded the
+immutable original manifest, catalog, and historical-inventory cutover record.
+Startup verified all 228 historical games and resumed the remaining 7,272 with
+ten rolling workers. Five new game reports were observed in GCS during activation;
+three independent readbacks verified checksums, exact model/date identity, all seven
+rounds, and final scorecards. Replacement browser sessions started immediately
+after completed uploads. All new reports go to GCS; historical reports remain
+in private GitHub.
 
 ## Readable report layout
 
@@ -22,6 +32,7 @@ campaigns/
   archive-75-20261106-v3/
     manifest.json.gz
     catalog.json.gz
+    storage-cutover.json.gz
     execution-revisions/<revision-id>.json.gz
     games/2026-11-06/models/openai/<exact-model-name>/
       attempts/initial/report.json.gz
@@ -57,8 +68,9 @@ personal project, outside the repository. Never load work ADC implicitly.
 The intended runner permissions are bucket-scoped Storage Object Creator, Storage
 Object Viewer, and Storage Legacy Bucket Reader. These allow create/read/list and
 bucket-metadata verification, without overwrite/delete or IAM administration.
-The user explicitly approved this bucket-only credential. The credential file must
-be confirmed locally before attempting the smoke test.
+The user explicitly approved this bucket-only credential. The saved credential
+was validated against the expected project and service account before the
+successful smoke test; its directory is mode 0700 and file mode 0600.
 
 The backend rechecks project number and privacy, compresses JSON in memory, uses
 `if_generation_match=0` to prevent overwrites, verifies CRC32C and SHA-256, and
@@ -68,26 +80,29 @@ No new trajectories, credentials, or private indexes belong in Git or local
 artifact directories. The local filesystem is used only for the explicitly
 configured credential, never as a trajectory sink.
 
-## Cutover plan — do not switch the running process yet
+## Cutover procedure and restart contract
 
-1. Confirm the approved credential file is available; verify a synthetic in-memory
-   upload/read/list and refusal to overwrite. Do not use a real game as a test.
+1. The approved credential and synthetic in-memory upload/read/list/immutability
+   test are verified. The test did not start a game.
 2. The CLI wiring and exact source-hash migration are prepared and tested against
    the real frozen manifest. The isolated continuation is
    `/private/tmp/Krillion-Bench-gcs`; all ten existing gameplay/shared modules are
    unchanged. Its new adapter and dependency lock are pinned. Public numeric
    progress keeps its existing separate GitHub status branch. Do not bypass source
    hashes or pull reorganized main into the running process.
-3. Gracefully drain all ten workers; verify every report uploaded and the old
-   coordinator exited. Freeze the legacy path inventory and destination identity.
+3. The original coordinator drained and exited with 228 verified reports. Leave
+   its stop sentinel in place; never restart it alongside the GCS continuation.
+   The legacy path inventory and destination identity are frozen in GCS.
 4. The GCS startup path uploads an immutable catalog, original manifest, and
    cutover record containing the historical checkpoint inventory and destination.
    A changed historical inventory is rejected on subsequent restarts. Resume exactly the remaining
    model/day pairs with ten rolling workers. `ReadThroughStore` reads old GitHub
    checkpoints and writes only new ones to GCS; it never silently falls back to
    GitHub writes. Duplicate checkpoints with conflicting content fail closed.
-5. Update monitoring to read both stores and retain the original all-7,500 balanced
-   completion gate. Keep previous GitHub data and all real scores unchanged.
+5. Monitoring now targets the isolated GCS runtime and reads both stores. It
+   retains the original all-7,500 balanced completion gate. Previous GitHub data
+   and all real scores remain unchanged. Numeric progress is refreshed periodically;
+   reports are acknowledged before each worker starts its next game.
 6. Publish only the final numeric aggregate to `web/data/leaderboard-data.json`.
 
 References: [GCS preconditions](https://docs.cloud.google.com/storage/docs/request-preconditions),
