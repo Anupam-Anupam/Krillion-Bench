@@ -40,6 +40,8 @@ Never repeat an answer already rejected in this round.
 Return actions: click a button by its exact visible name; fill the 'Your answer' textbox;
 wait (one second); or done. Batch fill and click DIVE in the same response.
 For fill, target MUST be exactly "Your answer" and text is the answer you choose.
+Each answer you enter in the 'Your answer' textbox MUST contain at most 5 words.
+Use a concise name or phrase; never include an explanation or multiple alternatives.
 If answering is false, NEVER fill. Click BEGIN DESCENT or DESCEND when present.
 Only the prompt field is a question; ocean scenery and previous results are not questions.
 If the game says 'no echo. try again', choose a different answer immediately: the SAME

@@ -172,3 +172,20 @@ stale rather than implying the workers are still healthy. Public progress outage
 are logged and retried on the next minute; they never abort private games. After
 all 7,500 games are verified, publishing aggregate scores is still a separate,
 validated step. Final shutdown publishes paused, needs-attention, or complete.
+
+## Five-word prompt amendment
+
+The user explicitly requested that new model answers contain at most five words
+and that existing runs need not be repeated. The system prompt now requires a
+concise name or phrase of at most five words, without explanations or alternatives.
+This is a prompt instruction; Krillion's automatic correction flow and the existing
+deadlines remain unchanged.
+
+For this specific transition, `--accept-five-word-prompt` permits the exact pinned
+before/after `player.py` hashes and the new `answer_word_limit_instruction=5`
+setting. It does not authorize any other player, runner, pricing, or timing change.
+An immutable execution revision records the amendment and preserves earlier
+checkpoints. New private checkpoints carry the instruction value and execution ID;
+older checkpoints remain untouched. The final aggregate export includes a protocol
+note that earlier results predate the amendment. Subsequent resumes of the same
+execution revision recognize its recorded authorization automatically.

@@ -121,5 +121,6 @@ async def test_unsupported_native_schema_falls_back_to_validated_prompt_json(tmp
     assert 'response_format' in seen[0] and 'response_format' not in seen[1]
     assert json.dumps(Turn.model_json_schema()) in seen[1]['messages'][0]['content']
     assert 'Do not wrap it in name or arguments' in seen[1]['messages'][0]['content']
+    assert all('MUST contain at most 5 words' in call['messages'][0]['content'] for call in seen)
     events = [json.loads(l) for l in (record.output/'events.jsonl').read_text().splitlines()]
     assert any(e['event'] == 'model_compatibility' and e['same_model'] for e in events)

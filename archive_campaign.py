@@ -51,7 +51,7 @@ def plan(roster, games, catalog, root, concurrency, campaign_id='archive-75-2026
                 models=[dict(id=r['model'], name=r.get('name', r['model']), rank=i+1,
                              pricing=meta[r['model']].get('pricing', {})) for i, r in enumerate(roster['runs'])],
                 source_sha256=hashes, concurrency=concurrency,
-                settings=dict(autocorrection_policy=AUTOCORRECTION_POLICY, max_output_tokens=None, model_retries=2, navigation_timeout=60,
+                settings=dict(answer_word_limit_instruction=5, autocorrection_policy=AUTOCORRECTION_POLICY, max_output_tokens=None, model_retries=2, navigation_timeout=60,
                               navigation_recovery='bounded', round_timeout_policy='continue',
                               terminal_failure_policy='collect_actual_scorecard', reasoning='low',
                               margin=3, vision=False))
@@ -62,20 +62,41 @@ def report_path(manifest, model, day):
     return f"{manifest['campaign']}/runs/{day}/{model_id}.json.gz"
 
 
-def execution_revision(original, current, reason):
-    """Permit audited orchestration changes, never changes to the player or controls."""
+FIVE_WORD_PLAYER_HASHES = (
+    "698d0856af689161831a304f3d5dd3177185c6f1f82e115b163fcd297328a2b1",
+    "568e9c0053f24330a13975667d28f51349a933eec4f54f76237d7b08fb99f952",
+)
+
+
+def execution_revision(original, current, reason, *, allow_five_word_prompt=False):
+    """Allow orchestration changes or the user's exact, audited prompt amendment."""
     stable = lambda m: {k: v for k, v in m.items() if k not in ('concurrency', 'source_sha256')}
-    if stable(original) != stable(current):
+    comparable = stable(current)
+    amendment = None
+    if allow_five_word_prompt:
+        if (original['settings'].get('answer_word_limit_instruction') is not None
+                or current['settings'].get('answer_word_limit_instruction') != 5
+                or (original['source_sha256'].get('player.py'), current['source_sha256'].get('player.py')) != FIVE_WORD_PLAYER_HASHES):
+            raise ValueError('Five-word amendment must match the exact approved prompt-only source change')
+        comparable = {**comparable, 'settings': dict(comparable['settings'])}
+        del comparable['settings']['answer_word_limit_instruction']
+        amendment = 'five_word_system_prompt_v1'
+    if stable(original) != comparable:
         raise ValueError('Campaign gameplay settings, dates, roster or prices changed')
     changed = {name for name in original['source_sha256'].keys() | current['source_sha256'].keys()
                if original['source_sha256'].get(name) != current['source_sha256'].get(name)}
-    if changed - {'archive_campaign.py'}:
+    allowed = {'archive_campaign.py', 'player.py'} if amendment else {'archive_campaign.py'}
+    if changed - allowed:
         raise ValueError('Only scheduler source may change within an existing campaign')
     if not reason or not reason.strip():
         raise ValueError('Scheduler revision requires an explicit audit reason')
-    return dict(reason=reason.strip(), original_concurrency=original['concurrency'],
+    revision = dict(reason=reason.strip(), original_concurrency=original['concurrency'],
                 concurrency=current['concurrency'], source_sha256=current['source_sha256'],
                 original_source_sha256=original['source_sha256'])
+    if amendment:
+        revision.update(policy_amendment=amendment, answer_word_limit_instruction=5,
+                        preserve_prior_results=True)
+    return revision
 
 
 def retryable_startup_failure(saved):
@@ -289,7 +310,9 @@ async def campaign(args):
             revision_path = campaign_id + '/execution-revisions/' + execution_id + '.json.gz'
             prior_revision = await store.read(revision_path)
             reason = (prior_revision or {}).get('reason') or getattr(args, 'execution_revision_reason', None)
-            revision = execution_revision(existing, manifest, reason)
+            revision = execution_revision(existing, manifest, reason,
+                allow_five_word_prompt=(getattr(args, 'accept_five_word_prompt', False)
+                    or (prior_revision or {}).get('policy_amendment') == 'five_word_system_prompt_v1'))
             if prior_revision is not None and prior_revision != revision:
                 raise ValueError('Execution revision differs from its immutable checkpoint')
             if prior_revision is None:
@@ -353,7 +376,7 @@ async def campaign(args):
                 prompt_fingerprint = hashlib.sha256(json.dumps(
                     [r['prompt'] for r in report['rounds']], ensure_ascii=False).encode()).hexdigest()
                 saved = dict(model=model['id'], game_date=game['date'], execution_id=execution_id,
-                             retry_of=retry_of,
+                             retry_of=retry_of, answer_word_limit_instruction=5,
                              captured_at=datetime.now(timezone.utc).isoformat(), report=report,
                              prompt_fingerprint=prompt_fingerprint, events=record.events)
                 # No new game starts in this slot until its report is remotely acknowledged.
@@ -400,6 +423,9 @@ async def campaign(args):
             print(json.dumps(dict(status='drained', verified=len(completed), planned=7500)), flush=True)
         if len(completed) == 7500:
             result = export_archive(manifest, completed)
+            if existing and 'answer_word_limit_instruction' not in existing['settings']:
+                result['protocol_note'] = ("At the user's request, a five-word answer instruction was added "
+                                           'during this campaign; earlier verified results were retained without reruns.')
             # This is the only local output: numeric aggregates, never trajectories.
             args.public_output.write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
             print('All 7,500 games verified; aggregate-only leaderboard export ready.', flush=True)
@@ -426,6 +452,7 @@ if __name__ == '__main__':
     parser.add_argument('--concurrency', type=int, default=2)
     parser.add_argument('--campaign-id', default='archive-75-20261106-v3')
     parser.add_argument('--execution-revision-reason')
+    parser.add_argument('--accept-five-word-prompt', action='store_true', help='Apply the explicitly authorized prompt-only amendment while preserving earlier scores')
     parser.add_argument('--publish-progress', action='store_true', help='Publish aggregate counters to the personal public status branch')
     parser.add_argument('--progress-output', type=Path, default=Path('artifacts/campaign-progress.json'))
     parser.add_argument('--stop-file', type=Path, default=Path('.campaign-stop'))

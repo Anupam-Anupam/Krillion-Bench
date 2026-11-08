@@ -203,3 +203,38 @@ async def test_progress_publish_failure_does_not_abort_games(tmp_path,capsys):
     assert progress.completed == 23
     assert 'progress_publish_failed' in capsys.readouterr().out
     assert (tmp_path/'status.json').exists()
+
+
+def test_only_explicit_exact_five_word_prompt_amendment_preserves_existing_panel(tmp_path):
+    from archive_campaign import FIVE_WORD_PLAYER_HASHES
+    current = plan(*inputs(tmp_path), tmp_path, 8)
+    current['source_sha256']['player.py'] = FIVE_WORD_PLAYER_HASHES[1]
+    original = deepcopy(current)
+    original['source_sha256']['player.py'] = FIVE_WORD_PLAYER_HASHES[0]
+    del original['settings']['answer_word_limit_instruction']
+    with pytest.raises(ValueError, match='gameplay settings'):
+        execution_revision(original, current, 'User asked for a word limit')
+    revision = execution_revision(original, current, 'User explicitly requested no reruns', allow_five_word_prompt=True)
+    assert revision['policy_amendment'] == 'five_word_system_prompt_v1'
+    assert revision['preserve_prior_results'] is True
+    assert revision['answer_word_limit_instruction'] == 5
+    changed = deepcopy(current)
+    changed['source_sha256']['player.py'] = 'some other gameplay change'
+    with pytest.raises(ValueError, match='exact approved'):
+        execution_revision(original, changed, 'reason', allow_five_word_prompt=True)
+    changed = deepcopy(current)
+    changed['settings']['margin'] = 0
+    with pytest.raises(ValueError, match='gameplay settings'):
+        execution_revision(original, changed, 'reason', allow_five_word_prompt=True)
+    changed = deepcopy(current)
+    changed['source_sha256']['runner.py'] = 'different execution rules'
+    with pytest.raises(ValueError, match='Only scheduler'):
+        execution_revision(original, changed, 'reason', allow_five_word_prompt=True)
+
+
+def test_five_word_amendment_matches_the_actual_player_source():
+    import hashlib
+    from archive_campaign import FIVE_WORD_PLAYER_HASHES
+    from player import SYSTEM
+    assert hashlib.sha256((Path(__file__).resolve().parents[1]/'player.py').read_bytes()).hexdigest() == FIVE_WORD_PLAYER_HASHES[1]
+    assert "Each answer you enter in the 'Your answer' textbox MUST contain at most 5 words." in SYSTEM
