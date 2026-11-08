@@ -116,3 +116,6 @@ body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
 
 /* Keep the table footer as readable as the graph legend. */
 .table-footer,.table-footer button,.data-note,#load-status{font:15px/1.4 var(--pixel)}
+
+/* Match methodology and accounting descriptions to the graph legend. */
+.method-grid p,.definitions,.definitions p,#metric-definitions summary{font:15px/1.5 var(--pixel)}
