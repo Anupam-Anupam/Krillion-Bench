@@ -405,6 +405,10 @@
     "qwen/qwen3.8-max-prime": {
       "weight_access": "closed",
       "weights_url": null
+    },
+    "mistralai/mistral-medium-3-5": {
+      "weight_access": "open",
+      "weights_url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
     }
   },
   "classification_note": "Open-Source filter means publicly downloadable weights, indicated by a Hugging Face model ID in the OpenRouter catalog. Closed Weight means no public weight repository listed. This is weight availability, not a certification of an OSI-approved license."

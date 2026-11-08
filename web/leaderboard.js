@@ -152,15 +152,14 @@ async function openDetails(id) {
 }
 function validate(data) {
   if(data?.schema_version!==1 || !Array.isArray(data.runs)||!data.settings||!data.date)throw new Error('Choose a leaderboard.json exported by this harness.');
-  if(data.aggregation==='archive_partial_mean'&&(data.runs.length!==100||data.target_games!==7500||data.verified_games!==data.runs.reduce((n,r)=>n+r.games,0)))throw new Error('Invalid provisional coverage.');
+  if(data.aggregation==='archive_partial_mean'&&(data.runs.length!==100||data.target_games!==data.runs.length*data.games_per_model||data.verified_games!==data.runs.reduce((n,r)=>n+r.games,0)))throw new Error('Invalid provisional coverage.');
   if(data.runs.length>2000)throw new Error('This viewer supports up to 2,000 run entries.');
   const ids=new Set();
   for(const r of data.runs){
     if(typeof r.model!=='string'||typeof r.provider!=='string'||!r.metrics||!Array.isArray(r.rounds)||ids.has(r.model))throw new Error('The data contains an invalid or duplicate model.');
     ids.add(r.model);
-    if(data.numeric_only&&(!r.report_object?.startsWith('campaigns/archive-75-20261106-v3/games/'+data.date+'/models/')||!r.report_object.endsWith('/report.json.gz')))throw new Error('Missing exact private report identity.');
     if(data.aggregation==='archive_partial_mean'){
-      if(!data.provisional||!Number.isInteger(r.games)||r.games<0||r.games>75||r.rounds.length||r.complete!==(r.games>0))throw new Error('Invalid provisional average.');
+      if(!data.provisional||!Number.isInteger(r.games)||r.games<0||r.games>data.games_per_model||r.rounds.length||r.complete!==(r.games>0))throw new Error('Invalid provisional average.');
       for(const key of ['score','daily_percentile','run_cost_usd','output_cost_usd','output_tokens','run_duration_s']){const stat=r.aggregate_stats?.[key];if(!stat||!Number.isInteger(stat.n)||stat.n<0||stat.n>r.games||(stat.mean!=null&&!numeric(stat.mean)))throw new Error('Invalid provisional metric.');}
     }
     if(data.aggregation==='archive_mean'){
@@ -196,11 +195,11 @@ function displaySnapshot(data) {
   $('#calendar-date').textContent=$('#day-filter').value;
   $('#view-note').hidden=state.view==='average';
   if(state.view!=='daily')closeCalendar(false);
-  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
+  $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of ${data.games_per_model} dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards. Select a model for its daily report.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
-  $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
+  $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'October 18–November 8 results.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
   $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Select a model to inspect the questions, answers and points from its verified clean run for this date.':'Open any model to inspect its answers, rejections, rarity, and points.';
   $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
   const s=data.settings;
@@ -238,14 +237,10 @@ function selectView() {
 function install(data) {
   validate(data);
   state.aggregate=['archive_mean','archive_partial_mean'].includes(data.aggregation)?data:(state.publishedAverage||null);
-  state.days=state.publishedDays?[data,...state.publishedDays.map(validate)]:['archive_mean','archive_partial_mean'].includes(data.aggregation)?(data.daily_snapshots||[]).map(validate):[data,...(data.daily_snapshots||[]).map(validate)];
-  // Only expose dates with one verified result for every model in the current roster.
+  state.days=state.publishedDays?state.publishedDays.map(validate):['archive_mean','archive_partial_mean'].includes(data.aggregation)?(data.daily_snapshots||[]).map(validate):[data,...(data.daily_snapshots||[]).map(validate)];
+  // Show every published window date; keep only clean results from the current roster.
   const roster=new Set((state.aggregate||data).runs.map(r=>r.model));
-  state.days=state.days.filter(day=>{
-    const clean=day.runs.filter(r=>r.complete&&numeric(r.score));
-    const models=new Set(clean.map(r=>r.model));
-    return models.size===clean.length&&[...roster].every(model=>models.has(model));
-  }).map(day=>({...day,runs:day.runs.filter(r=>roster.has(r.model))}));
+  state.days=state.days.filter(day=>day.runs.some(r=>r.complete&&numeric(r.score))).map(day=>({...day,runs:day.runs.filter(r=>roster.has(r.model))}));
   if(new Set(state.days.map(d=>d.date)).size!==state.days.length)throw new Error('Duplicate daily snapshot.');
   if(!state.publishedDays&&state.days.some(d=>JSON.stringify(d.settings)!==JSON.stringify(state.days[0].settings)||JSON.stringify(d.source_sha256)!==JSON.stringify(state.days[0].source_sha256)))throw new Error('Daily snapshots must use the same tested configuration.');
   state.days.sort((a,b)=>b.date.localeCompare(a.date));
@@ -327,6 +322,6 @@ scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-four-clean-dates').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-four-clean-dates').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
