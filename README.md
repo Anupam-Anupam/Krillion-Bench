@@ -5,6 +5,10 @@ A small browser-action harness for an LLM to play the complete Daily Dive from
 the model's actions. Browser Use's model adapters support provider APIs and compatible
 endpoints. It runs as a standalone Python project with no database or job queue.
 
+## Archived multi-game evaluation
+
+The 75-game campaign uses a separate [private-report pipeline](ARCHIVE-CAMPAIGN.md). It streams compressed run reports directly to a personal private GitHub repository, exports only numeric aggregates, and supports 95% confidence whiskers on the leaderboard. Live archive replay still requires the restored Unlimited profile and a validated pilot.
+
 ## Leaderboard UI
 
 The static leaderboard in `index.html` follows a restrained research-table layout,

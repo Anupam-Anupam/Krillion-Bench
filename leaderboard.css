@@ -63,3 +63,12 @@ body.calm .rank-badge.krillion{filter:none}
 #legend{font:15px/1.4 var(--pixel);gap:8px 13px}
 .metric-help{display:flex;justify-content:flex-end;padding:10px 0 14px}
 .metric-help button{font:14px var(--pixel);color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+
+/* Confidence whiskers appear only for measured multi-game averages. */
+.score-bar.with-interval{margin-bottom:12px}
+.score-interval{position:absolute;bottom:-7px;height:1px;background:var(--tier-color);box-shadow:0 0 5px color-mix(in srgb,var(--tier-color) 40%,transparent)}
+.score-interval::before,.score-interval::after{content:"";position:absolute;top:-3px;width:1px;height:7px;background:var(--tier-color)}
+.score-interval::before{left:0}.score-interval::after{right:0}
+.score-ci-label{display:block;font:13px/1.2 var(--pixel);color:var(--tier-color);white-space:normal}
+#aggregate-note{font:16px/1.4 var(--pixel);color:var(--muted);margin:0 0 15px}
+body.calm .score-interval{box-shadow:none}

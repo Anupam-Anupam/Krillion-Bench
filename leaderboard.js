@@ -43,6 +43,18 @@ function badgeMarkup(row) {
   const position=state.placements.get(row.model), badge=badgeForPosition(position);
   return badge ? `<img class="rank-badge ${badge.key}" src="krillion-${badge.key}.png" width="36" height="36" alt="${badge.label}, overall position ${position}" title="${badge.label} · overall position ${position}">` : '';
 }
+const scoreText = value => new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(value);
+function scoreMarkup(row) {
+  const interval=row.score_ci95;
+  const label=interval?`95% CI ${scoreText(interval[0])}–${scoreText(interval[1])}`:'';
+  return `<div class="score-bar${interval?' with-interval':''}"><div class="score-fill" style="width:${row.score/700*100}%"></div><span class="score-value">${scoreText(row.score)}<small>/ 700</small></span>${interval?`<span class="score-interval" aria-hidden="true" style="left:${interval[0]/700*100}%;width:${(interval[1]-interval[0])/700*100}%"></span>`:''}</div>${interval?`<span class="score-ci-label">${label}</span>`:''}`;
+}
+function openAggregateDetails(row) {
+  const labels={score:'MEAN SCORE',daily_percentile:'MEAN DAILY %',run_cost_usd:'MEAN LLM COST',output_cost_usd:'MEAN OUTPUT COST',output_tokens:'MEAN OUTPUT TOKENS',run_duration_s:'MEAN TIME'};
+  const format=(key,v)=>v==null?'—':key.includes('cost')?money(v):key==='run_duration_s'?duration(v):scoreText(v)+(key==='daily_percentile'?'%':'');
+  $('#detail-content').innerHTML=`<h2 id="detail-title">${escapeHTML(row.model.split('/').slice(1).join('/'))}</h2><p class="detail-id">${escapeHTML(row.model)} · ${row.games} archived games</p><dl class="detail-metrics">${Object.entries(labels).map(([key,label])=>{const stat=row.aggregate_stats[key];return `<div><dt>${label}</dt><dd>${format(key,stat.mean)}<small>${stat.n} of ${row.games} games${stat.ci95?` · 95% CI ${format(key,stat.ci95[0])}–${format(key,stat.ci95[1])}`:''}</small></dd></div>`;}).join('')}</dl><p class="detail-notes">${escapeHTML(state.data.date_start)} through ${escapeHTML(state.data.date_end)}. Each model plays the same archived games once. Score includes timed-out questions. Intervals use 10,000 bootstrap resamples of game dates and describe variation across games, not repeated trials of one game. Metrics with unavailable or partial records exclude those records and show their sample count. Individual answers and trajectories are stored privately.</p>`;
+  $('#run-dialog').showModal();$('#run-dialog').scrollTop=0;
+}
 function render() {
   const matches=orderedRows(visibleRows());
   const rows=state.expanded?matches:matches.slice(0,5);
@@ -51,8 +63,8 @@ function render() {
     const badge=badgeForPosition(state.placements.get(r.model));
     const display=r.model.split('/').slice(1).join('/');
     const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
-    const tokens=m.output_tokens == null ? '—' : `${m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
-    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" aria-label="View ${escapeHTML(r.model)} run details">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?`<div class="score-bar"><div class="score-fill" style="width:${r.score/700*100}%"></div><span class="score-value">${r.score}<small>/ 700</small></span></div>`:`<span class="incomplete-label">Run error <small>${escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${m.usage_calls} of ${m.model_calls} calls have usage">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':r.daily_percentile+'%'}</td></tr>`;
+    const tokens=m.output_tokens == null ? '—' : `${r.games||m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
+    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" aria-label="View ${escapeHTML(r.model)} run details">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">Run error <small>${escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${m.usage_calls} of ${m.model_calls} calls have usage">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.games?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
   $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'} · click a model to inspect its dive`;
   const expand=$('#expand-results');
@@ -68,7 +80,7 @@ function render() {
 }
 function renderChart(rows) {
   const key=state.axis;
-  const eligible=rows.filter(r=>r.complete && numeric(metric(r,key)) && (!key.includes('cost') || !r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'].startsWith('partial_')) && (key!=='output_tokens'||r.metrics.usage_complete));
+  const eligible=rows.filter(r=>r.complete && numeric(metric(r,key)) && (!key.includes('cost') || !r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'].startsWith('partial_')) && (key!=='output_tokens'||r.metrics.usage_complete||state.data.aggregation==='archive_mean'));
   $('#plot-direction').textContent=key==='daily_percentile'?'Higher score, higher placement ↗':'Higher score, lower '+({run_cost_usd:'cost',output_cost_usd:'output cost',output_tokens:'token use',run_duration_s:'time'}[key])+' ↖';
   $('#axis-label').textContent=axes[key];
   $('#chart-tooltip').hidden=true;
@@ -89,7 +101,7 @@ function renderChart(rows) {
   for(const r of [...eligible].sort((a,b)=>a.score-b.score)){
     const cx=x(metric(r,key)),cy=y(r.score);
     const formatted=key.includes('cost')?costPrefix(r.metrics[key==='run_cost_usd'?'cost_basis':'output_cost_basis'])+money(metric(r,key)):key==='run_duration_s'?duration(metric(r,key)):count(metric(r,key))+(key==='daily_percentile'?'%':'');
-    svg+=`<circle class="plot-point" cx="${cx}" cy="${cy}" r="4.5" fill="${color(r.provider)}" tabindex="0" role="button" data-model="${escapeHTML(r.model)}" aria-label="${escapeHTML(r.model)}, score ${r.score}, ${escapeHTML(formatted)}"><title>${escapeHTML(r.model)} · ${r.score} / 700 · ${escapeHTML(formatted)}</title></circle>`;
+    svg+=`<circle class="plot-point" cx="${cx}" cy="${cy}" r="4.5" fill="${color(r.provider)}" tabindex="0" role="button" data-model="${escapeHTML(r.model)}" aria-label="${escapeHTML(r.model)}, score ${scoreText(r.score)}, ${escapeHTML(formatted)}"><title>${escapeHTML(r.model)} · ${scoreText(r.score)} / 700 · ${escapeHTML(formatted)}</title></circle>`;
     if(top.includes(r)){
       let ly=cy-12;
       while(occupied.some(p=>Math.abs(p.x-cx)<155 && Math.abs(p.y-ly)<15))ly-=17;
@@ -103,9 +115,10 @@ function renderChart(rows) {
 }
 function openDetails(id) {
   const r=state.data.runs.find(r=>r.model===id);if(!r)return;
+  if(state.data.aggregation==='archive_mean'){openAggregateDetails(r);return;}
   const m=r.metrics;
   const item=(label,value,note='')=>`<div><dt>${label}</dt><dd>${escapeHTML(value)}${note?`<small>${escapeHTML(note)}</small>`:''}</dd></div>`;
-  $('#detail-content').innerHTML=`<h2 id="detail-title">${escapeHTML(r.model.split('/')[1])}</h2><p class="detail-id">${escapeHTML(r.model)} · ${escapeHTML(state.data.date)}</p><dl class="detail-metrics">${item('VERIFIED SCORE',r.complete?r.score+' / 700':'No verified scorecard',r.complete?'Rank '+scoreRank(r):`${r.partial_points??0} partial points`)}${item('DAILY PLACEMENT',r.daily_percentile==null?'—':r.daily_percentile+'%','Better than today’s players')}${item('ELAPSED TIME',duration(m.run_duration_s),duration(m.inference_duration_s)+' in model calls')}${item('LLM COST',costPrefix(m.cost_basis)+money(m.run_cost_usd),basisText(m.cost_basis))}${item('OUTPUT COST',costPrefix(m.output_cost_basis)+money(m.output_cost_usd),basisText(m.output_cost_basis))}${item('OUTPUT TOKENS',(m.output_tokens==null||m.usage_complete?'':'≥ ')+count(m.output_tokens),`${m.usage_calls}/${m.model_calls} calls have usage`)}</dl><p class="detail-notes">${escapeHTML(r.status)}${r.error_type?' · '+escapeHTML(r.error_type):''} · ${r.rounds_scored}/7 rounds scored · ${r.recoveries} navigation recoveries · ${r.missed_rounds??0} missed questions.<br>${r.scorecard_assisted?'Final score collected after the agent stopped. Remaining questions expired naturally; the harness supplied no answers.<br>':''}Input tokens: ${count(m.input_tokens)}. Output price: ${m.pricing?.completion!=null?money(Number(m.pricing.completion)*1e6)+' / million tokens (saved catalog)':'not available'}. Browser costs excluded.</p>${r.issues?.length?`<section class="round-detail"><h3>Timeouts &amp; failure diagnostics</h3><ul>${r.issues.map(e=>`<li>${escapeHTML(e.round||'Run')} · ${escapeHTML(e.reason||e.category)}${e.http_status?' · HTTP '+escapeHTML(e.http_status):''}${e.provider_name?' · '+escapeHTML(e.provider_name):''}</li>`).join('')}</ul></section>`:''}${r.rounds.map((round,i)=>`<section class="round-detail"><div class="round-meta"><span>ROUND ${i+1} / 7</span><span>${round.points==null?'UNSCORED':round.points+' PTS'}${round.rarity?' · '+escapeHTML(round.rarity):''}</span></div><h3>${escapeHTML(round.prompt)}</h3><table><thead><tr><th>Submitted answer</th><th>Outcome</th><th>Rarity</th><th>Clock</th></tr></thead><tbody>${round.submissions.length?round.submissions.map(s=>`<tr><td>${escapeHTML(s.answer)}</td><td class="${s.outcome==='accepted'?'accepted':s.outcome==='rejected'?'rejected':''}">${escapeHTML(s.outcome?.replaceAll('_',' '))}${s.suggested_answer?' → '+escapeHTML(s.suggested_answer):''}</td><td>${escapeHTML(s.rarity||'—')}</td><td>${s.timer==null?'—':escapeHTML(s.timer)+'s'}</td></tr>`).join(''):'<tr><td colspan="4">No recorded submission.</td></tr>'}</tbody></table>${round.interruptions?.length?`<p class="detail-notes">${round.interruptions.map(escapeHTML).join(', ')}</p>`:''}</section>`).join('')}${r.rounds.length?'':'<p class="empty">No question was reached in this run.</p>'}`;
+  $('#detail-content').innerHTML=`<h2 id="detail-title">${escapeHTML(r.model.split('/')[1])}</h2><p class="detail-id">${escapeHTML(r.model)} · ${escapeHTML(state.data.date)}</p><dl class="detail-metrics">${item('VERIFIED SCORE',r.complete?r.score+' / 700':'No verified scorecard',r.complete?'Rank '+scoreRank(r):`${r.partial_points??0} partial points`)}${item('DAILY PLACEMENT',r.daily_percentile==null?'—':(r.games?r.daily_percentile.toFixed(2):r.daily_percentile)+'%','Better than today’s players')}${item('ELAPSED TIME',duration(m.run_duration_s),duration(m.inference_duration_s)+' in model calls')}${item('LLM COST',costPrefix(m.cost_basis)+money(m.run_cost_usd),basisText(m.cost_basis))}${item('OUTPUT COST',costPrefix(m.output_cost_basis)+money(m.output_cost_usd),basisText(m.output_cost_basis))}${item('OUTPUT TOKENS',(m.output_tokens==null||m.usage_complete?'':'≥ ')+count(m.output_tokens),`${m.usage_calls}/${m.model_calls} calls have usage`)}</dl><p class="detail-notes">${escapeHTML(r.status)}${r.error_type?' · '+escapeHTML(r.error_type):''} · ${r.rounds_scored}/7 rounds scored · ${r.recoveries} navigation recoveries · ${r.missed_rounds??0} missed questions.<br>${r.scorecard_assisted?'Final score collected after the agent stopped. Remaining questions expired naturally; the harness supplied no answers.<br>':''}Input tokens: ${count(m.input_tokens)}. Output price: ${m.pricing?.completion!=null?money(Number(m.pricing.completion)*1e6)+' / million tokens (saved catalog)':'not available'}. Browser costs excluded.</p>${r.issues?.length?`<section class="round-detail"><h3>Timeouts &amp; failure diagnostics</h3><ul>${r.issues.map(e=>`<li>${escapeHTML(e.round||'Run')} · ${escapeHTML(e.reason||e.category)}${e.http_status?' · HTTP '+escapeHTML(e.http_status):''}${e.provider_name?' · '+escapeHTML(e.provider_name):''}</li>`).join('')}</ul></section>`:''}${r.rounds.map((round,i)=>`<section class="round-detail"><div class="round-meta"><span>ROUND ${i+1} / 7</span><span>${round.points==null?'UNSCORED':round.points+' PTS'}${round.rarity?' · '+escapeHTML(round.rarity):''}</span></div><h3>${escapeHTML(round.prompt)}</h3><table><thead><tr><th>Submitted answer</th><th>Outcome</th><th>Rarity</th><th>Clock</th></tr></thead><tbody>${round.submissions.length?round.submissions.map(s=>`<tr><td>${escapeHTML(s.answer)}</td><td class="${s.outcome==='accepted'?'accepted':s.outcome==='rejected'?'rejected':''}">${escapeHTML(s.outcome?.replaceAll('_',' '))}${s.suggested_answer?' → '+escapeHTML(s.suggested_answer):''}</td><td>${escapeHTML(s.rarity||'—')}</td><td>${s.timer==null?'—':escapeHTML(s.timer)+'s'}</td></tr>`).join(''):'<tr><td colspan="4">No recorded submission.</td></tr>'}</tbody></table>${round.interruptions?.length?`<p class="detail-notes">${round.interruptions.map(escapeHTML).join(', ')}</p>`:''}</section>`).join('')}${r.rounds.length?'':'<p class="empty">No question was reached in this run.</p>'}`;
   $('#run-dialog').showModal();$('#run-dialog').scrollTop=0;
 }
 function validate(data) {
@@ -115,6 +128,17 @@ function validate(data) {
   for(const r of data.runs){
     if(typeof r.model!=='string'||typeof r.provider!=='string'||!r.metrics||!Array.isArray(r.rounds)||ids.has(r.model))throw new Error('The data contains an invalid or duplicate model.');
     ids.add(r.model);
+    if(data.aggregation==='archive_mean'){
+      if(!Number.isInteger(r.games)||r.games<2||r.games!==data.games_per_model||r.rounds.length)throw new Error('Invalid aggregate game count or private trajectory included.');
+      const ci=r.score_ci95;
+      if(!Array.isArray(ci)||ci.length!==2||!ci.every(numeric)||ci[0]>ci[1]||ci[1]>700)throw new Error('Invalid score confidence interval.');
+      for(const key of ['score','daily_percentile','run_cost_usd','output_cost_usd','output_tokens','run_duration_s']){
+        const stat=r.aggregate_stats?.[key];
+        if(!stat||!Number.isInteger(stat.n)||stat.n<0||stat.n>r.games||(stat.mean!=null&&!numeric(stat.mean)))throw new Error('Invalid aggregate metric.');
+        if(stat.ci95!=null&&(!Array.isArray(stat.ci95)||stat.ci95.length!==2||!stat.ci95.every(numeric)||stat.ci95[0]>stat.ci95[1]))throw new Error('Invalid metric confidence interval.');
+      }
+    }
+
     if(typeof r.complete!=='boolean'||(r.complete&&(!numeric(r.score)||r.score>700))||(!r.complete&&r.score!==null))throw new Error('Invalid score or completion status.');
     if(r.daily_percentile!=null&&(!numeric(r.daily_percentile)||r.daily_percentile>100||!r.complete))throw new Error('Invalid daily placement.');
     for(const key of Object.keys(axes).filter(k=>k!=='daily_percentile'))if(r.metrics[key]!=null&&!numeric(r.metrics[key]))throw new Error('Invalid metric value.');
@@ -132,7 +156,11 @@ function install(data) {
   state.query='';state.status='all';state.provider='all';state.sort='score';state.direction=-1;state.expanded=false;
   $('#search').value='';$('#provider-filter').innerHTML='<option value="all">All providers</option>'+[...new Set(data.runs.map(r=>r.provider))].sort().map(p=>`<option value="${escapeHTML(p)}">${escapeHTML(providerName(p))}</option>`).join('');
   document.querySelectorAll('#status-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.status==='all')));
-  $('#snapshot').textContent=data.date;
+  $('#snapshot').textContent=data.aggregation==='archive_mean'?`${data.date_start} – ${data.date_end}`:data.date;
+  $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
+  $('#context-title').textContent=data.aggregation==='archive_mean'?`${data.games_per_model} daily puzzles.`:'One daily puzzle.';
+  $('#report-description').textContent=data.aggregation==='archive_mean'?'Open a model to inspect its aggregate metrics, sample counts, and confidence intervals. Individual answers and trajectories are stored privately.': 'Open any model to inspect its answers, rejections, rarity, and points.';
+  $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games · score whiskers show 95% confidence intervals`:'';
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
   $('#configuration').textContent=old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
@@ -153,7 +181,7 @@ document.querySelector('thead').addEventListener('click',e=>{const th=e.target.c
 $('#results').addEventListener('click',e=>{const b=e.target.closest('[data-model]');if(b)openDetails(b.dataset.model);});
 $('#chart').addEventListener('click',e=>{const b=e.target.closest('[data-model]');if(b)openDetails(b.dataset.model);});
 $('#chart').addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)&&e.target.dataset.model){e.preventDefault();openDetails(e.target.dataset.model);}});
-$('#chart').addEventListener('pointerover',e=>{const b=e.target.closest('[data-model]');if(!b)return;const r=state.data.runs.find(r=>r.model===b.dataset.model);$('#chart-tooltip').textContent=`${r.model} · ${r.score} / 700 · ${axes[state.axis]}: ${state.axis.includes('cost')?costPrefix(r.metrics[state.axis==='run_cost_usd'?'cost_basis':'output_cost_basis'])+money(metric(r,state.axis)):count(metric(r,state.axis))}`;$('#chart-tooltip').hidden=false;});
+$('#chart').addEventListener('pointerover',e=>{const b=e.target.closest('[data-model]');if(!b)return;const r=state.data.runs.find(r=>r.model===b.dataset.model);$('#chart-tooltip').textContent=`${r.model} · ${scoreText(r.score)} / 700 · ${axes[state.axis]}: ${state.axis.includes('cost')?costPrefix(r.metrics[state.axis==='run_cost_usd'?'cost_basis':'output_cost_basis'])+money(metric(r,state.axis)):count(metric(r,state.axis))}`;$('#chart-tooltip').hidden=false;});
 $('#chart').addEventListener('pointerleave',()=>{$('#chart-tooltip').hidden=true;});
 $('#close-dialog').addEventListener('click',()=>$('#run-dialog').close());
 $('#run-dialog').addEventListener('click',e=>{if(e.target===$('#run-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});

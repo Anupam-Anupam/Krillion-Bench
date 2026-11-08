@@ -23,7 +23,7 @@ from dotenv import dotenv_values
 from playwright.async_api import async_playwright
 
 from deadline import DeadlineExceeded, RoundDeadline
-from reporting import correction, read_events, rejection, result_details, write_report
+from reporting import correction, enrich_report, read_events, rejection, result_details, write_report
 from model_policy import error_details
 from metrics import aggregate, pricing_for, usage_hook
 import httpx
@@ -64,6 +64,8 @@ class State:
 
 
 class Recorder:
+    persist_artifacts = True
+
     def __init__(self, output):
         self.output = output
         output.mkdir(parents=True, exist_ok=False)
@@ -192,6 +194,8 @@ def make_model(args):
 
 async def capture_screenshot(page, record, name):
     """A diagnostic image must never prevent gameplay or final score collection."""
+    if not record.persist_artifacts:
+        return
     try:
         await page.screenshot(path=str(record.output / name), timeout=5000)
     except Exception as exc:
@@ -207,9 +211,10 @@ async def browser_session(args, record):
                 raise ValueError("Set BROWSER_USE_API_KEY or use --browser local")
             cloud = AsyncBrowserUse(max_retries=0)
             remote = await cloud.browsers.create(
-                timeout=15, solve_captchas=False, enable_recording=True,
+                timeout=15, solve_captchas=False, enable_recording=record.persist_artifacts,
+                profile_id=getattr(args, "profile_id", None),
                 browser_screen_width=1280, browser_screen_height=800,
-                metadata={"project": "krillion-benchmark", "run": record.output.name},
+                metadata={"project": "krillion-benchmark", "run": record.run_id if not record.persist_artifacts else record.output.name},
             )
             if not remote.cdp_url:
                 raise RuntimeError("Cloud browser did not provide a connection endpoint")
@@ -224,12 +229,16 @@ async def browser_session(args, record):
                 )
                 context = await connection.new_context(viewport={"width": 1280, "height": 800})
             try:
-                await context.tracing.start(screenshots=True, snapshots=True)
+                if record.persist_artifacts:
+                    await context.tracing.start(screenshots=True, snapshots=True)
                 page = context.pages[0] if context.pages else await context.new_page()
                 page.set_default_timeout(5000)
                 await page.set_viewport_size({"width": 1280, "height": 800})
                 await page.emulate_media(reduced_motion="reduce")
                 await page.goto(args.url, wait_until="domcontentloaded", timeout=30000)
+                prepare = getattr(args, "prepare_page", None)
+                if prepare:
+                    await prepare(page)
                 await page.get_by_role("button", name="▼ BEGIN DESCENT ▼", exact=True).wait_for(timeout=20000)
                 record.event("browser_ready", browser=args.browser)
                 await capture_screenshot(page, record, 'initial.png')
@@ -238,9 +247,14 @@ async def browser_session(args, record):
                 finally:
                     await capture_screenshot(page, record, 'final.png')
                     with suppress(Exception):
-                        (record.output / "final.txt").write_text(await page.locator("body").inner_text())
-                    with suppress(Exception):
-                        await context.tracing.stop(path=str(record.output / "trace.zip"))
+                        final_text = await page.locator("body").inner_text()
+                        if record.persist_artifacts:
+                            (record.output / "final.txt").write_text(final_text)
+                        else:
+                            record.final_text = final_text
+                    if record.persist_artifacts:
+                        with suppress(Exception):
+                            await context.tracing.stop(path=str(record.output / "trace.zip"))
             finally:
                 await connection.close()
     finally:
@@ -331,8 +345,8 @@ async def run_game(session, observer, args):
         observer.blocked = True
 
 
-async def run(args):
-    record = Recorder(args.output)
+async def execute_report(args, record, pricing=None):
+    """Run once; a memory recorder keeps all trajectory data off the filesystem."""
     observer = None
     status, error = "failed", None
     record.event("config", browser=args.browser, model=args.model, provider=args.provider,
@@ -368,13 +382,21 @@ async def run(args):
         report["final_score"] = observer.last_state.score
         report["scoreboard"] = observer.last_state.results
     record.event('run_finished', status=status)
-    pricing_path = getattr(args, 'pricing_file', None)
-    pricing = pricing_for(json.loads(pricing_path.read_text()), args.model) if pricing_path else {}
-    report['metrics'] = aggregate(read_events(record.output), pricing)
-    final = record.output / "final.txt"
-    write_report(report, record.output, final.read_text() if final.exists() else "", read_events(record.output))
-    print(json.dumps({"status": status, "error_type": error, "output": str(record.output)}))
-    return 0 if status in {"smoke_passed", "baseline_finished", "agent_finished", "scored_with_errors"} else 1
+    if pricing is None:
+        pricing_path = getattr(args, 'pricing_file', None)
+        pricing = pricing_for(json.loads(pricing_path.read_text()), args.model) if pricing_path else {}
+    events = read_events(record.output) if record.persist_artifacts else record.events
+    report['metrics'] = aggregate(events, pricing)
+    if record.persist_artifacts:
+        final = record.output / 'final.txt'
+        return write_report(report, record.output, final.read_text() if final.exists() else '', events)
+    return enrich_report(report, record.final_text, events)
+
+
+async def run(args):
+    report = await execute_report(args, Recorder(args.output))
+    print(json.dumps({'status': report['status'], 'error_type': report['error_type'], 'output': str(args.output)}))
+    return 0 if report['status'] in {'smoke_passed', 'baseline_finished', 'agent_finished', 'scored_with_errors'} else 1
 
 
 def main():

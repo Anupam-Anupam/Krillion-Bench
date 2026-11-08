@@ -71,3 +71,7 @@ Only the first-place row receives a gold background highlight and soft halo, wit
 ### Simplified chart labels
 
 Removed the Run errors filter tab, completion/error/ranking summary, campaign label beside the snapshot date, and plotted-run count. The snapshot date and About these metrics link remain. Provider legend labels use the same Krillion pixel font as the rest of the chart. Chart eligibility, underlying results, and error diagnostics are unchanged.
+
+### Aggregate score intervals
+
+Archive-mean datasets render a 95% bootstrap confidence whisker under each score bar, with matching tier color and pixel-font interval bounds. Mean scores use one decimal and daily percentages use two. Aggregate dialogs show per-metric sample counts and intervals without individual answers. Single-day snapshots retain their original presentation and have no fabricated interval. Synthetic aggregate data is used only for local UI validation.
