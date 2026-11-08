@@ -107,3 +107,16 @@ tr[data-tier=krillion],tr[data-tier=krillion]:hover{background:transparent;box-s
 #results tr[data-tier=krillion] .rank-badge{filter:drop-shadow(0 0 5px #ffd166a6) drop-shadow(0 0 15px #ffd16666)}
 body.calm #results tr[data-tier=krillion] .model-name{text-shadow:none}
 body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
+
+/* Tested-date calendar, styled with the same ocean palette and pixel font. */
+.date-picker{position:relative}.daily-controls #day-filter[hidden]{display:none}
+#calendar-toggle{font-size:18px;padding:8px 12px;border:1px solid #4de3ff60;background:#0b192b;color:#edf4ff}
+#calendar-toggle:hover,#calendar-toggle[aria-expanded=true]{border-color:#4de3ff;box-shadow:0 0 10px #4de3ff25}
+#date-calendar{position:absolute;top:calc(100% + 8px);left:0;width:300px;padding:14px;background:#0b1526;border:1px solid #4de3ff70;box-shadow:0 12px 35px #0009;z-index:10}
+#date-calendar[hidden]{display:none}.calendar-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.calendar-heading strong{font-size:22px;font-weight:400;color:#edf4ff}.calendar-heading button{font-size:26px;width:32px;color:#4de3ff}.calendar-heading button:disabled{opacity:.25;cursor:default}
+.calendar-weekdays,#calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.calendar-weekdays{text-align:center;color:#a4b8d1;font-size:16px;margin-bottom:6px}
+#calendar-days button{height:33px;font-size:19px;color:#4de3ff;background:#4de3ff18;border:1px solid #4de3ff60;text-shadow:0 0 7px #4de3ff70}
+#calendar-days button:disabled{color:#60758e;background:transparent;border-color:transparent;text-shadow:none;cursor:default}
+#calendar-days button:not(:disabled):hover,#calendar-days button[aria-current]{background:#4de3ff35;border-color:#4de3ff;box-shadow:0 0 8px #4de3ff35}
+#date-calendar button:focus-visible,#calendar-toggle:focus-visible{outline:2px solid #ffd166;outline-offset:2px}.calendar-note{font-size:15px;white-space:normal;color:#a4b8d1;margin:12px 0 0}
+@media(max-width:400px){#date-calendar{width:270px}}

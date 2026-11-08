@@ -58,9 +58,9 @@ function render() {
     const display=r.model.split('/').slice(1).join('/');
     const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
     const tokens=m.output_tokens == null ? '—' : `${r.games||m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
-    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?'Awaiting clean data':'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
+    return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${(state.view==='average'||state.data.numeric_only)?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':state.data.numeric_only?escapeHTML(r.model)+' daily metrics':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?'Awaiting clean data':'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
-  $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'}${state.view==='average'?' · average metrics only':' · click a model to inspect its dive'}`;
+  $('#row-count').textContent=`Showing ${rows.length} of ${matches.length}${matches.length===state.data.runs.length?' models':' matching models'}${state.view==='average'?' · average metrics only':state.data.numeric_only?' · verified daily metrics':' · click a model to inspect its dive'}`;
   const expand=$('#expand-results');
   expand.hidden=matches.length<=5;
   expand.setAttribute('aria-expanded',String(state.expanded));
@@ -110,7 +110,7 @@ function renderChart() {
   $('#legend').innerHTML=providers.slice(0,8).map(p=>`<span><i style="background:${color(p)}"></i>${escapeHTML(providerName(p))}</span>`).join('')+(providers.length>8?`<span>+${providers.length-8} providers</span>`:'');
 }
 function openDetails(id) {
-  if(state.view==='average')return;
+  if(state.view==='average'||state.data.numeric_only)return;
   const r=state.data.runs.find(r=>r.model===id);if(!r)return;
   const m=r.metrics;
   const item=(label,value,note='')=>`<div><dt>${label}</dt><dd>${escapeHTML(value)}${note?`<small>${escapeHTML(note)}</small>`:''}</dd></div>`;
@@ -159,20 +159,22 @@ function displaySnapshot(data) {
   $('#provider-filter').value=state.provider;
   document.querySelectorAll('#view-filters button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
   $('#daily-controls').hidden=state.view!=='daily'||!state.days.length;
+  $('#calendar-date').textContent=$('#day-filter').value;
+  if(state.view!=='daily')closeCalendar(false);
   $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
-  document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':'Krillion daily benchmark results. Select a model for run details.';
+  document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
   $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
-  $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': 'Open any model to inspect its answers, rejections, rarity, and points.';
+  $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Daily shows numeric metrics from clean verified scorecards.':'Open any model to inspect its answers, rejections, rarity, and points.';
   $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
-  $('#configuration').textContent=data.aggregation==='archive_partial_mean'?data.protocol_amendments.join(' '):old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
+  $('#configuration').textContent=data.aggregation==='archive_partial_mean'?data.protocol_amendments.join(' '):data.numeric_only?'Clean latest verified scorecards for this tested date. Models still awaiting a clean result are omitted. Five-word instruction amendment and authorized infrastructure replays are retained.':old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
   render();
 }
 // Average only published snapshots from the same tested configuration.
-// Private archive results remain unpublished until the balanced campaign verifies.
+// The archive average uses its separately validated numeric snapshot.
 function averageDays(days) {
   const base=days[0], keys=['score','daily_percentile','run_cost_usd','output_cost_usd','output_tokens','run_duration_s'];
   const models=[...new Set(days.flatMap(d=>d.runs.map(r=>r.model)))];
@@ -199,9 +201,9 @@ function selectView() {
 function install(data) {
   validate(data);
   state.aggregate=['archive_mean','archive_partial_mean'].includes(data.aggregation)?data:(state.publishedAverage||null);
-  state.days=['archive_mean','archive_partial_mean'].includes(data.aggregation)?(data.daily_snapshots||[]).map(validate):[data,...(data.daily_snapshots||[]).map(validate)];
+  state.days=state.publishedDays?[data,...state.publishedDays.map(validate)]:['archive_mean','archive_partial_mean'].includes(data.aggregation)?(data.daily_snapshots||[]).map(validate):[data,...(data.daily_snapshots||[]).map(validate)];
   if(new Set(state.days.map(d=>d.date)).size!==state.days.length)throw new Error('Duplicate daily snapshot.');
-  if(state.days.some(d=>JSON.stringify(d.settings)!==JSON.stringify(state.days[0].settings)||JSON.stringify(d.source_sha256)!==JSON.stringify(state.days[0].source_sha256)))throw new Error('Daily snapshots must use the same tested configuration.');
+  if(!state.publishedDays&&state.days.some(d=>JSON.stringify(d.settings)!==JSON.stringify(state.days[0].settings)||JSON.stringify(d.source_sha256)!==JSON.stringify(state.days[0].source_sha256)))throw new Error('Daily snapshots must use the same tested configuration.');
   state.days.sort((a,b)=>b.date.localeCompare(a.date));
   state.view='average';
   $('#day-filter').innerHTML=state.days.map(d=>`<option value="${escapeHTML(d.date)}">${escapeHTML(d.date)}</option>`).join('');
@@ -220,6 +222,24 @@ $('#search').addEventListener('input',e=>{state.query=e.target.value.trim().toLo
 $('#provider-filter').addEventListener('change',e=>{state.provider=e.target.value;render();});
 $('#model-filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.weights=b.dataset.weights;document.querySelectorAll('#model-filters button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render();});
 $('#view-filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;state.view=b.dataset.view;selectView();});
+let calendarMonth='';
+function closeCalendar(focus=true){$('#date-calendar').hidden=true;$('#calendar-toggle').setAttribute('aria-expanded','false');if(focus)$('#calendar-toggle').focus();}
+function renderCalendar(){
+  const [year,month]=calendarMonth.split('-').map(Number),first=new Date(year,month-1,1),days=new Date(year,month,0).getDate();
+  const tested=new Set(state.days.map(d=>d.date)),selected=$('#day-filter').value;
+  $('#calendar-month').textContent=first.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  $('#calendar-days').innerHTML='<span></span>'.repeat(first.getDay())+Array.from({length:days},(_,i)=>{
+    const date=calendarMonth+'-'+String(i+1).padStart(2,'0'),available=tested.has(date);
+    return `<button type="button" data-date="${date}" ${available?'':'disabled'} ${date===selected?'aria-current="date"':''} aria-label="${date}${available?', tested scores available':', no tested scores'}">${i+1}</button>`;
+  }).join('');
+  const months=state.days.map(d=>d.date.slice(0,7)).sort();
+  $('#calendar-prev').disabled=calendarMonth<=months[0];$('#calendar-next').disabled=calendarMonth>=months.at(-1);
+}
+$('#calendar-toggle').addEventListener('click',()=>{if(!$('#date-calendar').hidden){closeCalendar();return;}calendarMonth=$('#day-filter').value.slice(0,7);renderCalendar();$('#date-calendar').hidden=false;$('#calendar-toggle').setAttribute('aria-expanded','true');($('#calendar-days [aria-current]')||$('#calendar-days button:not(:disabled)')).focus();});
+for(const [id,delta] of [['calendar-prev',-1],['calendar-next',1]])$('#'+id).addEventListener('click',()=>{const [y,m]=calendarMonth.split('-').map(Number),d=new Date(y,m-1+delta,1);calendarMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');renderCalendar();});
+$('#calendar-days').addEventListener('click',e=>{const b=e.target.closest('button[data-date]');if(!b||b.disabled)return;$('#day-filter').value=b.dataset.date;selectView();closeCalendar();});
+document.addEventListener('click',e=>{if(!e.target.closest('.date-picker'))closeCalendar(false);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#date-calendar').hidden){e.preventDefault();closeCalendar();}});
 $('#day-filter').addEventListener('change',selectView);
 $('#chart-metrics').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.axis=b.dataset.metric;document.querySelectorAll('#chart-metrics button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderChart();});
 document.querySelector('thead').addEventListener('click',e=>{const th=e.target.closest('[data-sort]');if(!th)return;const key=th.dataset.sort;state.direction=state.sort===key?-state.direction: ['score','daily_percentile'].includes(key)?-1:1;state.sort=key;render();});
@@ -262,8 +282,8 @@ new ResizeObserver(scheduleOcean).observe(document.body);
 scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
-$('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-score-ci').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/leaderboard-data.json');});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+$('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
+fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-score-ci').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-calendar').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
 
