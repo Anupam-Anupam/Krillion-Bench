@@ -6,12 +6,12 @@
   "date": "2026-11-06",
   "date_start": "2026-08-24",
   "date_end": "2026-11-06",
-  "updated_at": "2026-11-08T20:55:33.661360+00:00",
-  "verified_games": 1888,
+  "updated_at": "2026-11-08T20:59:53.735884+00:00",
+  "verified_games": 1891,
   "target_games": 7500,
   "games_per_model": 75,
   "coverage": {
-    "min": 1,
+    "min": 4,
     "max": 21
   },
   "settings": {
@@ -5326,64 +5326,70 @@
       "provider": "qwen",
       "complete": true,
       "status": "provisional_average",
-      "score": 495.0,
-      "score_ci95": null,
-      "daily_percentile": 98.0,
-      "games": 1,
+      "score": 496.25,
+      "score_ci95": [
+        460.0,
+        542.5
+      ],
+      "daily_percentile": 97.435,
+      "games": 4,
       "aggregate_stats": {
         "score": {
-          "mean": 495.0,
-          "n": 1,
-          "ci95": null
+          "mean": 496.25,
+          "n": 4,
+          "ci95": [
+            460.0,
+            542.5
+          ]
         },
         "daily_percentile": {
-          "mean": 98.0,
-          "n": 1,
+          "mean": 97.435,
+          "n": 4,
           "ci95": null
         },
         "run_cost_usd": {
-          "mean": null,
-          "n": 0,
+          "mean": 0.15422616,
+          "n": 1,
           "ci95": null
         },
         "output_cost_usd": {
-          "mean": null,
-          "n": 0,
+          "mean": 0.077196,
+          "n": 1,
           "ci95": null
         },
         "output_tokens": {
-          "mean": null,
-          "n": 0,
+          "mean": 6433.0,
+          "n": 1,
           "ci95": null
         },
         "run_duration_s": {
-          "mean": 147.255,
-          "n": 1,
+          "mean": 150.8419,
+          "n": 4,
           "ci95": null
         },
         "inference_duration_s": {
-          "mean": 100.4036970436573,
-          "n": 1,
+          "mean": 105.20962169731501,
+          "n": 4,
           "ci95": null
         }
       },
       "metrics": {
         "cost_basis": "partial_reported",
-        "inference_duration_s": 100.4036970436573,
-        "input_tokens": 17763.0,
-        "model_calls": 20,
+        "inference_duration_s": 105.20962169731501,
+        "input_tokens": 15724.0,
+        "model_calls": 19,
         "output_cost_basis": "partial_provider_reported",
-        "output_cost_usd": null,
-        "output_tokens": null,
+        "output_cost_usd": 0.077196,
+        "output_tokens": 6433.0,
         "pricing": {
           "completion": "0.000012",
           "input_cache_read": "0.0000005",
           "prompt": "0.000004"
         },
-        "reasoning_tokens": 4530.0,
-        "run_cost_usd": null,
-        "run_duration_s": 147.255,
-        "usage_calls": 19,
+        "reasoning_tokens": 3801.0,
+        "run_cost_usd": 0.15422616,
+        "run_duration_s": 150.8419,
+        "usage_calls": 17,
         "usage_complete": false
       },
       "rounds": [],
@@ -6733,7 +6739,7 @@
   "protocol_amendments": [
     "Five-word instruction amendment; all 44 earlier verified games retained.",
     "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included.",
-    "After historical collection stopped, the user replaced unscored Xing4.0 29B A4B (free) with Qwen3.8 Max Prime. The new model has no score until a clean run verifies; historical snapshots retain their original model identities."
+    "After historical collection stopped, the user replaced unscored Xing4.0 29B A4B (free) with Qwen3.8 Max Prime. The replacement is evaluated separately with clean verified runs; historical model identities are retained."
   ],
   "uncertainty": {
     "method": "95% percentile bootstrap over available clean tested dates",
