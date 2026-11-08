@@ -64,7 +64,7 @@ function render() {
   const expand=$('#expand-results');
   expand.hidden=matches.length<=5;
   expand.setAttribute('aria-expanded',String(state.expanded));
-  expand.textContent=state.expanded?'Show fewer models ↑':`Show all ${matches.length} models ↓`;
+  expand.textContent=state.expanded?'Show fewer models ↑':'Show more';
   document.querySelectorAll('th[data-sort]').forEach(th=>{
     const selected=th.dataset.sort===state.sort;
     th.setAttribute('aria-sort',selected?(state.direction===-1?'descending':'ascending'):'none');
@@ -199,7 +199,7 @@ function displaySnapshot(data) {
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards. Select a model for its daily report.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
-  $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'October 18–November 8 results.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
+  $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
   $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Select a model to inspect the questions, answers and points from its verified clean run for this date.':'Open any model to inspect its answers, rejections, rarity, and points.';
   $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
   const s=data.settings;
@@ -251,11 +251,16 @@ function install(data) {
   selectView();
 }
 $('#expand-results').addEventListener('click',()=>{
+  const scrollX=window.scrollX, scrollY=window.scrollY;
   state.expanded=!state.expanded;
   render();
-  // Keep the collapse control reachable when removing rows shortens the page.
-  const button=$('#expand-results'), bounds=button.getBoundingClientRect();
-  if(bounds.top<0||bounds.bottom>window.innerHeight)button.scrollIntoView({block:'center',behavior:'instant'});
+  if(state.expanded){
+    requestAnimationFrame(()=>window.scrollTo({left:scrollX,top:scrollY,behavior:'instant'}));
+  }else{
+    // Keep the collapse control reachable when removing rows shortens the page.
+    const button=$('#expand-results'), bounds=button.getBoundingClientRect();
+    if(bounds.top<0||bounds.bottom>window.innerHeight)button.scrollIntoView({block:'center',behavior:'instant'});
+  }
 });
 $('#search').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();render();});
 $('#provider-filter').addEventListener('change',e=>{state.provider=e.target.value;render();});
@@ -322,6 +327,6 @@ scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-methodology-restored').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});

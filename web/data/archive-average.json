@@ -6531,10 +6531,7 @@
   "protocol_amendments": [
     "Five-word instruction amendment; all 44 earlier verified games retained.",
     "Authorized infrastructure replays supersede only affected attempts; only clean latest model/date scorecards are included.",
-    "After historical collection stopped, the user replaced unscored Xing4.0 29B A4B (free) with Qwen3.8 Max Prime. The replacement is evaluated separately with clean verified runs; historical model identities are retained.",
-    "User scoped publication to October18\u2013November8; retired Mercury replaced with Mistral Medium3.5, evaluated separately on all22dates.",
-    "Authorized identical canonical paid routes for Nemotron Ultra, Lightning and Super VL preserve actual route and paid accounting; separate roster entries have independently played scores.",
-    "November8 runs used isolated fresh sessions on the regular DIVE#116 after the saved profile had completed; five-word gameplay remains unchanged."
+    "After historical collection stopped, the user replaced unscored Xing4.0 29B A4B (free) with Qwen3.8 Max Prime. The replacement is evaluated separately with clean verified runs; historical model identities are retained."
   ],
   "uncertainty": {
     "method": "95% percentile bootstrap over available clean tested dates",
