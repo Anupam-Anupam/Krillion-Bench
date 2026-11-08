@@ -111,3 +111,10 @@ th{font-size:18px}.score-bar{height:34px;min-width:155px}.score-error-bar{stroke
 #results .score-ci-label{color:var(--tier-color);text-shadow:0 0 7px color-mix(in srgb,var(--tier-color) 55%,transparent)}
 body.calm #results .score-interval,body.calm #results .score-interval::before,body.calm #results .score-interval::after{box-shadow:none}
 body.calm #results .score-ci-label{text-shadow:none}
+
+/* First-place light blooms from the lettering and badge, without a row rectangle. */
+tr[data-tier=krillion],tr[data-tier=krillion]:hover{background:transparent;box-shadow:none}
+#results tr[data-tier=krillion] .model-name{color:#ffd166;text-shadow:0 0 4px #ffd166b3,0 0 12px #ffd16680,0 0 25px #ffd1664d}
+#results tr[data-tier=krillion] .rank-badge{filter:drop-shadow(0 0 5px #ffd166a6) drop-shadow(0 0 15px #ffd16666)}
+body.calm #results tr[data-tier=krillion] .model-name{text-shadow:none}
+body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
