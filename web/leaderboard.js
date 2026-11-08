@@ -109,13 +109,41 @@ function renderChart() {
   const providers=[...new Set(eligible.map(r=>r.provider))];
   $('#legend').innerHTML=providers.slice(0,8).map(p=>`<span><i style="background:${color(p)}"></i>${escapeHTML(providerName(p))}</span>`).join('')+(providers.length>8?`<span>+${providers.length-8} providers</span>`:'');
 }
-function openDetails(id) {
+function readableRounds(rounds) { return rounds.map((round,i)=>`<section class="round-detail"><div class="round-meta"><span>ROUND ${i+1} / 7</span><span>${round.points==null?'UNSCORED':round.points+' PTS'}${round.rarity?' · '+escapeHTML(round.rarity):''}</span></div><h3>${escapeHTML(round.prompt)}</h3><table><thead><tr><th>Submitted answer</th><th>Outcome</th><th>Rarity</th><th>Clock</th></tr></thead><tbody>${round.submissions.length?round.submissions.map(s=>`<tr><td>${escapeHTML(s.answer)}</td><td class="${s.outcome==='accepted'?'accepted':s.outcome==='rejected'?'rejected':''}">${escapeHTML(s.outcome?.replaceAll('_',' '))}${s.suggested_answer?' → '+escapeHTML(s.suggested_answer):''}</td><td>${escapeHTML(s.rarity||'—')}</td><td>${s.timer==null?'—':escapeHTML(s.timer)+'s'}</td></tr>`).join(''):'<tr><td colspan="4">No recorded submission.</td></tr>'}</tbody></table>${round.interruptions?.length?`<p class="detail-notes">${round.interruptions.map(escapeHTML).join(', ')}</p>`:''}</section>`).join(''); }
+let reportRequest = 0;
+const reportCache = new Map();
+async function openDetails(id) {
   if(state.view==='average')return;
   const r=state.data.runs.find(r=>r.model===id);if(!r)return;
+  const request=++reportRequest;
   if(state.data.numeric_only){
-    const url='https://console.cloud.google.com/storage/browser/_details/krillion-runs-20261107-83e52a/'+encodeURIComponent(r.report_object)+'?project=krillion-bench-20261107&authuser=1';
-    $('#detail-content').innerHTML=`<h2 id="detail-title">${escapeHTML(r.model.split('/').slice(1).join('/'))}</h2><p class="detail-id">${escapeHTML(state.data.date)} · ${scoreText(r.score)} / 700</p><p class="detail-notes">This date’s verified clean run report is stored privately in Google Cloud.</p><a class="private-report-link" href="${escapeHTML(url)}" target="_blank" rel="noopener">Open this run’s private report ↗</a><p class="detail-notes">Sign in with your Google account to view or download the report.</p>`;
-    $('#run-dialog').showModal();return;
+    const day=state.data.date;
+    const heading=`<h2 id="detail-title">${escapeHTML(r.model.split('/').slice(1).join('/'))}</h2><p class="detail-id">${escapeHTML(day)} · ${scoreText(r.score)} / 700</p>`;
+    $('#detail-content').innerHTML=heading+'<p class="detail-notes" role="status">Loading verified report…</p>';
+    $('#run-dialog').showModal();$('#run-dialog').scrollTop=0;
+    try {
+      const key=day+'/'+r.model;
+      let report=reportCache.get(key);
+      if(!report){
+        const configResponse=await fetch('web/data/report-service.json', {cache:'no-cache'});
+        if(!configResponse.ok)throw new Error('Service configuration unavailable.');
+        const config=await configResponse.json();
+        if(!config.endpoint)throw new Error('Report service is being connected. Please try again shortly.');
+        const endpoint=new URL(config.endpoint);
+        if(endpoint.protocol!=='https:')throw new Error('Invalid report service configuration.');
+        const response=await fetch(endpoint.href.replace(/\/$/,'')+'/reports/'+encodeURIComponent(day)+'/'+encodeURIComponent(r.model), {credentials:'omit',signal:AbortSignal.timeout(60000)});
+        if(!response.ok)throw new Error('Report temporarily unavailable. Please try again.');
+        report=await response.json();
+        if(report.model!==r.model||report.date!==day||report.score!==r.score||report.rounds?.length!==7||report.rounds.reduce((n,round)=>n+round.points,0)!==r.score||report.rounds.some(round=>!Array.isArray(round.submissions)))throw new Error('Report validation failed.');
+        reportCache.set(key,report);
+      }
+      if(request!==reportRequest||state.view!=='daily'||state.data.date!==day||!$('#run-dialog').open)return;
+      $('#detail-content').innerHTML=heading+readableRounds(report.rounds);
+    } catch(error) {
+      if(request!==reportRequest||state.view!=='daily'||state.data.date!==day||!$('#run-dialog').open)return;
+      $('#detail-content').innerHTML=heading+'<p class="detail-notes" role="status">'+escapeHTML(error.message)+'</p>';
+    }
+    return;
   }
   const m=r.metrics;
   const item=(label,value,note='')=>`<div><dt>${label}</dt><dd>${escapeHTML(value)}${note?`<small>${escapeHTML(note)}</small>`:''}</dd></div>`;
@@ -169,11 +197,11 @@ function displaySnapshot(data) {
   $('#view-note').hidden=state.view==='average';
   if(state.view!=='daily')closeCalendar(false);
   $('#view-note').textContent=data.aggregation==='archive_partial_mean'?`Provisional average · ${count(data.verified_games)} clean verified games · ${data.coverage.min}–${data.coverage.max} of 75 dates per model. Date coverage varies; this is not the final balanced comparison.`:state.view==='average'?(data.aggregation==='archive_mean'?`Average metrics across all ${data.games_per_model} tested days.`:`Average metrics across ${state.days.length} published tested ${state.days.length===1?'day · more days will appear after publication.':'days; available sample counts appear in model details.'}`):`Daily metrics for ${data.date}.`;
-  document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards. Select a model for its private report.':'Krillion daily benchmark results. Select a model for run details.';
+  document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards. Select a model for its daily report.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
   $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
-  $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Select a model to open its exact verified clean run report in your private Google Cloud storage.':'Open any model to inspect its answers, rejections, rarity, and points.';
+  $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Select a model to inspect the questions, answers and points from its verified clean run for this date.':'Open any model to inspect its answers, rejections, rarity, and points.';
   $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
   const s=data.settings;
   const old=s.round_timeout_policy!=='continue';
@@ -203,6 +231,8 @@ function averageDays(days) {
   return {...base,aggregation:'published_mean',date_start:dates[0],date_end:dates.at(-1),date:dates.at(-1),runs};
 }
 function selectView() {
+  ++reportRequest;
+  if($('#run-dialog').open)$('#run-dialog').close();
   displaySnapshot(state.view==='average'?(state.aggregate||averageDays(state.days)):state.days.find(d=>d.date===$('#day-filter').value)||state.days[0]);
 }
 function install(data) {
