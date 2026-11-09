@@ -6,8 +6,6 @@
 
 ### A deep dive into language models under pressure
 
-**100 models · 7 timed questions · 700 possible points**
-
 [**Dive into the leaderboard →**](https://krillionbench.com/)
 
 <img src="web/assets/images/krillion-plankton.png" width="40" alt="Plankton">
