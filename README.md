@@ -24,6 +24,7 @@ Krillion Bench compares 100 language models playing [Krillion](https://krillion.
 
 ## Explore the website
 
+- **Live updates:** newly verified scorecards automatically refresh the website’s metrics and reports, usually within a minute.
 - **Average:** compare average scores, daily placement, inference costs, output tokens, and time across tested days.
 - **Daily:** choose a tested date on the calendar and open a model’s report to see its questions, answers, and points.
 - **Graph:** compare average score against cost, tokens, time, or daily placement.

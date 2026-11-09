@@ -334,7 +334,36 @@ new ResizeObserver(scheduleOcean).observe(document.body);
 scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
-$('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
+$('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');liveEnabled=false;state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
 fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-methodology-restored').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
+
+// Refresh verified numeric data while preserving the visitor's current view.
+let liveEnabled=true, liveVersion=null, liveBusy=false;
+async function refreshLiveData() {
+  if(!liveEnabled||liveBusy||document.hidden||!state.data||$('#run-dialog').open)return;
+  liveBusy=true;
+  try {
+    const config=await fetch('web/data/report-service.json',{cache:'no-cache'}).then(r=>r.json());
+    if(!config.endpoint)return;
+    const response=await fetch(config.endpoint.replace(/\/$/,'')+'/snapshot',{cache:'no-cache',credentials:'omit',signal:AbortSignal.timeout(60000)});
+    if(!response.ok)throw new Error('Live snapshot unavailable.');
+    const snapshot=await response.json();
+    if(snapshot.version===liveVersion)return;
+    const average=validate(snapshot.average), roster=new Set(average.runs.map(r=>r.model)), days=snapshot.daily_snapshots.map(validate);
+    if(new Set(days.map(d=>d.date)).size!==days.length||days.some(d=>new Set(d.runs.map(r=>r.model)).size!==d.runs.length||d.runs.some(r=>!roster.has(r.model)||!r.complete||!numeric(r.score))))throw new Error('Invalid live snapshot.');
+    if(days.reduce((n,d)=>n+d.runs.length,0)!==average.verified_games||average.verified_games<(state.aggregate?.verified_games||0))throw new Error('Incomplete live snapshot.');
+    const day=$('#day-filter').value,limit=state.rowLimit,x=window.scrollX,y=window.scrollY;
+    state.publishedAverage=state.aggregate=average;
+    state.publishedDays=state.days=days.sort((a,b)=>b.date.localeCompare(a.date));
+    $('#day-filter').innerHTML=days.map(d=>`<option value="${escapeHTML(d.date)}">${escapeHTML(d.date)}</option>`).join('');
+    if(days.some(d=>d.date===day))$('#day-filter').value=day;
+    displaySnapshot(state.view==='average'?average:days.find(d=>d.date===$('#day-filter').value)||days[0]);
+    state.rowLimit=limit;render();window.scrollTo(x,y);liveVersion=snapshot.version;
+  }catch(_){/* Retain the last verified snapshot during connection outages. */}
+  finally{liveBusy=false;}
+}
+setInterval(refreshLiveData,30000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshLiveData();});
+setTimeout(refreshLiveData,1000);
