@@ -336,7 +336,27 @@ scheduleOcean();
 $('#download').addEventListener('click',()=>{if(!state.data)return;const url=URL.createObjectURL(new Blob([JSON.stringify(state.data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krillion-leaderboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('#load-button').addEventListener('click',()=>$('#load-file').click());
 $('#load-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>15e6)throw new Error('Choose a JSON export smaller than 15 MB.');liveEnabled=false;state.publishedDays=null;state.publishedAverage=null;install(JSON.parse(await f.text()));$('#load-status').textContent='Loaded '+f.name;}catch(err){$('#load-status').textContent=err.message;}e.target.value='';});
-fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();}).then(metadata=>{state.weightMetadata=metadata.models;return fetch('web/data/archive-average.json?v=20261108-methodology-restored').then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}).then(average=>{state.publishedAverage=validate(average);return fetch('web/data/archive-daily.json?v=20261108-window-2140-final').then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();}).then(d=>{state.publishedDays=d.daily_snapshots;return fetch('web/data/leaderboard-data.json');});});}).then(r=>{if(!r.ok)throw new Error('Unable to load leaderboard data.');return r.json();}).then(install).catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
+async function loadPublishedData() {
+  const metadata=await fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();});
+  state.weightMetadata=metadata.models;
+  // Resolve the current published dates before selecting the initial Daily date.
+  try {
+    const snapshot=await fetchLiveSnapshot(10000);
+    state.publishedAverage=validate(snapshot.average);
+    state.publishedDays=snapshot.daily_snapshots.map(validate);
+    liveVersion=snapshot.version;
+    install(state.publishedAverage);
+  } catch(_) {
+    const [average,daily]=await Promise.all([
+      fetch('web/data/archive-average.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}),
+      fetch('web/data/archive-daily.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();})
+    ]);
+    state.publishedAverage=validate(average);state.publishedDays=daily.daily_snapshots;
+    install(average);
+    refreshLiveData();
+  }
+}
+loadPublishedData().catch(e=>{$('#results').innerHTML=`<tr><td colspan="8" class="empty">${escapeHTML(e.message)} Serve this directory over HTTP, or use Load campaign.</td></tr>`;$('#snapshot').textContent='Data unavailable';});
 
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
 
@@ -346,15 +366,20 @@ function defaultDailyDate(days) {
   const now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   return days.some(d=>d.date===today)?today:days.map(d=>d.date).sort().at(-1);
 }
+async function fetchLiveSnapshot(timeout=60000) {
+  const config=await fetch('web/data/report-service.json',{cache:'no-cache',signal:AbortSignal.timeout(timeout)}).then(r=>r.json());
+  if(!config.endpoint)throw new Error('Live snapshot unavailable.');
+  const response=await fetch(config.endpoint.replace(/\/$/,'')+'/snapshot',{cache:'no-cache',credentials:'omit',signal:AbortSignal.timeout(timeout)});
+  if(!response.ok)throw new Error('Live snapshot unavailable.');
+  const snapshot=await response.json(),average=validate(snapshot.average),roster=new Set(average.runs.map(r=>r.model)),days=snapshot.daily_snapshots.map(validate);
+  if(new Set(days.map(d=>d.date)).size!==days.length||days.some(d=>new Set(d.runs.map(r=>r.model)).size!==d.runs.length||d.runs.some(r=>!roster.has(r.model)||!r.complete||!numeric(r.score)))||days.reduce((n,d)=>n+d.runs.length,0)!==average.verified_games)throw new Error('Invalid live snapshot.');
+  return snapshot;
+}
 async function refreshLiveData() {
   if(!liveEnabled||liveBusy||document.hidden||!state.data||$('#run-dialog').open)return;
   liveBusy=true;
   try {
-    const config=await fetch('web/data/report-service.json',{cache:'no-cache'}).then(r=>r.json());
-    if(!config.endpoint)return;
-    const response=await fetch(config.endpoint.replace(/\/$/,'')+'/snapshot',{cache:'no-cache',credentials:'omit',signal:AbortSignal.timeout(60000)});
-    if(!response.ok)throw new Error('Live snapshot unavailable.');
-    const snapshot=await response.json();
+    const snapshot=await fetchLiveSnapshot();
     if(snapshot.version===liveVersion)return;
     const average=validate(snapshot.average), roster=new Set(average.runs.map(r=>r.model)), days=snapshot.daily_snapshots.map(validate);
     if(new Set(days.map(d=>d.date)).size!==days.length||days.some(d=>new Set(d.runs.map(r=>r.model)).size!==d.runs.length||d.runs.some(r=>!roster.has(r.model)||!r.complete||!numeric(r.score))))throw new Error('Invalid live snapshot.');
@@ -372,4 +397,4 @@ async function refreshLiveData() {
 }
 setInterval(refreshLiveData,30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshLiveData();});
-setTimeout(refreshLiveData,1000);
+
