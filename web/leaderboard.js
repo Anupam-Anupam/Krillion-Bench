@@ -363,8 +363,7 @@ window.addEventListener('resize',()=>{if(state.data)renderChart();});
 // Refresh verified numeric data while preserving the visitor's current view.
 let liveEnabled=true, liveVersion=null, liveBusy=false, dailyDateChosen=false;
 function defaultDailyDate(days) {
-  const now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-  return days.some(d=>d.date===today)?today:days.map(d=>d.date).sort().at(-1);
+  return days.filter(d=>d.runs.some(r=>r.complete&&numeric(r.score))).map(d=>d.date).sort().at(-1);
 }
 async function fetchLiveSnapshot(timeout=60000) {
   const config=await fetch('web/data/report-service.json',{cache:'no-cache',signal:AbortSignal.timeout(timeout)}).then(r=>r.json());

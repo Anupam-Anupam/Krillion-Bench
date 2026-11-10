@@ -27,6 +27,7 @@ from reporting import correction, enrich_report, read_events, rejection, result_
 from model_policy import error_details
 from metrics import aggregate, pricing_for, usage_hook
 import httpx
+from billing_capture import BillingClient
 
 
 # These selectors were observed on the live UI. Read rendered state only.
@@ -304,11 +305,14 @@ async def play(session, observer, args):
     from player import play_actions
     model = make_model(args)
     # Capture billing before adapter validation can discard a malformed response.
-    async with httpx.AsyncClient(timeout=None, event_hooks={'response': [usage_hook(observer.record)]}) as client:
+    async with BillingClient(observer.record, timeout=None) as client:
         if isinstance(model, ChatOpenAI):
             model.http_client = client
-        return await play_actions(observer, TimedModel(model, observer.record), args.max_steps,
-                                  args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
+        try:
+            return await play_actions(observer, TimedModel(model, observer.record), args.max_steps,
+                                      args.vision, args.navigation_recovery, args.navigation_timeout, args.model_retries)
+        finally:
+            await client.finish_accounting()
 
 
 async def run_game(session, observer, args):
