@@ -56,7 +56,7 @@ function render() {
     const m=r.metrics;
     const badge=badgeForPosition(state.placements.get(r.model));
     const display=r.model.split('/').slice(1).join('/');
-    const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML(costPrefix(basis)+money(value))}</span>`;
+    const cost=(value,basis)=>`<span title="${escapeHTML(basisText(basis))}">${escapeHTML((value==null?'':costPrefix(basis))+money(value))}</span>`;
     const tokens=m.output_tokens == null ? '—' : `${r.games||m.usage_complete?'':'≥ '}${count(m.output_tokens)}`;
     return `<tr data-tier="${badge?.key||'none'}" class="${r.complete?'':'incomplete'}"><td class="rank">${scoreRank(r)}</td><td class="model-cell"><button class="model-button" data-model="${escapeHTML(r.model)}" ${state.view==='average'?'tabindex="-1" aria-disabled="true"':''} aria-label="${state.view==='average'?escapeHTML(r.model)+' average metrics':state.data.numeric_only?'View '+escapeHTML(r.model)+' daily report':'View '+escapeHTML(r.model)+' run details'}">${badgeMarkup(r)}<span><span class="model-name">${escapeHTML(display)}</span><span class="variant">${escapeHTML(providerName(r.provider))}${r.model.endsWith(':free')?' · free endpoint':''}${r.missed_rounds?' · '+r.missed_rounds+' missed':''}${r.scorecard_assisted?' · recovery':''}</span></span></button></td><td class="score-cell">${r.complete?scoreMarkup(r):`<span class="incomplete-label">${state.view==='average'?(r.status==='awaiting_first_run'?'Awaiting first run':r.model==='xingchen-agi/xing4.0-29b-a4b:free'?'Provider quota blocked':'No clean score'):'Run error'} <small>${state.view==='average'?'':escapeHTML(r.error_type || r.status)}</small></span>`}</td><td>${cost(m.run_cost_usd,m.cost_basis)}</td><td>${cost(m.output_cost_usd,m.output_cost_basis)}</td><td title="${state.view==='average'?(r.aggregate_stats?.output_tokens?.n??0)+' tested days with complete token usage':m.usage_calls+' of '+m.model_calls+' calls have usage'}">${tokens}</td><td>${duration(m.run_duration_s)}</td><td class="daily">${r.daily_percentile == null?'—':(r.aggregate_stats?r.daily_percentile.toFixed(2):r.daily_percentile)+'%'}</td></tr>`;
   }).join('') || '<tr><td colspan="8" class="empty">No models match these filters. Try another name or provider.</td></tr>';
@@ -246,6 +246,7 @@ function install(data) {
   state.days.sort((a,b)=>b.date.localeCompare(a.date));
   state.view='average';
   $('#day-filter').innerHTML=state.days.map(d=>`<option value="${escapeHTML(d.date)}">${escapeHTML(d.date)}</option>`).join('');
+  $('#day-filter').value=defaultDailyDate(state.days)||'';
   $('#view-filters [data-view="daily"]').disabled=!state.days.length;
   $('#view-filters [data-view="daily"]').title=state.days.length?'View a tested day':'Daily snapshots have not been published for this aggregate';
   selectView();
@@ -289,10 +290,10 @@ function renderCalendar(){
 }
 $('#calendar-toggle').addEventListener('click',()=>{if(!$('#date-calendar').hidden){closeCalendar();return;}calendarMonth=$('#day-filter').value.slice(0,7);renderCalendar();$('#date-calendar').hidden=false;$('#calendar-toggle').setAttribute('aria-expanded','true');($('#calendar-days [aria-current]')||$('#calendar-days button:not(:disabled)')).focus();});
 for(const [id,delta] of [['calendar-prev',-1],['calendar-next',1]])$('#'+id).addEventListener('click',()=>{const [y,m]=calendarMonth.split('-').map(Number),d=new Date(y,m-1+delta,1);calendarMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');renderCalendar();});
-$('#calendar-days').addEventListener('click',e=>{const b=e.target.closest('button[data-date]');if(!b||b.disabled)return;$('#day-filter').value=b.dataset.date;selectView();closeCalendar();});
+$('#calendar-days').addEventListener('click',e=>{const b=e.target.closest('button[data-date]');if(!b||b.disabled)return;dailyDateChosen=true;$('#day-filter').value=b.dataset.date;selectView();closeCalendar();});
 document.addEventListener('click',e=>{if(!e.target.closest('.date-picker'))closeCalendar(false);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#date-calendar').hidden){e.preventDefault();closeCalendar();}});
-$('#day-filter').addEventListener('change',selectView);
+$('#day-filter').addEventListener('change',()=>{dailyDateChosen=true;selectView();});
 $('#chart-metrics').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.axis=b.dataset.metric;document.querySelectorAll('#chart-metrics button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderChart();});
 document.querySelector('thead').addEventListener('click',e=>{const th=e.target.closest('[data-sort]');if(!th)return;const key=th.dataset.sort;state.direction=state.sort===key?-state.direction: ['score','daily_percentile'].includes(key)?-1:1;state.sort=key;render();});
 $('#results').addEventListener('click',e=>{const b=e.target.closest('[data-model]');if(b)openDetails(b.dataset.model);});
@@ -340,7 +341,11 @@ fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable t
 window.addEventListener('resize',()=>{if(state.data)renderChart();});
 
 // Refresh verified numeric data while preserving the visitor's current view.
-let liveEnabled=true, liveVersion=null, liveBusy=false;
+let liveEnabled=true, liveVersion=null, liveBusy=false, dailyDateChosen=false;
+function defaultDailyDate(days) {
+  const now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  return days.some(d=>d.date===today)?today:days.map(d=>d.date).sort().at(-1);
+}
 async function refreshLiveData() {
   if(!liveEnabled||liveBusy||document.hidden||!state.data||$('#run-dialog').open)return;
   liveBusy=true;
@@ -358,7 +363,8 @@ async function refreshLiveData() {
     state.publishedAverage=state.aggregate=average;
     state.publishedDays=state.days=days.sort((a,b)=>b.date.localeCompare(a.date));
     $('#day-filter').innerHTML=days.map(d=>`<option value="${escapeHTML(d.date)}">${escapeHTML(d.date)}</option>`).join('');
-    if(days.some(d=>d.date===day))$('#day-filter').value=day;
+    $('#day-filter').value=dailyDateChosen&&days.some(d=>d.date===day)?day:defaultDailyDate(days);
+    if(!$('#date-calendar').hidden)renderCalendar();
     displaySnapshot(state.view==='average'?average:days.find(d=>d.date===$('#day-filter').value)||days[0]);
     state.rowLimit=limit;render();window.scrollTo(x,y);liveVersion=snapshot.version;
   }catch(_){/* Retain the last verified snapshot during connection outages. */}
