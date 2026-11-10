@@ -340,19 +340,27 @@ async function loadPublishedData() {
   const metadata=await fetch('web/data/model-weights.json').then(r=>{if(!r.ok)throw new Error('Unable to load model weight metadata.');return r.json();});
   state.weightMetadata=metadata.models;
   // Resolve the current published dates before selecting the initial Daily date.
+  const backup=Promise.all([
+    fetch('web/data/archive-average.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}),
+    fetch('web/data/archive-daily.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();})
+  ]).then(([average,daily])=>{
+    validate(average);
+    const days=daily.daily_snapshots.map(validate),roster=new Set(average.runs.map(r=>r.model));
+    if(new Set(days.map(d=>d.date)).size!==days.length||days.some(d=>new Set(d.runs.map(r=>r.model)).size!==d.runs.length||d.runs.some(r=>!roster.has(r.model)||!r.complete||!numeric(r.score)))||days.reduce((n,d)=>n+d.runs.length,0)!==average.verified_games)throw new Error('Invalid published snapshot.');
+    return {average,daily_snapshots:days};
+  }).catch(()=>null);
   try {
-    const snapshot=await fetchLiveSnapshot(10000);
+    const [live,staticSnapshot]=await Promise.all([fetchLiveSnapshot(10000),backup]);
+    const snapshot=staticSnapshot&&staticSnapshot.average.verified_games>live.average.verified_games?staticSnapshot:live;
     state.publishedAverage=validate(snapshot.average);
     state.publishedDays=snapshot.daily_snapshots.map(validate);
     liveVersion=snapshot.version;
     install(state.publishedAverage);
   } catch(_) {
-    const [average,daily]=await Promise.all([
-      fetch('web/data/archive-average.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load verified averages.');return r.json();}),
-      fetch('web/data/archive-daily.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('Unable to load tested dates.');return r.json();})
-    ]);
-    state.publishedAverage=validate(average);state.publishedDays=daily.daily_snapshots;
-    install(average);
+    const snapshot=await backup;
+    if(!snapshot)throw new Error('Unable to load verified published data.');
+    state.publishedAverage=snapshot.average;state.publishedDays=snapshot.daily_snapshots;
+    install(snapshot.average);
     refreshLiveData();
   }
 }
