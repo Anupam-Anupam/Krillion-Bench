@@ -122,6 +122,8 @@ body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
 
 #metric-definitions summary{font-size:18px}
 
+/* Larger typography and wordmark belong to desktop screens. */
+@media(min-width:761px){
 /* Give the pixel typography more room at normal reading distance. */
 body{font-size:16px}
 h2{font-size:36px}
@@ -151,18 +153,6 @@ th{font-size:19px;padding:17px 10px}
 #metric-definitions summary{font-size:21px}
 footer{font-size:18px}
 .detail-id,.detail-notes,.detail-metrics dd small,.round-meta,.round-detail td{font-size:18px}
-@media(max-width:760px){
- h2{font-size:34px}
- .hero-description{font-size:20px}
- .hero-tagline{font-size:22px}
- .view-controls button,#chart-metrics button{font-size:19px;padding:10px 11px}
- .table-scroll>table{width:1180px;min-width:1180px}
- .table-scroll th:nth-child(2),.table-scroll td.model-cell{width:260px;max-width:260px}
- #results .model-name{max-width:198px;font-size:21px}
- .rank-badge{width:38px;height:38px}
- .plot-heading{font-size:21px}
- .plot-heading>span{font-size:17px}
-}
 #provider-filter{min-width:174px;max-width:none}
 
 /* A further step up for comfortable reading. */
@@ -187,14 +177,6 @@ th{font-size:22px}
 .table-footer,.table-footer button,.data-note,#load-status{font-size:20px}
 .method-grid p,.definitions,.definitions p{font-size:20px}
 footer{font-size:20px}
-@media(max-width:760px){
- h2{font-size:38px}
- .view-controls button,#chart-metrics button{font-size:22px;padding:11px 12px}
- .table-scroll>table{width:1340px;min-width:1340px}
- .table-scroll th:nth-child(2),.table-scroll td.model-cell{width:300px;max-width:300px}
- #results .model-name{max-width:226px;font-size:25px}
- .rank-badge{width:44px;height:44px}
-}
 
 /* Let the opening wordmark fill the surface with more breathing room. */
 .hero{min-height:740px;padding:88px 0 68px}
@@ -205,13 +187,7 @@ footer{font-size:20px}
 .hero-description{font-size:24px;margin-top:5px}
 .hero-actions{margin-top:36px}
 .scroll-cue{margin-top:38px}
-@media(max-width:760px){
- .hero{min-height:650px;padding:64px 0 48px}
- .hero>.eyebrow{font-size:17px;letter-spacing:1.5px;max-width:330px;line-height:1.4;margin-bottom:30px}
- .hero h1{font-size:clamp(76px,17vw,124px);letter-spacing:4px}
- .hero h1>span:first-child{letter-spacing:15px;margin:24px 0 0 15px}
- .hero-tagline{font-size:24px;letter-spacing:2px;margin-top:32px}
- .hero-description{font-size:22px}
+
 }
 
 /* Readable definitions and a dedicated technical article. */
@@ -248,4 +224,59 @@ footer{font-size:20px}
  .technical-article h2{font-size:32px}
  .technical-article p{font-size:23px;line-height:1.5}
  .technical-article pre{padding:15px}.technical-article code{font-size:14px}
+}
+
+/* Restore the compact phone layout while keeping controls readable. */
+@media(max-width:760px){
+ body{font-size:14px}
+ header{padding:0 12px}.brand{font-size:19px;letter-spacing:0}nav{gap:10px;font-size:14px}
+ main{padding:0 12px}
+ .hero{min-height:460px;padding:38px 0 28px}
+ .hero h1{font-size:clamp(60px,14vw,96px);letter-spacing:3px;line-height:.82}
+ .hero h1>span:first-child{font-size:.42em;margin:20px 0 0 10px;letter-spacing:12px}
+ .hero>.eyebrow{font-size:13px;letter-spacing:1px;margin-bottom:22px}
+ .hero-tagline{font-size:18px;letter-spacing:2px;margin:27px 0 5px}
+ .hero-description{font-size:17px;margin:0}
+ .hero-actions{margin-top:26px;gap:12px}.scroll-cue{margin-top:27px}
+ #leaderboard{padding:20px 12px}
+ h2{font-size:30px}.live-label{font-size:13px}.eyebrow{font-size:16px}
+ .view-controls{gap:12px}.view-controls button{font-size:17px;padding:8px 9px;min-height:40px}
+ #chart-metrics button{font-size:15px;padding:8px 10px}
+ .filters{gap:8px;min-width:0}.search{flex:1;min-width:0}
+ #provider-filter{font-size:18px;min-width:0;max-width:48%;padding:9px 22px 9px 8px}
+ #provider-filter option,#search,#calendar-toggle{font-size:18px}
+ #search{width:100%;min-width:0}
+ #view-note,#aggregate-note,.daily-controls{font-size:17px}
+ .table-scroll>table{width:970px;min-width:970px}
+ .table-scroll th.rank{width:38px}
+ .table-scroll th:nth-child(2),.table-scroll td.model-cell{width:175px;max-width:175px}
+ .table-scroll th.score-column{width:110px}
+ .table-scroll th{font-size:16px;padding:12px 6px}
+ #results td{font-size:16px;padding:12px 6px;line-height:1.3}
+ #results .model-name{font-size:18px;max-width:129px;line-height:1.2}
+ #results .variant{font-size:14px;max-width:129px;line-height:1.4}
+ .rank-badge{width:28px;height:28px}.model-button{gap:6px}
+ .score-bar{height:29px;min-width:0}
+ #results .score-value{font-size:23px;line-height:23px;padding:3px 5px}
+ #results .score-value small{font-size:12px;line-height:23px}
+ #results td.daily{font-size:18px}
+ #expand-results{font-size:18px;padding:11px 18px}
+ .plot-heading{font-size:17px}.plot-heading>span{font-size:13px}
+ #legend,#axis-label,.metric-help button{font-size:15px}
+ .axis-text{font-size:12px}.dot-label{font-size:15px}
+ .table-footer,.table-footer button,.data-note,#load-status{font-size:15px}
+ footer{font-size:14px}
+ #metric-definitions{padding:22px 16px;margin-top:36px}
+ #metric-definitions h2{font-size:28px}
+ #metric-definitions .definitions p{font-size:18px;line-height:1.5;margin:18px 0}
+ .article-intro{padding:38px 5px 24px}
+ .article-intro h1{font-size:clamp(36px,10vw,52px)}
+ .article-deck{font-size:20px}.article-byline{font-size:16px}
+ .article-back,.source-links a{font-size:18px}
+ .technical-article{padding:24px 16px}
+ .technical-article h2{font-size:27px}
+ .technical-article p{font-size:18px;line-height:1.5}
+ .technical-article section+section{margin-top:30px;padding-top:26px}
+ .technical-article .method-number{font-size:16px}.process-flow{font-size:17px;gap:8px}
+ .process-flow span{padding:8px}
 }
