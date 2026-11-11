@@ -280,3 +280,13 @@ footer{font-size:20px}
  .technical-article .method-number{font-size:16px}.process-flow{font-size:17px;gap:8px}
  .process-flow span{padding:8px}
 }
+
+/* Each definition opens independently using native keyboard-accessible controls. */
+#metric-definitions .metric-definition{margin:0;padding:0;border:0;border-bottom:1px solid var(--line)}
+#metric-definitions .metric-definition summary{font:24px/1.4 var(--pixel);color:var(--accent);padding:16px 0;cursor:pointer}
+#metric-definitions .metric-definition[open] summary{padding-bottom:0}
+#metric-definitions .metric-definition p{margin:14px 0 20px}
+@media(max-width:760px){
+ #metric-definitions .metric-definition summary{font-size:20px;padding:13px 0}
+ #metric-definitions .metric-definition p{font-size:18px;margin:12px 0 16px}
+}
