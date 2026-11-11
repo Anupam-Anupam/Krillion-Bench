@@ -314,8 +314,8 @@ header #theme{width:34px;height:34px;font-size:25px}
  header #theme{width:30px;height:30px;font-size:22px}
  .hero{min-height:490px;padding:40px 0 32px}
  .hero h1{font-size:clamp(56px,13vw,88px);letter-spacing:3px}
- .hero .hero-actions{margin-top:32px;gap:18px 24px}
- .hero .primary,.hero .secondary{font-size:20px;padding:16px 20px}
+ .hero .hero-actions{margin-top:32px;gap:12px;flex-wrap:nowrap;align-items:stretch}
+ .hero .primary,.hero .secondary{font-size:clamp(15px,4.6vw,20px);padding:14px clamp(8px,2vw,16px);white-space:nowrap;min-height:48px;display:flex;align-items:center;justify-content:center}
  .hero .scroll-cue{margin-top:34px}
 }
 @media(max-width:420px){
