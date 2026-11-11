@@ -121,3 +121,45 @@ body.calm #results tr[data-tier=krillion] .rank-badge{filter:none}
 .method-grid p,.definitions,.definitions p,#metric-definitions summary{font:15px/1.5 var(--pixel)}
 
 #metric-definitions summary{font-size:18px}
+
+/* Give the pixel typography more room at normal reading distance. */
+body{font-size:16px}
+h2{font-size:36px}
+.live-label{font-size:16px}
+.hero-description{font-size:21px}
+.hero-tagline{font-size:25px}
+.eyebrow{font-size:18px}
+.view-controls button,#chart-metrics button{font-size:20px;padding:10px 13px}
+#provider-filter,#provider-filter option,#search,#calendar-toggle{font-size:21px}
+#view-note,#aggregate-note,.daily-controls{font-size:20px}
+th{font-size:19px;padding:17px 10px}
+#results td{font-size:19px;padding:18px 10px;line-height:1.35}
+#results .model-name{font-size:22px;line-height:1.2}
+#results .variant{font-size:16px;line-height:1.4}
+.rank-badge{width:42px;height:42px}
+#results .score-value{font-size:28px;line-height:30px}
+#results .score-value small{font-size:17px;line-height:30px}
+.score-bar{height:36px;min-width:150px}
+#results td.daily{font-size:22px}
+.expand-results button{font-size:20px;padding:13px 18px}
+.plot-heading{font-size:22px}
+.plot-heading>span,#legend,#axis-label,.metric-help button{font-size:18px}
+.axis-text{font-size:14px}
+.dot-label{font-size:17px}
+.table-footer,.table-footer button,.data-note,#load-status{font-size:18px;line-height:1.45}
+.method-grid p,.definitions,.definitions p{font-size:18px;line-height:1.5}
+#metric-definitions summary{font-size:21px}
+footer{font-size:18px}
+.detail-id,.detail-notes,.detail-metrics dd small,.round-meta,.round-detail td{font-size:18px}
+@media(max-width:760px){
+ h2{font-size:34px}
+ .hero-description{font-size:20px}
+ .hero-tagline{font-size:22px}
+ .view-controls button,#chart-metrics button{font-size:19px;padding:10px 11px}
+ .table-scroll>table{width:1180px;min-width:1180px}
+ .table-scroll th:nth-child(2),.table-scroll td.model-cell{width:260px;max-width:260px}
+ #results .model-name{max-width:198px;font-size:21px}
+ .rank-badge{width:38px;height:38px}
+ .plot-heading{font-size:21px}
+ .plot-heading>span{font-size:17px}
+}
