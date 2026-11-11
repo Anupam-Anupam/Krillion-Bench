@@ -291,31 +291,40 @@ footer{font-size:20px}
  #metric-definitions .metric-definition p{font-size:18px;margin:12px 0 16px}
 }
 
-/* Keep the masthead prominent without scaling up the phone content. */
-header{height:88px;gap:24px}
-header .brand{font-size:32px;gap:12px;white-space:nowrap}
-header .brand img{width:36px;height:36px}
-header nav{font-size:23px;gap:26px;white-space:nowrap}
-@media(max-width:760px){
- header{height:70px;gap:12px;padding:0 12px}
- header .brand{font-size:22px;gap:7px;letter-spacing:0}
- header .brand img{width:28px;height:28px}
- header nav{font-size:17px;gap:11px;letter-spacing:0}
-}
-@media(max-width:380px){
- header{height:auto;min-height:94px;flex-wrap:wrap;justify-content:center;gap:5px;padding:12px}
- header .brand{justify-content:center;width:100%}
- header nav{gap:22px}
-}
 
-/* Give the opening actions and their surrounding space more presence. */
-.hero{min-height:800px;padding:100px 0 80px}
-.hero .hero-actions{margin-top:44px;gap:22px}
-.hero .primary,.hero .secondary{font-size:24px;padding:18px 30px;line-height:1.3}
-.hero .scroll-cue{margin-top:46px}
+/* Prominent masthead and a consistently scaled opening section. */
+header{height:104px;gap:30px}
+header .brand{font-size:40px;gap:14px;white-space:nowrap}
+header .brand img{width:44px;height:44px}
+header nav{font-size:30px;gap:32px;white-space:nowrap}
+header #theme{width:38px;height:38px;font-size:28px}
+.hero{min-height:880px;padding:110px 0 90px}
+.hero .hero-tagline{font-size:38px;letter-spacing:4px;margin-top:44px}
+.hero .hero-description{font-size:30px;line-height:1.4;margin-top:10px}
+.hero .hero-actions{margin-top:48px;gap:42px}
+.hero .primary,.hero .secondary{font-size:32px;padding:23px 40px;line-height:1.3}
+.hero .scroll-cue{font-size:20px;letter-spacing:3px;margin-top:52px}
+.hero .scroll-cue span{font-size:30px;margin-top:10px}
+@media(max-width:1000px) and (min-width:761px){
+ header .brand{font-size:34px}header nav{font-size:25px;gap:24px}
+ .hero .hero-actions{gap:30px}.hero .primary,.hero .secondary{font-size:28px;padding:21px 28px}
+}
 @media(max-width:760px){
- .hero{min-height:530px;padding:48px 0 38px}
- .hero .hero-actions{margin-top:32px;gap:16px}
- .hero .primary,.hero .secondary{font-size:18px;padding:15px 18px}
- .hero .scroll-cue{margin-top:34px}
+ header{height:78px;gap:14px;padding:0 14px}
+ header .brand{font-size:25px;gap:8px;letter-spacing:0}
+ header .brand img{width:30px;height:30px}
+ header nav{font-size:19px;gap:14px;letter-spacing:0}
+ header #theme{width:32px;height:32px;font-size:24px}
+ .hero{min-height:610px;padding:58px 0 46px}
+ .hero .hero-tagline{font-size:24px;letter-spacing:1.5px;margin-top:32px}
+ .hero .hero-description{font-size:21px;letter-spacing:.5px;margin-top:8px}
+ .hero .hero-actions{margin-top:36px;gap:22px 28px}
+ .hero .primary,.hero .secondary{font-size:22px;padding:18px 24px}
+ .hero .scroll-cue{font-size:17px;letter-spacing:2px;margin-top:38px}
+ .hero .scroll-cue span{font-size:26px;margin-top:8px}
+}
+@media(max-width:460px){
+ header{height:auto;min-height:106px;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px 14px}
+ header .brand{justify-content:center;width:100%}
+ header nav{gap:26px}
 }
