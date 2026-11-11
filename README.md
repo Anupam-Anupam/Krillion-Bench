@@ -30,25 +30,25 @@ Krillion Bench compares 100 language models playing [Krillion](https://krillion.
 
 ## The top of the ocean
 
-From the website’s published snapshot of **2,379 clean verified games**, updated November 10, 2026. Scores are rounded to whole numbers; ranking uses the underlying averages.
+From the website’s published snapshot of **2,476 clean verified games**, updated November 11, 2026. Scores are rounded to whole numbers; ranking uses the underlying averages.
 
 | Rank | Tier | Model | Average score / 700 | Average daily percentile |
 | ---: | :---: | --- | ---: | ---: |
-| 1 | <img src="web/assets/images/krillion-krillion.png" width="28" alt="Krillion" title="Krillion"> | openai/gpt-6-sol | 558 | 99.53% |
-| 2 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-5.6-sol | 544 | 99.24% |
-| 3 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-6-astra | 534 | 98.95% |
-| 4 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | particle-ai/particle-1 | 527 | 98.81% |
-| 5 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | deepseek/deepseek-v4.1-flash-1017 | 525 | 98.71% |
-| 6 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | google/gemini-3.6-flash | 524 | 98.94% |
-| 7 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-6-luna-pro | 523 | 98.76% |
-| 8 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | deepseek/deepseek-v4.1-flash | 514 | 97.68% |
-| 9 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | moonshotai/kimi-k3.1-pro | 511 | 98.18% |
-| 10 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-5.6-terra | 510 | 98.57% |
-| 11 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | anthropic/claude-opus-5 | 502 | 97.12% |
-| 12 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | openai/gpt-6-luna | 502 | 98.33% |
-| 13 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | openai/gpt-5.6-luna-pro | 501 | 97.56% |
-| 14 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | google/gemini-3-flash-preview | 499 | 97.70% |
-| 15 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | google/gemini-3.7-flash | 497 | 97.69% |
+| 1 | <img src="web/assets/images/krillion-krillion.png" width="28" alt="Krillion" title="Krillion"> | openai/gpt-6-sol | 560 | 99.54% |
+| 2 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-5.6-sol | 544 | 99.23% |
+| 3 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-6-astra | 535 | 98.98% |
+| 4 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | deepseek/deepseek-v4.1-flash-1017 | 524 | 98.72% |
+| 5 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | google/gemini-3.6-flash | 522 | 98.90% |
+| 6 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-6-luna-pro | 519 | 98.57% |
+| 7 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | particle-ai/particle-1 | 517 | 96.54% |
+| 8 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | deepseek/deepseek-v4.1-flash | 514 | 97.74% |
+| 9 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | openai/gpt-5.6-terra | 512 | 98.61% |
+| 10 | <img src="web/assets/images/krillion-deepcut.png" width="28" alt="Deep Cut" title="Deep Cut"> | moonshotai/kimi-k3.1-pro | 511 | 98.22% |
+| 11 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | anthropic/claude-opus-5 | 501 | 97.11% |
+| 12 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | openai/gpt-6-luna | 500 | 98.15% |
+| 13 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | openai/gpt-5.6-luna-pro | 499 | 97.41% |
+| 14 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | xiaomi/mimo-v2.6-pro | 496 | 96.31% |
+| 15 | <img src="web/assets/images/krillion-rare.png" width="28" alt="Rare" title="Rare"> | google/gemini-3-flash-preview | 496 | 97.39% |
 
 <p align="center">
 <img src="web/assets/images/krillion-krillion.png" width="24" alt=""> <strong>Krillion</strong> #1 &nbsp; · &nbsp;
