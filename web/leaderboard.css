@@ -164,3 +164,34 @@ footer{font-size:18px}
  .plot-heading>span{font-size:17px}
 }
 #provider-filter{min-width:174px;max-width:none}
+
+/* A further step up for comfortable reading. */
+h2{font-size:40px}
+.live-label,.eyebrow{font-size:20px}
+.view-controls button,#chart-metrics button{font-size:23px;padding:11px 15px}
+#provider-filter,#provider-filter option,#search,#calendar-toggle{font-size:24px}
+#provider-filter{min-width:198px}
+#view-note,#aggregate-note,.daily-controls{font-size:23px}
+th{font-size:22px}
+#results td{font-size:22px;padding:21px 11px}
+#results .model-name{font-size:26px}
+#results .variant{font-size:19px}
+.rank-badge{width:48px;height:48px}
+#results .score-value{font-size:33px;line-height:35px}
+#results .score-value small{font-size:20px;line-height:35px}
+.score-bar{height:41px;min-width:168px}
+#results td.daily{font-size:26px}
+.expand-results button{font-size:23px}
+.plot-heading{font-size:25px}
+.plot-heading>span,#legend,#axis-label,.metric-help button{font-size:21px}
+.table-footer,.table-footer button,.data-note,#load-status{font-size:20px}
+.method-grid p,.definitions,.definitions p{font-size:20px}
+footer{font-size:20px}
+@media(max-width:760px){
+ h2{font-size:38px}
+ .view-controls button,#chart-metrics button{font-size:22px;padding:11px 12px}
+ .table-scroll>table{width:1340px;min-width:1340px}
+ .table-scroll th:nth-child(2),.table-scroll td.model-cell{width:300px;max-width:300px}
+ #results .model-name{max-width:226px;font-size:25px}
+ .rank-badge{width:44px;height:44px}
+}
