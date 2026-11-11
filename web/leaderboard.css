@@ -307,3 +307,15 @@ header nav{font-size:23px;gap:26px;white-space:nowrap}
  header .brand{justify-content:center;width:100%}
  header nav{gap:22px}
 }
+
+/* Give the opening actions and their surrounding space more presence. */
+.hero{min-height:800px;padding:100px 0 80px}
+.hero .hero-actions{margin-top:44px;gap:22px}
+.hero .primary,.hero .secondary{font-size:24px;padding:18px 30px;line-height:1.3}
+.hero .scroll-cue{margin-top:46px}
+@media(max-width:760px){
+ .hero{min-height:530px;padding:48px 0 38px}
+ .hero .hero-actions{margin-top:32px;gap:16px}
+ .hero .primary,.hero .secondary{font-size:18px;padding:15px 18px}
+ .hero .scroll-cue{margin-top:34px}
+}
