@@ -298,7 +298,8 @@ header .brand{font-size:36px;gap:12px;white-space:nowrap}
 header .brand img{width:38px;height:38px}
 header nav{font-size:26px;gap:28px;white-space:nowrap}
 header #theme{width:34px;height:34px;font-size:25px}
-.hero{min-height:800px;padding:100px 0 80px}
+.hero{min-height:720px;padding:82px 0 64px}
+.hero h1{font-size:clamp(90px,10.5vw,144px);letter-spacing:8px}
 .hero .hero-actions{margin-top:44px;gap:32px}
 .hero .primary,.hero .secondary{font-size:28px;padding:19px 32px;line-height:1.3}
 .hero .scroll-cue{margin-top:46px}
@@ -311,7 +312,8 @@ header #theme{width:34px;height:34px;font-size:25px}
  header .brand img{width:28px;height:28px}
  header nav{font-size:18px;gap:12px;letter-spacing:0}
  header #theme{width:30px;height:30px;font-size:22px}
- .hero{min-height:530px;padding:48px 0 38px}
+ .hero{min-height:490px;padding:40px 0 32px}
+ .hero h1{font-size:clamp(56px,13vw,88px);letter-spacing:3px}
  .hero .hero-actions{margin-top:32px;gap:18px 24px}
  .hero .primary,.hero .secondary{font-size:20px;padding:16px 20px}
  .hero .scroll-cue{margin-top:34px}
