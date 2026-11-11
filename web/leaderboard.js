@@ -199,12 +199,7 @@ function displaySnapshot(data) {
   document.querySelector('table caption').textContent=state.view==='average'?'Krillion provisional average metrics from clean verified scorecards.':state.data.numeric_only?'Krillion daily metrics from clean verified scorecards. Select a model for its daily report.':'Krillion daily benchmark results. Select a model for run details.';
   $('#snapshot').textContent=['archive_mean','archive_partial_mean','published_mean'].includes(data.aggregation)?`${data.date_start} – ${data.date_end}`:data.date;
   $('#aggregate-note').hidden=data.aggregation!=='archive_mean';
-  $('#context-title').textContent=data.aggregation==='archive_partial_mean'?'Archive results so far.':state.view==='average'?`${data.games_per_model||state.days.length} tested daily ${data.games_per_model===1||state.days.length===1?'puzzle':'puzzles'}.`:'One daily puzzle.';
-  $('#report-description').textContent=state.view==='average'?'Average shows numeric metrics only; rows and graph dots do not open reports.': state.data.numeric_only?'Select a model to inspect the questions, answers and points from its verified clean run for this date.':'Open any model to inspect its answers, rejections, rarity, and points.';
   $('#aggregate-note').textContent=data.aggregation==='archive_mean'?`Means across ${data.games_per_model} games`:'';
-  const s=data.settings;
-  const old=s.round_timeout_policy!=='continue';
-  $('#configuration').textContent=data.aggregation==='archive_partial_mean'?data.protocol_amendments.join(' '):data.numeric_only?'Clean latest verified scorecards for this tested date. Models still awaiting a clean result are omitted. Five-word instruction amendment and authorized infrastructure replays are retained.':old?'This snapshot uses the original harness: 1,500 output tokens, an 18-second model-call limit, and stop-on-failure. It predates timeout recovery.':`This snapshot uses timeout recovery, ${s.max_output_tokens==null?'no harness output-token cap':s.max_output_tokens+' maximum output tokens'}, and ${s.model_retries??0} same-model retries. Navigation recovery: ${s.navigation_recovery??'unspecified'}. ${s.terminal_failure_policy?'Terminal failures use navigation-only collection of the actual final scorecard.':''}`;
   render();
 }
 // Average only published snapshots from the same tested configuration.
@@ -301,7 +296,7 @@ $('#chart').addEventListener('pointerover',e=>{const b=e.target.closest('[data-m
 $('#chart').addEventListener('pointerleave',()=>{$('#chart-tooltip').hidden=true;});
 $('#close-dialog').addEventListener('click',()=>$('#run-dialog').close());
 $('#run-dialog').addEventListener('click',e=>{if(e.target===$('#run-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
-$('#metric-info').addEventListener('click',()=>{$('#metric-definitions').open=true;$('#metric-definitions').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
+$('#metric-info').addEventListener('click',()=>{$('#metric-definitions').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
 function setCalm(calm) {
   document.body.classList.toggle('calm',calm);
   $('#theme').setAttribute('aria-pressed',String(calm));
